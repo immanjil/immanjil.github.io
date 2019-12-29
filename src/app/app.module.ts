@@ -18,7 +18,6 @@ import { HeaderComponent } from './header/header.component';
 import { MainComponent } from './main/main.component';
 import { FooterComponent } from './footer/footer.component';
 import { AboutComponent } from './about/about.component';
-import { BlogComponent } from './blog/blog.component';
 import { ProjectComponent } from './project/project.component';
 import { ContactComponent } from './contact/contact.component';
 
@@ -26,7 +25,6 @@ const routes: Routes = [
   { path: 'project', component: ProjectComponent},
   { path: 'about', component: AboutComponent},
   { path: 'contact', component: ContactComponent},
-  { path: 'blog', component: BlogComponent},
   { path: 'main', component: MainComponent},
   { path: '', redirectTo: 'main', pathMatch: 'full'}
 ];
@@ -39,7 +37,6 @@ const routes: Routes = [
     FooterComponent,
     AboutComponent,
     ContactComponent,
-    BlogComponent,
     ProjectComponent
   ],
   imports: [

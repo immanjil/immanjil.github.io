@@ -3,7 +3,7 @@
 .menu-btn {
   position: absolute;
   z-index: 3;
-  right: 35px;
+  left: 35px;
   top: 35px;
   cursor: pointer;
   @include easeOut;
@@ -84,9 +84,9 @@
       }
 
       .portrait {
-          width: 250px;
-          height: 250px;
-          background: url('../assets/images/rsz_2sacc_dc_2018-9255-zf-8713-28305-1-005.jpg');
+          width: 350px;
+          height: 350px;
+          background: url('../assets/images/profile-pic.jpg');
           border-radius: 50%;
           border: solid 7px $circle-border-color;
       }
