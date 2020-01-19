@@ -41,7 +41,7 @@ const routes: Routes = [
   ],
   imports: [
     BrowserModule,
-    NgbModule.forRoot(),
+    NgbModule,
     RouterModule.forRoot(routes),
     MatIconModule,
     MatCardModule,
