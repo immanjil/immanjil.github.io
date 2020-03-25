@@ -1,0 +1,39 @@
+<app-header></app-header>
+
+<br>
+
+<main>
+
+  <form (ngSubmit)="onSubmit()" [formGroup]="checkoutForm">
+    <div class="wrapper">
+      <label for="sku">SKU/UPC</label>
+      <input formControlName="sku" id="sku" placeholder="Enter the sku" type="text">
+      <label for="zipCode">Zip Code</label>
+      <input formControlName="zipCode" id="zipCode" placeholder="Enter the sku" type="text">
+      <button class="button" type="submit">Check Inventory</button>
+    </div>
+  </form>
+  <div *ngIf="showResults" aria-label="Destinations" class="table-container" role="table">
+    <div class="flex-table header" role="rowgroup">
+      <div class="flex-row first" role="columnheader">Store</div>
+      <div class="flex-row" role="columnheader">Availability</div>
+      <div class="flex-row" role="columnheader">Price</div>
+      <div class="flex-row" role="columnheader">Discount</div>
+    </div>
+    <div class="flex-table row" role="rowgroup">
+      <div class="flex-row first" role="cell"><span class="flag-icon flag-icon-gb"></span> Walmart Supercenter #2505
+      </div>
+      <div class="flex-row" role="cell">In Stock</div>
+      <div class="flex-row" role="cell">US$15</div>
+      <div class="flex-row" role="cell">75%</div>
+    </div>
+    <div>
+      <br>
+      <button (click)="clear()" class="button" type="submit">Clear Results</button>
+    </div>
+  </div>
+</main>
+
+<br>
+
+<app-footer></app-footer>
