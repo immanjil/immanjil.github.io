@@ -7,8 +7,8 @@ import {FormControl, FormGroup} from '@angular/forms';
   styleUrls: ['./walmart-api.component.scss']
 })
 export class WalmartApiComponent implements OnInit {
-  private checkoutForm: FormGroup;
-  private showResults: boolean = false;
+  public checkoutForm: FormGroup;
+  public showResults: boolean = false;
 
   constructor() { }
 
