@@ -20,8 +20,10 @@ import { FooterComponent } from './footer/footer.component';
 import { AboutComponent } from './about/about.component';
 import { ProjectComponent } from './project/project.component';
 import { ContactComponent } from './contact/contact.component';
+import { WalmartApiComponent } from './walmart-api/walmart-api.component';
 
 const routes: Routes = [
+  { path: 'wally-api', component: WalmartApiComponent},
   { path: 'project', component: ProjectComponent},
   { path: 'about', component: AboutComponent},
   { path: 'contact', component: ContactComponent},
@@ -37,7 +39,8 @@ const routes: Routes = [
     FooterComponent,
     AboutComponent,
     ContactComponent,
-    ProjectComponent
+    ProjectComponent,
+    WalmartApiComponent
   ],
   imports: [
     BrowserModule,
