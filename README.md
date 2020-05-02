@@ -6,3 +6,11 @@ Code for Traversy Media's portfolio located at github account - https://github.c
   2.  It uses grid to stack the elements as the screen shrinks
   3.  It uses media query to handle screen sizes.  
   4.  The end result is a great looking website.
+  
+Deployment to GitHub Page
+1. Install angular-cli-ghpages 
+    npm install -g angular-cli-ghpages
+2. create a build for release
+    ng build --prod --base-href "<repo-name>"
+3. Use angular-cli-ghpages comaand to update Github Page.
+    ngh --branch=master

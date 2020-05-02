@@ -28,7 +28,8 @@ const routes: Routes = [
   { path: 'about', component: AboutComponent},
   { path: 'contact', component: ContactComponent},
   { path: 'main', component: MainComponent},
-  { path: '', redirectTo: 'main', pathMatch: 'full'}
+  { path: '', redirectTo: 'main', pathMatch: 'full'},
+  { path: 'blog', loadChildren: () => import('./blog/blog.module').then(m => m.BlogModule) }
 ];
 
 @NgModule({
@@ -54,7 +55,7 @@ const routes: Routes = [
     BrowserAnimationsModule,
     FlexLayoutModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
