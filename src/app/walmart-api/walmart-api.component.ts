@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 
 @Component({
@@ -10,7 +10,8 @@ export class WalmartApiComponent implements OnInit {
   public checkoutForm: FormGroup;
   public showResults: boolean = false;
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
     this.checkoutForm = new FormGroup({
@@ -18,6 +19,7 @@ export class WalmartApiComponent implements OnInit {
       sku: new FormControl(''),
     });
   }
+
   onSubmit() {
     // Process checkout data here
     console.log('Your request has been submitted');

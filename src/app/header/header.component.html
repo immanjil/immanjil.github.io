@@ -1,62 +1,62 @@
 <body>
 <header>
-  <div class="menu-btn" (click)="closeMenu()" [class.close]="menuBtn">
+  <div (click)="closeMenu()" [class.close]="menuBtn" class="menu-btn">
     <div class="btn-line"></div>
     <div class="btn-line"></div>
     <div class="btn-line"></div>
 
   </div>
-  <nav class="menu" (click)="closeMenu()" [class.show]="menu">
-    <div class="menu-branding" (click)="closeMenu()" [class.show]="menuBranding">
+  <nav (click)="closeMenu()" [class.show]="menu" class="menu">
+    <div (click)="closeMenu()" [class.show]="menuBranding" class="menu-branding">
       <div class="portrait"></div>
       <br>
       <div style="text-align: center;">
-      <div class="icons">
-        <a href="https://twitter.com/Manjilmagar" target="_blank">
-          <i class="fab fa-twitter fa-3x"></i>
-        </a>
-      </div>
-      <div class="icons">
-        <a href="https://www.linkedin.com/in/manjilthapamagar/" target="_blank">
-          <i class="fab fa-linkedin fa-3x"></i>
-        </a>
-      </div>
-      <div class="icons">
-        <a href="https://github.com/immanjil" target="_blank">
-          <i class="fab fa-github fa-3x"></i>
-        </a>
-      </div>
+        <div class="icons">
+          <a href="https://twitter.com/Manjilmagar" target="_blank">
+            <i class="fab fa-twitter fa-3x"></i>
+          </a>
+        </div>
+        <div class="icons">
+          <a href="https://www.linkedin.com/in/manjilthapamagar/" target="_blank">
+            <i class="fab fa-linkedin fa-3x"></i>
+          </a>
+        </div>
+        <div class="icons">
+          <a href="https://github.com/immanjil" target="_blank">
+            <i class="fab fa-github fa-3x"></i>
+          </a>
+        </div>
       </div>
     </div>
-    <ul class="menu-nav" (click)="closeMenu()" [class.show]="menuNav">
-      <li class="nav-item" (click)="closeMenu()" [class.show]="navItem">
+    <ul (click)="closeMenu()" [class.show]="menuNav" class="menu-nav">
+      <li (click)="closeMenu()" [class.show]="navItem" class="nav-item">
         <a class="nav-link" routerLink="/main">
-              Home
+          Home
         </a>
       </li>
-      <li class="nav-item" (click)="closeMenu()" [class.show]="navItem">
-        <a class="nav-link" routerLink="/about">
-              About Me
-        </a>
-      </li>
-      <li class="nav-item" (click)="closeMenu()" [class.show]="navItem">
-        <a class="nav-link" routerLink="/project">
-              My Projects
-        </a>
-      </li>
-      <li class="nav-item" (click)="closeMenu()" [class.show]="navItem">
+      <li (click)="closeMenu()" [class.show]="navItem" class="nav-item">
         <a class="nav-link" routerLink="/blog">
-              Blogs
+          Blogs
         </a>
       </li>
-      <li class="nav-item" (click)="closeMenu()" [class.show]="navItem">
+      <li (click)="closeMenu()" [class.show]="navItem" class="nav-item">
+        <a class="nav-link" routerLink="/about">
+          About Me
+        </a>
+      </li>
+      <li (click)="closeMenu()" [class.show]="navItem" class="nav-item">
+        <a class="nav-link" routerLink="/project">
+          My Projects
+        </a>
+      </li>
+      <li (click)="closeMenu()" [class.show]="navItem" class="nav-item">
         <a class="nav-link" routerLink="/wally-api">
           Walmart API
         </a>
       </li>
-      <li class="nav-item" (click)="closeMenu()" [class.show]="navItem">
+      <li (click)="closeMenu()" [class.show]="navItem" class="nav-item">
         <a class="nav-link" routerLink="/contact">
-              Contact Me
+          Contact Me
         </a>
       </li>
     </ul>

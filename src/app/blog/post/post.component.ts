@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {Subscription} from "rxjs";
 
@@ -9,9 +9,8 @@ import {Subscription} from "rxjs";
 })
 export class PostComponent implements OnInit {
 
-  private sub: Subscription;
-
   post: string;
+  private sub: Subscription;
 
   constructor(private route: ActivatedRoute) {
 
@@ -19,7 +18,7 @@ export class PostComponent implements OnInit {
 
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
-      this.post = './assets/blog/post/' +  params['id'] + '.md';
+      this.post = './assets/blog/post/' + params['id'] + '.md';
     });
   }
 

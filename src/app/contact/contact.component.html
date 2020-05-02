@@ -1,80 +1,84 @@
 <body id="bg-img">
-  <app-header></app-header>
+<app-header></app-header>
 
-    <main id="contact">
-      <h1 class="lg-heading">
-        Connect With <span style="color:rgb(240, 80, 106)">Me</span>
-      </h1>
-      <br>
-      <h1 class="lg-heading">
-        <div class="icons">
-          <a href="mailto: iammanjil@gmail.com">
-            <i class="fa fa-envelope-o"></i>
-          </a>
-        </div>
-        <div class="icons">
-          <a href="https://twitter.com/Manjilmagar" target="_blank">
-            <i class="fab fa-twitter"></i>
-          </a>
-        </div>
-        <div class="icons">
-          <a href="https://www.linkedin.com/in/manjilthapamagar/" target="_blank">
-            <i class="fab fa-linkedin"></i>
-          </a>
-        </div>
-        <div class="icons">
-          <a href="https://github.com/immanjil" target="_blank">
-            <i class="fab fa-github"></i>
-          </a>
-        </div>
-      </h1>
+<main id="contact">
+  <h1 class="lg-heading">
+    Connect With <span style="color:rgb(240, 80, 106)">Me</span>
+  </h1>
+  <br>
+  <h1 class="lg-heading">
+    <div class="icons">
+      <a href="mailto: iammanjil@gmail.com">
+        <i class="fa fa-envelope-o"></i>
+      </a>
+    </div>
+    <div class="icons">
+      <a href="https://twitter.com/Manjilmagar" target="_blank">
+        <i class="fab fa-twitter"></i>
+      </a>
+    </div>
+    <div class="icons">
+      <a href="https://www.linkedin.com/in/manjilthapamagar/" target="_blank">
+        <i class="fab fa-linkedin"></i>
+      </a>
+    </div>
+    <div class="icons">
+      <a href="https://github.com/immanjil" target="_blank">
+        <i class="fab fa-github"></i>
+      </a>
+    </div>
+  </h1>
 
-      <div class="contact">
-        <div class="container">
-          <div class="jumbotron">
-            <h3><i class="fa fa-envelope-o fa-2x" style="margin-right: 1rem;"></i>Send me an Email!</h3>
-            <br>
-            <form (ngSubmit)="onSubmit()" #contact [ngFormOptions]="{ updateOn: 'submit'}">
-              <div class="form-group">
-                <i class="fa fa-user"></i>
-                <label for="name"></label>
-                <input required [(ngModel)]="model.name" name="name" #name="ngModel" id="name" type="text" class="form-control" placeholder="Your name">
-                <div [hidden]="name.valid || name.pristine" class="alert alert-danger">
-                  Name is required
-                </div>
-              </div>
-              <div class="form-group">
-                <i class="fa fa-envelope-o"></i>
-                <label for="emailAddress"></label>
-                <input required [(ngModel)]="model.emailAddress" name="emailAddress" #emailAddress="ngModel" id="emailAddress" type="email" class="form-control" placeholder="Your email address">
-                <div [hidden]="emailAddress.valid || emailAddress.pristine" class="alert alert-danger">
-                  Email Address is required
-                </div>
-              </div>
-              <div class="form-group">
-                <i class="fa fa-tag"></i>
-                <label for="subject"></label>
-                <input required [(ngModel)]="model.subject" name="subject" #subject="ngModel" id="subject" type="text" class="form-control" placeholder="Subject of your email">
-                <div [hidden]="subject.valid || subject.pristine" class="alert alert-danger">
-                  Subject is required
-                </div>
-              </div>
-              <div class="form-group">
-                <i class="fa fa-pencil"></i>
-                <label for="message"></label>
-                <textarea required [(ngModel)]="model.message" name="message" #message="ngModel" id="message" class="form-control" placeholder="Your Message to me"></textarea>
-                <div [hidden]="message.valid || message.pristine" class="alert alert-danger">
-                  Message is required
-                </div>
-              </div>
-              <button type="submit" class="button btn-sucess">Send</button>
-            </form>
+  <div class="contact">
+    <div class="container">
+      <div class="jumbotron">
+        <h3><i class="fa fa-envelope-o fa-2x" style="margin-right: 1rem;"></i>Send me an Email!</h3>
+        <br>
+        <form #contact (ngSubmit)="onSubmit()" [ngFormOptions]="{ updateOn: 'submit'}">
+          <div class="form-group">
+            <i class="fa fa-user"></i>
+            <label for="name"></label>
+            <input #name="ngModel" [(ngModel)]="model.name" class="form-control" id="name" name="name"
+                   placeholder="Your name"
+                   required type="text">
+            <div [hidden]="name.valid || name.pristine" class="alert alert-danger">
+              Name is required
+            </div>
           </div>
-        </div>
+          <div class="form-group">
+            <i class="fa fa-envelope-o"></i>
+            <label for="emailAddress"></label>
+            <input #emailAddress="ngModel" [(ngModel)]="model.emailAddress" class="form-control" id="emailAddress"
+                   name="emailAddress" placeholder="Your email address" required type="email">
+            <div [hidden]="emailAddress.valid || emailAddress.pristine" class="alert alert-danger">
+              Email Address is required
+            </div>
+          </div>
+          <div class="form-group">
+            <i class="fa fa-tag"></i>
+            <label for="subject"></label>
+            <input #subject="ngModel" [(ngModel)]="model.subject" class="form-control" id="subject" name="subject"
+                   placeholder="Subject of your email"
+                   required type="text">
+            <div [hidden]="subject.valid || subject.pristine" class="alert alert-danger">
+              Subject is required
+            </div>
+          </div>
+          <div class="form-group">
+            <i class="fa fa-pencil"></i>
+            <label for="message"></label>
+            <textarea #message="ngModel" [(ngModel)]="model.message" class="form-control" id="message" name="message"
+                      placeholder="Your Message to me" required></textarea>
+            <div [hidden]="message.valid || message.pristine" class="alert alert-danger">
+              Message is required
+            </div>
+          </div>
+          <button class="button btn-sucess" type="submit">Send</button>
+        </form>
       </div>
-    -->
-
-    </main>
-  <app-footer></app-footer>
+    </div>
+  </div>
+</main>
+<app-footer></app-footer>
 </body>
 

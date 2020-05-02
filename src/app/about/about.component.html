@@ -1,88 +1,94 @@
 <body>
 
-  <app-header></app-header>
+<app-header></app-header>
 
-  <main id="about">
+<main id="about">
 
-    <h1 class="lg-heading">
-      About <span style="color:rgb(240, 80, 106)">Me</span>
-    </h1>
+  <h1 class="lg-heading">
+    About <span style="color:rgb(240, 80, 106)">Me</span>
+  </h1>
+  <br>
+  <h2 class="sm-heading"></h2>
+  <br>
+  <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutGap="0.5%" fxLayoutWrap>
+    <div fxFlex="30%">
+      <img alt="Manjil Thapa Magar" class="img" src="../../assets/images/profile-pic.jpg">
+    </div>
     <br>
-    <h2 class="sm-heading"></h2>
-    <br>
-    <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="0.5%" fxLayoutAlign="center">
-      <div fxFlex="30%">
-        <img class="img" src="../../assets/images/profile-pic.jpg" alt="Manjil Thapa Magar">
+    <div fxFlex="15%">
+      <button class="button"><a
+        href="https://manjil-profolio-assets.s3.us-east-2.amazonaws.com/Resume_Manjil_03Mar2020.pdf" target="_blank">Resume</a>
+      </button>
+      <div class="icon">
+        <a href="https://twitter.com/Manjilmagar" target="_blank"><i class="fab fa-twitter fa-2x"></i></a>
       </div>
-      <br>
-      <div fxFlex="15%">
-        <button class="button"><a href="https://manjil-profolio-assets.s3.us-east-2.amazonaws.com/Resume_Manjil_03Mar2020.pdf" target="_blank">Resume</a></button>
-        <div class="icon">
-          <a href="https://twitter.com/Manjilmagar" target="_blank"><i class="fab fa-twitter fa-2x"></i></a>
-        </div>
-        <div class="icon">
-          <a href="https://www.linkedin.com/in/manjilthapamagar/" target="_blank"><i class="fab fa-linkedin fa-2x"></i></a>
-        </div>
-        <div class="icon">
-          <a href="https://github.com/immanjil" target="_blank"><i class="fab fa-github fa-2x"></i></a>
-        </div>
+      <div class="icon">
+        <a href="https://www.linkedin.com/in/manjilthapamagar/" target="_blank"><i
+          class="fab fa-linkedin fa-2x"></i></a>
       </div>
-      <br>
-      <div fxFlex="55%">
-        <mat-card class="about1-card">
-          <mat-card-content>
-            <p>Besides Software Engineering?</p>
-            <p>I love working on my car and motorcycle and enjoy working on them. I also love playing FIFA on my Xbox whenever I get some time to myself.</p>
-            <p>I love watching Football and American Football. I spend a lot of time being a fan, but I enjoy every second.</p>
-          </mat-card-content>
-        </mat-card>
+      <div class="icon">
+        <a href="https://github.com/immanjil" target="_blank"><i class="fab fa-github fa-2x"></i></a>
       </div>
     </div>
     <br>
-    <br>
-    <div class="container"
-         fxLayout="row"
-         fxLayout.xs="column"
-         fxLayoutGap="0.5%"
-         fxLayoutAlign="center">
-      <div fxFlex="33%">
-        <mat-card class="about-card">
-          <mat-card-header class="about-header">
-            <mat-card-title class="about-title">Academics</mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-            <p>Bachelors's in Mechanical Engineering<br> - Texas A&M University, College Station, Texas</p>
-            <p>December 2015</p>
-          </mat-card-content>
-        </mat-card>
-      </div>
-      <div fxFlex="33%">
-        <mat-card class="about-card">
-          <mat-card-header class="about-header">
-            <mat-card-title class="about-title">Coding</mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-            <p>PHP projects using Zend Framework 3, Symfony, Codeigniter & Cake PHP.</p>
-            <p>PHP Zend Framework 3 project using Angular 8 as frontend technology using MySQL and Redshift as Database solutions.</p>
-            <p>AWS Services EC2, Lambda, CloudWatch, ElasticSearch for Cloud computing and Serverless applications.</p>
-          </mat-card-content>
-        </mat-card>
-      </div>
-      <div fxFlex="34%">
-        <mat-card class="about-card">
-          <mat-card-header class="about-header">
-            <mat-card-title class="about-title">Work Experience</mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-            <p>Full Stack Engineer, Cognizant Technology Solutions 2016-2019</p>
-            <p>Full Stack Engineer, PowerWizard 2019-Present</p>
-          </mat-card-content>
-        </mat-card>
-      </div>
+    <div fxFlex="55%">
+      <mat-card class="about1-card">
+        <mat-card-content>
+          <p>Besides Software Engineering?</p>
+          <p>I love working on my car and motorcycle and enjoy working on them. I also love playing FIFA on my Xbox
+            whenever I get some time to myself.</p>
+          <p>I love watching Football and American Football. I spend a lot of time being a fan, but I enjoy every
+            second.</p>
+        </mat-card-content>
+      </mat-card>
     </div>
+  </div>
+  <br>
+  <br>
+  <div class="container"
+       fxLayout="row"
+       fxLayout.xs="column"
+       fxLayoutAlign="center"
+       fxLayoutGap="0.5%">
+    <div fxFlex="33%">
+      <mat-card class="about-card">
+        <mat-card-header class="about-header">
+          <mat-card-title class="about-title">Academics</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p>Bachelors's in Mechanical Engineering<br> - Texas A&M University, College Station, Texas</p>
+          <p>December 2015</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div fxFlex="33%">
+      <mat-card class="about-card">
+        <mat-card-header class="about-header">
+          <mat-card-title class="about-title">Coding</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p>PHP projects using Zend Framework 3, Symfony, Codeigniter & Cake PHP.</p>
+          <p>PHP Zend Framework 3 project using Angular 8 as frontend technology using MySQL and Redshift as Database
+            solutions.</p>
+          <p>AWS Services EC2, Lambda, CloudWatch, ElasticSearch for Cloud computing and Serverless applications.</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div fxFlex="34%">
+      <mat-card class="about-card">
+        <mat-card-header class="about-header">
+          <mat-card-title class="about-title">Work Experience</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p>Full Stack Engineer, Cognizant Technology Solutions 2016-2019</p>
+          <p>Full Stack Engineer, PowerWizard 2019-Present</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
 
-  </main>
+</main>
 
-  <app-footer></app-footer>
+<app-footer></app-footer>
 
 </body>

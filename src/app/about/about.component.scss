@@ -10,9 +10,11 @@
   background: rgba(lighten(#444, 2), 0.5);
   padding: 1rem;
   color: #fff;
+
   p {
     font-size: 20px;
   }
+
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -27,10 +29,12 @@
   padding: 1rem;
   border-bottom: rgb(40, 8, 245) 5px solid;
   color: #fff;
+
   p {
     font-size: 15px;
     text-align: left;
   }
+
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -40,7 +44,7 @@
 }
 
 .about-header {
-  display:flex;
+  display: flex;
   justify-content: center;
   margin-bottom: 5%;
 }
@@ -49,7 +53,7 @@ a {
   padding: 0.4rem;
 
   &:hover {
-      color: $secondary-color;
-      @include easeOut;
+    color: $secondary-color;
+    @include easeOut;
   }
 }

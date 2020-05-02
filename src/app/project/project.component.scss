@@ -21,7 +21,7 @@
 }
 
 .project-header {
-  display:flex;
+  display: flex;
   justify-content: center;
   margin-bottom: 5%;
 }
@@ -48,7 +48,7 @@
   transition: background-color 2s ease-out;
 }
 
-mat-card img{
+mat-card img {
   object-fit: cover;
   width: 90%;
   height: 60%;
@@ -59,7 +59,7 @@ a {
   font-size: 1.5rem;
 
   &:hover {
-      color: $secondary-color;
-      @include easeOut;
+    color: $secondary-color;
+    @include easeOut;
   }
 }
