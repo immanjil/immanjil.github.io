@@ -1,44 +1,42 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {ReactiveFormsModule} from '@angular/forms';
 import {MatButtonModule, MatCardModule, MatGridListModule, MatIconModule} from '@angular/material';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {RouterModule, Routes} from '@angular/router';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {FlexLayoutModule} from '@angular/flex-layout';
 
-
 import {AppComponent} from './app.component';
-import {HeaderComponent} from './header/header.component';
 import {MainComponent} from './main/main.component';
-import {FooterComponent} from './footer/footer.component';
 import {AboutComponent} from './about/about.component';
 import {ProjectComponent} from './project/project.component';
 import {ContactComponent} from './contact/contact.component';
 import {WalmartApiComponent} from './walmart-api/walmart-api.component';
-import {BlogModule} from "./blog/blog.module";
+import {SharedModule} from "./shared/shared.module";
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 const routes: Routes = [
+  {path: 'blog', loadChildren: () => import('./blog/blog.module').then(m => m.BlogModule)},
   {path: 'wally-api', component: WalmartApiComponent},
   {path: 'project', component: ProjectComponent},
   {path: 'about', component: AboutComponent},
   {path: 'contact', component: ContactComponent},
   {path: 'main', component: MainComponent},
-  {path: '', redirectTo: 'main', pathMatch: 'full'},
-  {path: 'blog', loadChildren: () => import('./blog/blog.module').then(m => m.BlogModule)}
+  {path: '', redirectTo: '/main', pathMatch: 'full'},
+  {path: '**', component: PageNotFoundComponent },
 ];
 
 @NgModule({
   declarations: [
     AppComponent,
-    HeaderComponent,
     MainComponent,
-    FooterComponent,
     AboutComponent,
     ContactComponent,
     ProjectComponent,
-    WalmartApiComponent
+    WalmartApiComponent,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,
@@ -51,14 +49,12 @@ const routes: Routes = [
     FontAwesomeModule,
     BrowserAnimationsModule,
     FlexLayoutModule,
-    FormsModule,
     ReactiveFormsModule,
+    SharedModule,
+  ],
+  exports: [
   ],
   providers: [],
-  exports: [
-    HeaderComponent,
-    FooterComponent
-  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

@@ -1,13 +1,11 @@
 import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {RouterModule} from '@angular/router';
 import {MarkdownModule} from "ngx-markdown";
 import {HttpClient, HttpClientModule} from "@angular/common/http";
-import {FormsModule} from "@angular/forms";
+
 import {BlogComponent} from "./blog/blog.component";
 import {PostComponent} from "./post/post.component";
-import {HeaderComponent} from "../header/header.component";
-import {FooterComponent} from "../footer/footer.component";
+import {SharedModule} from "../shared/shared.module";
+import {BlogRoutingModule} from "./blog-routing.module";
 
 @NgModule({
   declarations: [
@@ -15,14 +13,15 @@ import {FooterComponent} from "../footer/footer.component";
     PostComponent,
   ],
   imports: [
-    CommonModule,
-    RouterModule.forChild([
-      {path: '', pathMatch: 'full', component: BlogComponent},
-      {path: 'post/:id', component: PostComponent},
-    ]),
+    BlogRoutingModule,
     HttpClientModule,
     MarkdownModule.forRoot({loader: HttpClient}),
-    FormsModule
+    SharedModule,
+
+  ],
+  exports: [
+    BlogComponent,
+    PostComponent,
   ]
 })
 export class BlogModule {
