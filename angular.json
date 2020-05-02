@@ -30,12 +30,21 @@
               "./node_modules/bootstrap/dist/css/bootstrap.min.css",
               "./node_modules/font-awesome/css/font-awesome.css",
               "./node_modules/hover.css/css/hover-min.css",
-              "./src/scss/styles.scss"
+              "node_modules/prismjs/themes/prism-okaidia.css",
+              "./src/scss/styles.scss",
+              "node_modules/katex/dist/katex.min.css",
+              "node_modules/prismjs/plugins/line-highlight/prism-line-highlight.css"
             ],
             "scripts": [
               "./node_modules/jquery/dist/jquery.min.js",
               "./node_modules/popper.js/dist/umd/popper.min.js",
               "./node_modules/bootstrap/dist/js/bootstrap.min.js",
+              "node_modules/marked/lib/marked.js",
+              "node_modules/katex/dist/katex.min.js",
+              "node_modules/prismjs/prism.js",
+              "node_modules/prismjs/components/prism-csharp.min.js",
+              "node_modules/prismjs/components/prism-css.min.js",
+              "node_modules/prismjs/plugins/line-highlight/prism-line-highlight.js",
               {
                 "input": "node_modules/document-register-element/build/document-register-element.js"
               }
