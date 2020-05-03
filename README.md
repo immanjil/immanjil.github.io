@@ -1,16 +1,20 @@
-Portfolio based on code from Traversy Media's 7-part "Responsive Portfolio Website Project" Youtub Tutorail.
-https://www.youtube.com/watch?v=gYzHS-n2gqU&list=PLillGF-RfqbYoGoCjKoMOkVznV6aSXKzU
+# Person Portfolio created based on the various Tutorial.
 
-Code for Traversy Media's portfolio located at github account - https://github.com/bradtraversy/modern_portfolio
-  1.  This responsive code uses html5, Sass, CSS and a little bit of JavaScript.
-  2.  It uses grid to stack the elements as the screen shrinks
-  3.  It uses media query to handle screen sizes.  
-  4.  The end result is a great looking website.
+---
+
+## References
+[1] Traversy Media's 7-part "Responsive Portfolio Website Project" Youtube Tutorial.
+[youtube-tutorial](https://www.youtube.com/watch?v=gYzHS-n2gqU&list=PLillGF-RfqbYoGoCjKoMOkVznV6aSXKzU)
+
+---
+
+[2] Blog & Post creation Referenced from : [github-link](https://github.com/fluster/fluster-website)
   
-Deployment to GitHub Page
+## Deployment Steps to GitHub Page
+### Skip step 1 if angular-cli-ghpages installed
 1. Install angular-cli-ghpages 
-    npm install -g angular-cli-ghpages
+    > npm install -g angular-cli-ghpages
 2. create a build for release
-    ng build --prod --base-href "<repo-name>"
-3. Use angular-cli-ghpages comaand to update Github Page.
-    ngh --branch=master
+    > ng build --prod
+3. Use angular-cli-ghpages command to update Github Page.
+    > ngh --branch=master

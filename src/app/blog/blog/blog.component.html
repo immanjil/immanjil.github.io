@@ -1,17 +1,27 @@
-<body>
-
+<!-- Page Header -->
+<header class="masthead">
+  <div class="overlay"></div>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-md-10 mx-auto">
+        <div class="site-heading">
+          <h1>Blogs by Manjil</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
 <app-header></app-header>
 
-<br>
+<!-- Main Content -->
+<div class="container blog-summary">
+  <div class="row">
+    <div class="col-lg-8 col-md-10 mx-auto">
 
-<main>
+      <div [src]="'./assets/blog/blog.md'" class="post" markdown></div>
 
-  <div [src]="'./assets/blog/blog.md'" markdown></div>
-
-</main>
-
-<br>
+    </div>
+  </div>
+</div>
 
 <app-footer></app-footer>
-
-</body>
