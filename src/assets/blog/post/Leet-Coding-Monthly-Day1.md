@@ -39,8 +39,9 @@
 >     return $left; }
 > 
 >     // Test cases to be run $testCases = [5, 100, 444]; foreach
->     ($testCases as $testCase) {
->     $sol = firstBadVersion(5);
->     echo "Then $sol is the first bad version for input: $testCase" . PHP_EOL; }
+>     foreach ($testCases as $testCase) {
+>         $sol = firstBadVersion(5);
+>         echo "Then $sol is the first bad version for input: $testCase" . PHP_EOL; 
+>     }
 
 

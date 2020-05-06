@@ -1,17 +1,12 @@
 import {Component, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewEncapsulation} from '@angular/core';
 import {DomSanitizer, Meta, SafeUrl} from '@angular/platform-browser';
 import {ActivatedRoute} from '@angular/router';
-
 import {isPlatformServer} from '@angular/common';
-
 import {Subscription} from 'rxjs';
-
 import {MarkdownService} from 'ngx-markdown';
-
 // Utils
 import {Comparator} from '../../../providers/core/utils/utils';
 import {Resources} from '../../../providers/core/utils/resources';
-
 // Web
 import {FormControl, Validators} from "@angular/forms";
 import {BlogPostService} from "../../_services/blog-post.service";
@@ -41,7 +36,6 @@ export class PostComponent implements OnInit, OnDestroy {
               private meta: Meta,
               private blogPostService: BlogPostService
               ) {
-
   }
 
   runCode() {
