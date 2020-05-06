@@ -17,3 +17,7 @@ Posted by [Manjil](mailto:iammanjil@gmail.com) on May 5, 2020
 # [May Leet Coding Challenge - May 5](/blog/post/Leet-Coding-Monthly-Day5)
 ### [May 2020](/blog/post/Leet-Coding-Monthly-Day5)
 Posted by [Manjil](mailto:iammanjil@gmail.com) on May 5, 2020
+
+# [May Leet Coding Challenge - May 5](/blog/post/Leet-Coding-Monthly-Day6)
+### [May 2020](/blog/post/Leet-Coding-Monthly-Day6)
+Posted by [Manjil](mailto:iammanjil@gmail.com) on May 6, 2020
