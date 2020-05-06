@@ -5,9 +5,9 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
-          <div markdown [src]="post" class="post" (error)="onError($event)"></div>
+          <div (error)="onError($event)" [src]="post" class="post" markdown></div>
 
-          <div class="post-not-found" *ngIf="notFound">
+          <div *ngIf="notFound" class="post-not-found">
             <div class="d-flex justify-content-center">
               <fa-icon [icon]="['fal', 'sad-cry']"></fa-icon>
             </div>
@@ -22,5 +22,20 @@
 
 </section>
 
+<div class="content-page--right-container">
+  <div class="content-page--right">
+    <form (ngSubmit)="runCode()">
+      <div class="pg-form-input-group">
+        <input [formControl]="code" hidden type="text">
+        <div style="text-align: center">
+          <button type="submit">
+            Run Code <span>&rarr;</span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<br>
 <app-footer></app-footer>
 

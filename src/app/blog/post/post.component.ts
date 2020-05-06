@@ -13,7 +13,8 @@ import {Comparator} from '../../../providers/core/utils/utils';
 import {Resources} from '../../../providers/core/utils/resources';
 
 // Web
-import {WebSocialShareInput} from 'web-social-share/dist/types/types/web-social-share/web-social-share-input';
+import {FormControl, Validators} from "@angular/forms";
+import {BlogPostService} from "../../_services/blog-post.service";
 
 @Component({
   selector: 'app-post',
@@ -31,17 +32,26 @@ export class PostComponent implements OnInit, OnDestroy {
   post: string;
   notFound = false;
 
-  showShare = false;
-  shareOptions: WebSocialShareInput;
+  public code = new FormControl('', [Validators.required]);
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object,
               private route: ActivatedRoute,
               private sanitizer: DomSanitizer,
               private markdownService: MarkdownService,
-              private meta: Meta) {
+              private meta: Meta,
+              private blogPostService: BlogPostService
+              ) {
 
   }
 
+  runCode() {
+    this.blogPostService
+      .runCode().subscribe(
+      data => [console.log(data)],
+      error => [console.log(error)],
+      () => [console.log('completed!')]
+    );
+  }
   ngOnInit() {
     this.sub = this.route.params.subscribe(async (params) => {
       this.postId = params['id'];
@@ -113,50 +123,5 @@ export class PostComponent implements OnInit, OnDestroy {
     });
   }
 
-  async share(): Promise<{}> {
-    return new Promise((resolve) => {
-      this.shareOptions = {
-        config: [{
-          facebook: {
-            socialShareUrl: this.RESOURCES.SOCIAL_SHARING.FLUSTER_WEBSITE + + '/blog/post/' + this.postId,
-            socialSharePopupWidth: 400,
-            socialSharePopupHeight: 400
-          }
-        }, {
-          twitter: {
-            socialShareUrl: this.RESOURCES.SOCIAL_SHARING.FLUSTER_WEBSITE + + '/blog/post/' + this.postId,
-            socialSharePopupWidth: 300,
-            socialSharePopupHeight: 400
-          }
-        }, {
-          reddit: {
-            socialShareUrl: this.RESOURCES.SOCIAL_SHARING.FLUSTER_WEBSITE + + '/blog/post/' + this.postId,
-            socialSharePopupWidth: 300,
-            socialSharePopupHeight: 500
-          }
-        }, {
-          linkedin: {
-            socialShareUrl: this.RESOURCES.SOCIAL_SHARING.FLUSTER_WEBSITE + + '/blog/post/' + this.postId
-          }
-        }, {
-          pinterest: {
-            socialShareUrl: this.RESOURCES.SOCIAL_SHARING.FLUSTER_WEBSITE + + '/blog/post/' + this.postId
-          }
-        }, {
-          email: {
-            socialShareBody: this.RESOURCES.SOCIAL_SHARING.FLUSTER_WEBSITE + + '/blog/post/' + this.postId
-          }
-        }]
-      };
-
-      this.showShare = true;
-
-      resolve();
-    });
-  }
-
-  shareClose() {
-    this.showShare = false;
-  }
 }
 

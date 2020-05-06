@@ -11,8 +11,7 @@
 
 ### Solution - Simple
   
-> class Solution {
-> 
+>     <?php
 >     /**
 >      * @param String $J
 >      * @param String $S
@@ -29,8 +28,3 @@
 >         }
 >         return $totalGems;        
 >     }
-> }
-
----
-
-[Manjil](mailto:iammanjil@gmail.com)
