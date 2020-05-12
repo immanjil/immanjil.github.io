@@ -1,4 +1,5 @@
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {environment} from "../../../environments/environment";
 
 
 @Component({
@@ -8,6 +9,8 @@ import {Component, OnInit, ViewEncapsulation} from '@angular/core';
   encapsulation: ViewEncapsulation.None
 })
 export class BlogComponent implements OnInit {
+  ASSET_FOLDER: string = environment.assetsUrl;
+  BLOG_FILE: string = this.ASSET_FOLDER  + '/blog/blog.md' ;
 
   constructor() { }
 

@@ -3,7 +3,8 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  assetsUrl: 'https://manjil-profolio-assets.s3.us-east-2.amazonaws.com/assets'
 };
 
 /*

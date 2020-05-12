@@ -10,6 +10,7 @@ import {Resources} from '../../../providers/core/utils/resources';
 // Web
 import {FormControl, Validators} from "@angular/forms";
 import {BlogPostService} from "../../_services/blog-post.service";
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: 'app-post',
@@ -18,10 +19,9 @@ import {BlogPostService} from "../../_services/blog-post.service";
   encapsulation: ViewEncapsulation.None
 })
 export class PostComponent implements OnInit, OnDestroy {
+  ASSET_FOLDER: string = environment.assetsUrl;
   private RESOURCES: any = Resources.Constants;
-
   private sub: Subscription;
-
   private postId: string;
 
   post: string;
@@ -49,7 +49,7 @@ export class PostComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.sub = this.route.params.subscribe(async (params) => {
       this.postId = params['id'];
-      this.post =  './assets/blog/post/' + this.postId + '.md';
+      this.post =  this.ASSET_FOLDER  + '/blog/post/' + this.postId + '.md';
 
       if (isPlatformServer(this.platformId)) {
         await this.updateMetadata();
