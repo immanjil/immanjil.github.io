@@ -13,8 +13,7 @@
 
 ### Solution - Simple
   
-> class Solution {
-> 
+>     <?php
 >     /**
 >      * @param String $ransomNote
 >      * @param String $magazine
@@ -35,8 +34,3 @@
 >         }
 >         return true;
 >     }
-> }
-
----
-
-[Manjil](mailto:iammanjil@gmail.com)
