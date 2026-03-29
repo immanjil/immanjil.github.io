@@ -1,0 +1,100 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { profile } from '../data/profile';
+---
+
+<Layout title="About & Leadership">
+    <section class="about-hero">
+        <h1>About & Leadership</h1>
+        <p class="subtitle">Engineering Manager | Strategic Leader | AI Innovator</p>
+    </section>
+
+    <section class="mission">
+        <h2>Mission</h2>
+        <p>
+            My mission is to build and scale high-performing engineering teams that deliver exceptional value through technical excellence and strategic alignment. With over 9 years of experience, I bridge the gap between complex technical challenges and business objectives, fostering an environment where innovation and efficiency coexist.
+        </p>
+    </section>
+
+    <section class="leadership-philosophy">
+        <h2>Leadership Philosophy</h2>
+        <div class="values-grid">
+            <div class="value-card">
+                <h3>Empowerment</h3>
+                <p>I believe in hiring great people and giving them the autonomy, tools, and support they need to succeed. Leadership is about removing roadblocks, not micromanagement.</p>
+            </div>
+            <div class="value-card">
+                <h3>Continuous Excellence</h3>
+                <p>From TDD and clean architecture to modern CI/CD, I advocate for high engineering standards that ensure long-term maintainability and system reliability.</p>
+            </div>
+            <div class="value-card">
+                <h3>Adaptability</h3>
+                <p>In a rapidly evolving landscape—now accelerated by Agentic AI—the ability to pivot and integrate new frameworks is what separates surviving teams from thriving ones.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="technical-leadership">
+        <h2>Technical Leadership</h2>
+        <p>
+            My leadership approach is grounded in a deep technical foundation across the full stack. I specialize in:
+        </p>
+        <ul>
+            <li><strong>Legacy Evolution:</strong> Strategically migrating monolithic systems to modern, containerized architectures (Docker, AWS).</li>
+            <li><strong>Engineering Velocity:</strong> Optimizing development lifecycles through automated workflows and AI-assisted coding frameworks.</li>
+            <li><strong>Agile Delivery:</strong> Directing cross-functional teams to deliver enterprise-grade features on time and within budget.</li>
+        </ul>
+    </section>
+
+    <section class="team-building">
+        <h2>Team Building</h2>
+        <p>
+            I currently manage a team of 6+ software engineers at Paycom, where I focus on technical coaching, career development, and building a culture of mutual respect and shared ownership. I believe a team's strength lies in its diversity of thought and its ability to communicate openly.
+        </p>
+    </section>
+
+    <section class="beyond-code">
+        <h2>Beyond the Code</h2>
+        <p>
+            When I'm not leading engineering initiatives, I explore the intersection of LLMs and developer productivity. Based in Frisco, Texas, I am an advocate for the local tech community and a lifelong learner, originally holding a degree in Mechanical Engineering from Texas A&M University.
+        </p>
+    </section>
+</Layout>
+
+<style>
+    section { margin-top: 5rem; }
+    h1 { font-size: 3.5rem; margin-bottom: 0.5rem; font-weight: 800; }
+    .subtitle { font-size: 1.5rem; color: var(--secondary-text); margin-bottom: 2rem; font-weight: 500; }
+    
+    h2 { font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem; }
+    
+    p { font-size: 1.15rem; line-height: 1.8; color: var(--text-color); opacity: 0.9; max-width: 800px; }
+    
+    .values-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+
+    @media (min-width: 768px) {
+        .values-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    .value-card {
+        background: var(--card-bg);
+        padding: 2rem;
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+        transition: border-color 0.2s;
+    }
+
+    .value-card:hover { border-color: var(--accent-color); }
+
+    .value-card h3 { font-size: 1.25rem; margin-top: 0; margin-bottom: 1rem; color: var(--accent-color); }
+    .value-card p { font-size: 1rem; line-height: 1.6; margin: 0; }
+
+    ul { margin-top: 1.5rem; padding-left: 1.5rem; }
+    li { font-size: 1.15rem; line-height: 1.8; color: var(--text-color); margin-bottom: 0.75rem; opacity: 0.9; }
+    li strong { color: var(--accent-color); }
+</style>
