@@ -57,6 +57,7 @@ export const profile = {
         linkedin: "https://www.linkedin.com/in/manjilthapamagar/",
         github: "https://github.com/immanjil",
         email: "mailto:manjil.thapa.magar101@gmail.com",
-        resume: "/assets/Manjil_Thapa_Magar_Resume2026.pdf"
+        resume: "/assets/Manjil_Thapa_Magar_Resume2026.pdf",
+        avatar: "/assets/Magar_Thapa_Manjil.jpg"
     }
 };

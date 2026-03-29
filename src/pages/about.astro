@@ -5,8 +5,17 @@ import { profile } from '../data/profile';
 
 <Layout title="About & Leadership">
     <section class="about-hero">
-        <h1>About & Leadership</h1>
-        <p class="subtitle">Engineering Manager | Strategic Leader | AI Innovator</p>
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>About & Leadership</h1>
+                <p class="subtitle">Engineering Manager | Strategic Leader | AI Innovator</p>
+            </div>
+            {profile.links.avatar && (
+                <div class="profile-image-container">
+                    <img src={profile.links.avatar} alt={profile.name} class="profile-image" />
+                </div>
+            )}
+        </div>
     </section>
 
     <section class="mission">
@@ -63,7 +72,37 @@ import { profile } from '../data/profile';
 
 <style>
     section { margin-top: 5rem; }
-    h1 { font-size: 3.5rem; margin-bottom: 0.5rem; font-weight: 800; }
+    .hero-content { display: flex; align-items: center; gap: 3rem; justify-content: space-between; }
+    .hero-text { flex: 1; }
+
+    .profile-image-container {
+        flex-shrink: 0;
+        width: 180px;
+        height: 180px;
+        border-radius: 20px;
+        overflow: hidden;
+        border: 4px solid var(--card-bg);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        transform: rotate(-2deg);
+        transition: transform 0.3s ease;
+    }
+
+    .profile-image-container:hover {
+        transform: rotate(0deg) scale(1.05);
+    }
+
+    .profile-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    @media (max-width: 768px) {
+        .hero-content { flex-direction: column-reverse; gap: 2rem; align-items: flex-start; }
+        .profile-image-container { width: 140px; height: 140px; }
+    }
+
+    h1 { font-size: 3.5rem; margin-bottom: 0.5rem; font-weight: 800; line-height: 1.1; }
     .subtitle { font-size: 1.5rem; color: var(--secondary-text); margin-bottom: 2rem; font-weight: 500; }
     
     h2 { font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem; }
