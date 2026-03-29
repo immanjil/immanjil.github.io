@@ -2,7 +2,6 @@
 import Layout from '../layouts/Layout.astro';
 import { profile } from '../data/profile';
 import ExperienceCard from '../components/ExperienceCard.astro';
-import ProjectCard from '../components/ProjectCard.astro';
 import SkillBadge from '../components/SkillBadge.astro';
 ---
 
@@ -57,15 +56,6 @@ import SkillBadge from '../components/SkillBadge.astro';
         {profile.experience.map(exp => (
             <ExperienceCard {...exp} />
         ))}
-    </section>
-
-    <section id="projects">
-        <h2>Key Projects</h2>
-        <div class="projects-grid">
-            {profile.projects.map(project => (
-                <ProjectCard {...project} />
-            ))}
-        </div>
     </section>
 
     <section id="skills">
@@ -222,18 +212,6 @@ import SkillBadge from '../components/SkillBadge.astro';
         letter-spacing: 0.1em;
     }
     .badges { display: flex; flex-wrap: wrap; }
-
-    .projects-grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-    }
-
-    @media (min-width: 768px) {
-        .projects-grid {
-            grid-template-columns: 1fr 1fr;
-        }
-    }
 
     .education-card h3 { color: var(--text-color); margin-top: 0; font-size: 1.4rem; }
     .education-card p { color: var(--secondary-text); font-weight: 500; }
