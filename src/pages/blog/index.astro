@@ -9,7 +9,7 @@ const posts = await getCollection('blog');
     <ul>
         {posts.map(post => (
             <li>
-                <a href={`/blog/${post.slug}`}>{post.slug.replace(/-/g, ' ')}</a>
+                <a href={`/blog/${post.id}`}>{post.id.replace(/-/g, ' ')}</a>
             </li>
         ))}
     </ul>
