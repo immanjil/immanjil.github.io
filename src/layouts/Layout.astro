@@ -90,6 +90,42 @@ const { title } = Astro.props;
 
         .nav-links a:hover { text-decoration: underline; }
 
+        .status-badges {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .ai-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            background: rgba(0, 112, 243, 0.1);
+            padding: 0.4rem 0.75rem;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border: 1px solid rgba(0, 112, 243, 0.2);
+        }
+
+        .pulse {
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            box-shadow: 0 0 0 rgba(0, 112, 243, 0.4);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 112, 243, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(0, 112, 243, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 112, 243, 0); }
+        }
+
         h1, h2, h3 {
             margin-top: 2rem;
             color: var(--text-color);
@@ -131,10 +167,16 @@ const { title } = Astro.props;
             <a href="/projects">Projects</a>
             <a href="/leetcode">LeetCode</a>
         </div>
-        <button id="theme-toggle" aria-label="Toggle dark mode">
-            <span class="sun">🌞</span>
-            <span class="moon">🌙</span>
-        </button>
+        <div class="status-badges">
+            <span class="ai-status">
+                <span class="pulse"></span>
+                AI Powered Repo
+            </span>
+            <button id="theme-toggle" aria-label="Toggle dark mode">
+                <span class="sun">🌞</span>
+                <span class="moon">🌙</span>
+            </button>
+        </div>
     </nav>
     <main>
         <slot />
