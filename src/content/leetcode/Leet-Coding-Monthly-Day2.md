@@ -1,5 +1,8 @@
-
-# Jewels and Stones 
+---
+title: "Jewels and Stones"
+date: 2026-03-29
+tags: ["LeetCode"]
+---
 
 ---
 

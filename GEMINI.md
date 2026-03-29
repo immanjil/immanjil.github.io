@@ -16,11 +16,11 @@ The site is transitioning from a legacy Jekyll setup to Astro to leverage better
 - **CI/CD:** GitHub Actions (including custom Gemini CLI integrations)
 
 ## 📂 Project Structure
-- `src/pages/`: Main site routes (`index.astro`, `blog/index.astro`, `blog/[slug].astro`).
+- `src/pages/`: Main site routes (`index.astro`, `leetcode/index.astro`, `leetcode/[slug].astro`).
 - `src/components/`: Reusable UI components (`ExperienceCard`, `ProjectCard`, `SkillBadge`).
 - `src/layouts/`: Base page layouts (`Layout.astro`).
 - `src/data/`: Centralized profile data (`profile.ts`).
-- `src/content/`: Content collections for blog posts (`blog/`).
+- `src/content/`: Content collections for LeetCode problems (`leetcode/`).
 - `src/assets/`: Static assets like resumes and images.
 - `public/`: Publicly accessible files (e.g., `.nojekyll`).
 - `.github/`: CI/CD workflows and Gemini CLI custom commands.
@@ -39,7 +39,7 @@ The project features a robust Gemini CLI setup for autonomous and assisted devel
 ## 📝 Recent Updates (March 2026)
 - **Stats Section:** Added an "At a Glance" section on the homepage featuring key career metrics (9+ years experience, 6+ engineers managed, TX-based, AI focus).
 - **Server Config:** Updated `astro.config.mjs` to enable host access and set default port `4321`.
-- **Content:** Maintained a monthly LeetCode blogging series in `src/content/blog/`.
+- **Content:** Maintained a monthly LeetCode blogging series in `src/content/leetcode/`.
 
 ## 🛠️ Development
 - `npm run dev`: Start local development server.

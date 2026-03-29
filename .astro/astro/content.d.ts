@@ -140,82 +140,90 @@ declare module 'astro:content' {
 	>;
 
 	type ContentEntryMap = {
-		"blog": {
+		"blog": Record<string, {
+  id: string;
+  slug: string;
+  body: string;
+  collection: "blog";
+  data: any;
+  render(): Render[".md"];
+}>;
+"leetcode": {
 "Leet-Coding-Monthly-Day1.md": {
 	id: "Leet-Coding-Monthly-Day1.md";
   slug: "leet-coding-monthly-day1";
   body: string;
-  collection: "blog";
+  collection: "leetcode";
   data: any
 } & { render(): Render[".md"] };
 "Leet-Coding-Monthly-Day10.md": {
 	id: "Leet-Coding-Monthly-Day10.md";
   slug: "leet-coding-monthly-day10";
   body: string;
-  collection: "blog";
+  collection: "leetcode";
   data: any
 } & { render(): Render[".md"] };
 "Leet-Coding-Monthly-Day11.md": {
 	id: "Leet-Coding-Monthly-Day11.md";
   slug: "leet-coding-monthly-day11";
   body: string;
-  collection: "blog";
+  collection: "leetcode";
   data: any
 } & { render(): Render[".md"] };
 "Leet-Coding-Monthly-Day2.md": {
 	id: "Leet-Coding-Monthly-Day2.md";
   slug: "leet-coding-monthly-day2";
   body: string;
-  collection: "blog";
+  collection: "leetcode";
   data: any
 } & { render(): Render[".md"] };
 "Leet-Coding-Monthly-Day3.md": {
 	id: "Leet-Coding-Monthly-Day3.md";
   slug: "leet-coding-monthly-day3";
   body: string;
-  collection: "blog";
+  collection: "leetcode";
   data: any
 } & { render(): Render[".md"] };
 "Leet-Coding-Monthly-Day4.md": {
 	id: "Leet-Coding-Monthly-Day4.md";
   slug: "leet-coding-monthly-day4";
   body: string;
-  collection: "blog";
+  collection: "leetcode";
   data: any
 } & { render(): Render[".md"] };
 "Leet-Coding-Monthly-Day5.md": {
 	id: "Leet-Coding-Monthly-Day5.md";
   slug: "leet-coding-monthly-day5";
   body: string;
-  collection: "blog";
+  collection: "leetcode";
   data: any
 } & { render(): Render[".md"] };
 "Leet-Coding-Monthly-Day6.md": {
 	id: "Leet-Coding-Monthly-Day6.md";
   slug: "leet-coding-monthly-day6";
   body: string;
-  collection: "blog";
+  collection: "leetcode";
   data: any
 } & { render(): Render[".md"] };
 "Leet-Coding-Monthly-Day7.md": {
 	id: "Leet-Coding-Monthly-Day7.md";
   slug: "leet-coding-monthly-day7";
   body: string;
-  collection: "blog";
+  collection: "leetcode";
   data: any
 } & { render(): Render[".md"] };
 "Leet-Coding-Monthly-Day8.md": {
 	id: "Leet-Coding-Monthly-Day8.md";
   slug: "leet-coding-monthly-day8";
   body: string;
-  collection: "blog";
+  collection: "leetcode";
   data: any
 } & { render(): Render[".md"] };
 "Leet-Coding-Monthly-Day9.md": {
 	id: "Leet-Coding-Monthly-Day9.md";
   slug: "leet-coding-monthly-day9";
   body: string;
-  collection: "blog";
+  collection: "leetcode";
   data: any
 } & { render(): Render[".md"] };
 };
