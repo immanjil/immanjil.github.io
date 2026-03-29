@@ -1,0 +1,28 @@
+---
+const { role, company, period, description } = Astro.props;
+---
+<div class="experience-card">
+    <div class="header">
+        <h3>{role}</h3>
+        <span class="period">{period}</span>
+    </div>
+    <div class="company">{company}</div>
+    <p class="description">{description}</p>
+</div>
+
+<style>
+    .experience-card {
+        margin-bottom: 2rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid var(--border-color);
+    }
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+    }
+    h3 { margin: 0; color: var(--text-color); font-weight: 600; font-size: 1.25rem; }
+    .period { font-size: 0.85rem; color: var(--secondary-text); font-weight: 500; }
+    .company { font-weight: 600; color: var(--accent-color); margin-top: 0.2rem; font-size: 1.1rem; }
+    .description { margin-top: 0.75rem; color: var(--text-color); opacity: 0.9; }
+</style>

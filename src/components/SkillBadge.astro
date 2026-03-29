@@ -1,0 +1,25 @@
+---
+const { name } = Astro.props;
+---
+<span class="skill-badge">{name}</span>
+
+<style>
+    .skill-badge {
+        display: inline-block;
+        background: var(--card-bg);
+        color: var(--text-color);
+        border: 1px solid var(--border-color);
+        padding: 0.4rem 1rem;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        margin-right: 0.75rem;
+        margin-bottom: 0.75rem;
+        transition: all 0.2s;
+    }
+    .skill-badge:hover {
+        border-color: var(--accent-color);
+        color: var(--accent-color);
+        transform: scale(1.05);
+    }
+</style>

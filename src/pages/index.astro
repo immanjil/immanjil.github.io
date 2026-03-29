@@ -1,10 +1,126 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { profile } from '../data/profile';
+import ExperienceCard from '../components/ExperienceCard.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import SkillBadge from '../components/SkillBadge.astro';
 ---
+
 <Layout title="Home">
-    <h1>Manjil Thapa Magar</h1>
-    <p>Software Engineer. Welcome to my new, simpler portfolio built with Astro.</p>
-    <p>I'm migrating my old site to something much easier to maintain.</p>
-    <h2>Latest Thoughts</h2>
-    <p>Check out my <a href="/blog">blog posts</a>.</p>
+    <section class="intro">
+        <h1>{profile.name}</h1>
+        <p class="title">{profile.title} @ {profile.company}</p>
+        <p class="bio">{profile.intro}</p>
+        <div class="social-links">
+            <a href={profile.links.linkedin} target="_blank">LinkedIn</a>
+            <a href={profile.links.github} target="_blank">GitHub</a>
+            <a href={profile.links.resume} target="_blank" class="resume-button">Download Resume</a>
+        </div>
+    </section>
+
+    <section id="experience">
+        <h2>Professional Experience</h2>
+        {profile.experience.map(exp => (
+            <ExperienceCard {...exp} />
+        ))}
+    </section>
+
+    <section id="projects">
+        <h2>Key Projects</h2>
+        <div class="projects-grid">
+            {profile.projects.map(project => (
+                <ProjectCard {...project} />
+            ))}
+        </div>
+    </section>
+
+    <section id="skills">
+        <h2>Technical Skills</h2>
+        <div class="skills-category">
+            <h3>Programming Languages</h3>
+            <div class="badges">
+                {profile.skills.languages.map(skill => <SkillBadge name={skill} />)}
+            </div>
+            
+            <h3>Frameworks</h3>
+            <div class="badges">
+                {profile.skills.frameworks.map(skill => <SkillBadge name={skill} />)}
+            </div>
+
+            <h3>Databases & Cloud</h3>
+            <div class="badges">
+                {profile.skills.backend.map(skill => <SkillBadge name={skill} />)}
+            </div>
+
+            <h3>Tools & Specialties</h3>
+            <div class="badges">
+                {profile.skills.tools.map(skill => <SkillBadge name={skill} />)}
+            </div>
+        </div>
+    </section>
+
+    <section id="education">
+        <h2>Education</h2>
+        <div class="education-card">
+            <h3>{profile.education.degree}</h3>
+            <p>{profile.education.college} | {profile.education.period}</p>
+        </div>
+    </section>
 </Layout>
+
+<style>
+    .intro { margin-bottom: 6rem; margin-top: 2rem; }
+    h1 { font-size: 3.5rem; margin-bottom: 0.5rem; line-height: 1.1; font-weight: 800; }
+    .title { font-size: 1.5rem; color: var(--secondary-text); font-weight: 600; margin-bottom: 1.5rem; }
+    .bio { font-size: 1.25rem; color: var(--text-color); max-width: 700px; line-height: 1.6; opacity: 0.9; }
+    
+    .social-links { margin-top: 2.5rem; display: flex; align-items: center; gap: 2rem; }
+    .social-links a { font-weight: 600; color: var(--text-color); text-decoration: none; font-size: 1.1rem; }
+    .social-links a:hover { color: var(--accent-color); }
+    
+    .resume-button {
+        background-color: var(--text-color);
+        color: var(--bg-color) !important;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        transition: transform 0.2s, opacity 0.2s;
+    }
+    .resume-button:hover {
+        transform: scale(1.05);
+        opacity: 0.9;
+    }
+
+    section { margin-top: 6rem; }
+    h2 { font-size: 2rem; font-weight: 700; margin-bottom: 3rem; }
+    
+    .skills-category h3 { 
+        margin-top: 2.5rem; 
+        margin-bottom: 1.25rem; 
+        color: var(--secondary-text); 
+        font-size: 1rem; 
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+    }
+    .badges { display: flex; flex-wrap: wrap; }
+
+    .projects-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+        .projects-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+
+    .education-card h3 { color: var(--text-color); margin-top: 0; font-size: 1.4rem; }
+    .education-card p { color: var(--secondary-text); font-weight: 500; }
+
+    /* Theme Toggle Icons */
+    :global(.dark) .sun { display: none; }
+    :global(.dark) .moon { display: inline; }
+    .sun { display: inline; }
+    .moon { display: none; }
+</style>
