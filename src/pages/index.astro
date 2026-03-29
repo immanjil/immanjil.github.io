@@ -2,15 +2,23 @@
 import Layout from '../layouts/Layout.astro';
 import { profile } from '../data/profile';
 import ExperienceCard from '../components/ExperienceCard.astro';
-import ProjectCard from '../components/ProjectCard.astro';
 import SkillBadge from '../components/SkillBadge.astro';
 ---
 
 <Layout title="Home">
     <section class="intro">
-        <h1>{profile.name}</h1>
-        <p class="title">{profile.title} @ {profile.company}</p>
-        <p class="bio">{profile.intro}</p>
+        <div class="intro-content">
+            <div class="intro-text">
+                <h1>{profile.name}</h1>
+                <p class="title">{profile.title} @ {profile.company}</p>
+                <p class="bio">{profile.intro}</p>
+            </div>
+            {profile.links.avatar && (
+                <div class="profile-image-container">
+                    <img src={profile.links.avatar} alt={profile.name} class="profile-image" />
+                </div>
+            )}
+        </div>
         <div class="social-links">
             <a href={profile.links.linkedin} target="_blank" aria-label="LinkedIn">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
@@ -50,15 +58,6 @@ import SkillBadge from '../components/SkillBadge.astro';
         ))}
     </section>
 
-    <section id="projects">
-        <h2>Key Projects</h2>
-        <div class="projects-grid">
-            {profile.projects.map(project => (
-                <ProjectCard {...project} />
-            ))}
-        </div>
-    </section>
-
     <section id="skills">
         <h2>Technical Skills</h2>
         <div class="skills-category">
@@ -95,6 +94,36 @@ import SkillBadge from '../components/SkillBadge.astro';
 
 <style>
     .intro { margin-bottom: 6rem; margin-top: 2rem; }
+    .intro-content { display: flex; align-items: flex-start; gap: 3rem; justify-content: space-between; }
+    .intro-text { flex: 1; }
+    
+    .profile-image-container {
+        flex-shrink: 0;
+        width: 200px;
+        height: 200px;
+        border-radius: 20px;
+        overflow: hidden;
+        border: 4px solid var(--card-bg);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        transform: rotate(2deg);
+        transition: transform 0.3s ease;
+    }
+
+    .profile-image-container:hover {
+        transform: rotate(0deg) scale(1.05);
+    }
+
+    .profile-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    @media (max-width: 768px) {
+        .intro-content { flex-direction: column-reverse; gap: 2rem; }
+        .profile-image-container { width: 150px; height: 150px; margin-bottom: 1rem; }
+    }
+
     h1 { font-size: 3.5rem; margin-bottom: 0.5rem; line-height: 1.1; font-weight: 800; }
     .title { font-size: 1.5rem; color: var(--secondary-text); font-weight: 600; margin-bottom: 1.5rem; }
     .bio { font-size: 1.25rem; color: var(--text-color); max-width: 700px; line-height: 1.6; opacity: 0.9; }
@@ -183,18 +212,6 @@ import SkillBadge from '../components/SkillBadge.astro';
         letter-spacing: 0.1em;
     }
     .badges { display: flex; flex-wrap: wrap; }
-
-    .projects-grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-    }
-
-    @media (min-width: 768px) {
-        .projects-grid {
-            grid-template-columns: 1fr 1fr;
-        }
-    }
 
     .education-card h3 { color: var(--text-color); margin-top: 0; font-size: 1.4rem; }
     .education-card p { color: var(--secondary-text); font-weight: 500; }

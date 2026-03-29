@@ -1,0 +1,64 @@
+---
+import { profile } from '../data/profile';
+const currentYear = new Date().getFullYear();
+---
+<footer>
+    <div class="footer-content">
+        <div class="footer-info">
+            <p class="copyright">© {currentYear} {profile.name}. All rights reserved.</p>
+            <p class="tagline">{profile.title} @ {profile.company}</p>
+        </div>
+        
+        <div class="footer-links">
+            <a href={profile.links.linkedin} target="_blank">LinkedIn</a>
+            <a href={profile.links.github} target="_blank">GitHub</a>
+            <a href={profile.links.email}>Email</a>
+        </div>
+
+        <div class="footer-meta">
+            <span>Built with <a href="https://astro.build" target="_blank">Astro</a></span>
+        </div>
+    </div>
+</footer>
+
+<style>
+    footer {
+        margin-top: 8rem;
+        padding: 4rem 0;
+        border-top: 1px solid var(--border-color);
+    }
+
+    .footer-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+        text-align: center;
+    }
+
+    @media (min-width: 768px) {
+        .footer-content {
+            flex-direction: row;
+            justify-content: space-between;
+            text-align: left;
+        }
+    }
+
+    .footer-info p { margin: 0; }
+    .copyright { font-weight: 600; color: var(--text-color); }
+    .tagline { font-size: 0.9rem; color: var(--secondary-text); margin-top: 0.25rem; }
+
+    .footer-links { display: flex; gap: 1.5rem; }
+    .footer-links a { 
+        text-decoration: none; 
+        color: var(--secondary-text); 
+        font-size: 0.95rem; 
+        font-weight: 500;
+        transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--accent-color); }
+
+    .footer-meta { font-size: 0.85rem; color: var(--secondary-text); }
+    .footer-meta a { color: var(--text-color); font-weight: 600; text-decoration: none; }
+    .footer-meta a:hover { color: var(--accent-color); }
+</style>

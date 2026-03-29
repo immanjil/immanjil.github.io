@@ -1,0 +1,155 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SkillBadge from '../components/SkillBadge.astro';
+---
+
+<Layout title="Projects Showcase">
+    <section class="projects-hero">
+        <h1>Projects & Innovation</h1>
+        <p class="subtitle">Showcasing high-impact engineering and AI initiatives.</p>
+    </section>
+
+    <article class="project-featured">
+        <header>
+            <div class="project-label">Featured AI Project</div>
+            <h2>Internal Coding Agent Ecosystem</h2>
+            <div class="project-tech">
+                <SkillBadge name="Agentic AI" />
+                <SkillBadge name="OpenCode" />
+                <SkillBadge name="Kimi K2" />
+            </div>
+        </header>
+
+        <div class="project-details">
+            <section>
+                <h3>Context & Challenge</h3>
+                <p>
+                    In high-scale enterprise environments, engineering velocity is often bottlenecked by manual triage and architectural alignment. I architected an internal agentic ecosystem to bridge these gaps, leveraging specialized models and modular agent frameworks.
+                </p>
+            </section>
+
+            <section>
+                <h3>The Solution</h3>
+                <p>
+                    The ecosystem utilizes <strong>OpenCode</strong> for precise code generation and reasoning, combined with <strong>Kimi K2</strong> for long-context analysis of complex project requirements. These models are orchestrated within an <strong>Agentic AI</strong> framework that defines specific skills, allowing agents to act as autonomous peers in the development lifecycle.
+                </p>
+            </section>
+
+            <section class="features-list">
+                <h3>Key Features</h3>
+                <ul>
+                    <li><strong>Agentic Orchestration:</strong> Defining autonomous behaviors and modular "Skills" that allow agents to execute complex, multi-step engineering tasks.</li>
+                    <li><strong>OpenCode Integration:</strong> Leveraging specialized coding models for high-fidelity code generation and refactoring.</li>
+                    <li><strong>Kimi K2 Long-Context:</strong> Utilizing advanced LLMs to analyze entire project architectures and multi-file dependencies simultaneously.</li>
+                </ul>
+            </section>
+
+            <section class="impact-section">
+                <h3>Business Impact</h3>
+                <div class="impact-grid">
+                    <div class="impact-stat">
+                        <span class="value">30%</span>
+                        <span class="label">Increase in Dev Velocity</span>
+                    </div>
+                    <div class="impact-stat">
+                        <span class="value">2x</span>
+                        <span class="label">Faster Onboarding</span>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </article>
+
+    <section class="future-roadmap">
+        <h2>Future Roadmap</h2>
+        <div class="roadmap-card">
+            <p>
+                Expanding the ecosystem to include automated architectural compliance checking and real-time observability feedback loops directly into the agentic workflows.
+            </p>
+        </div>
+    </section>
+</Layout>
+
+<style>
+    section { margin-top: 5rem; }
+    h1 { font-size: 3.5rem; margin-bottom: 0.5rem; font-weight: 800; line-height: 1.1; }
+    .subtitle { font-size: 1.5rem; color: var(--secondary-text); margin-bottom: 2rem; font-weight: 500; }
+
+    .project-featured {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        padding: 4rem;
+        border-radius: 20px;
+        margin-top: 4rem;
+        box-shadow: 0 4px 30px rgba(0,0,0,0.05);
+    }
+
+    @media (max-width: 640px) {
+        .project-featured { padding: 2rem; }
+    }
+
+    .project-label {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: var(--accent-color);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 1rem;
+    }
+
+    .project-featured h2 { 
+        font-size: 2.5rem; 
+        margin: 0 0 1.5rem 0; 
+        font-weight: 800; 
+        border: none;
+    }
+
+    .project-tech { display: flex; flex-wrap: wrap; margin-bottom: 3rem; }
+
+    .project-details section { margin-top: 3rem; border: none; }
+    .project-details h3 { font-size: 1.5rem; margin-bottom: 1rem; color: var(--text-color); font-weight: 700; }
+    .project-details p { font-size: 1.15rem; line-height: 1.8; color: var(--text-color); opacity: 0.9; }
+
+    .features-list ul { padding-left: 1.5rem; }
+    .features-list li { font-size: 1.1rem; line-height: 1.8; color: var(--text-color); margin-bottom: 1rem; opacity: 0.9; }
+    .features-list strong { color: var(--accent-color); }
+
+    .impact-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+        margin-top: 1.5rem;
+    }
+
+    .impact-stat {
+        background: var(--bg-color);
+        padding: 1.5rem;
+        border-radius: 12px;
+        text-align: center;
+        border: 1px solid var(--border-color);
+    }
+
+    .impact-stat .value {
+        display: block;
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: var(--accent-color);
+    }
+
+    .impact-stat .label {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--secondary-text);
+        text-transform: uppercase;
+    }
+
+    .roadmap-card {
+        background: var(--card-bg);
+        border: 1px dashed var(--border-color);
+        padding: 2rem;
+        border-radius: 12px;
+        margin-top: 1.5rem;
+    }
+
+    .roadmap-card p { font-size: 1.1rem; margin: 0; color: var(--secondary-text); font-style: italic; }
+</style>

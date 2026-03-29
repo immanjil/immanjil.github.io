@@ -227,6 +227,15 @@ declare module 'astro:content' {
   data: any
 } & { render(): Render[".md"] };
 };
+"system-design": {
+"url-shortener-bitly.md": {
+	id: "url-shortener-bitly.md";
+  slug: "url-shortener-bitly";
+  body: string;
+  collection: "system-design";
+  data: any
+} & { render(): Render[".md"] };
+};
 
 	};
 
