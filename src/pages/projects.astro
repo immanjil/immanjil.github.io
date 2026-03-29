@@ -1,0 +1,157 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SkillBadge from '../components/SkillBadge.astro';
+---
+
+<Layout title="Projects Showcase">
+    <section class="projects-hero">
+        <h1>Projects & Innovation</h1>
+        <p class="subtitle">Showcasing high-impact engineering and AI initiatives.</p>
+    </section>
+
+    <article class="project-featured">
+        <header>
+            <div class="project-label">Featured AI Project</div>
+            <h2>Internal Coding Agent Ecosystem</h2>
+            <div class="project-tech">
+                <SkillBadge name="Agentic AI" />
+                <SkillBadge name="Python" />
+                <SkillBadge name="LLMs" />
+                <SkillBadge name="Gemini CLI" />
+                <SkillBadge name="RAG" />
+            </div>
+        </header>
+
+        <div class="project-details">
+            <section>
+                <h3>Context & Challenge</h3>
+                <p>
+                    As engineering teams scale, maintaining consistent development standards and high velocity becomes increasingly difficult. I led the development of an internal "Agent Ecosystem" to automate repetitive tasks and provide intelligent, context-aware coding assistance directly within the developer's CLI environment.
+                </p>
+            </section>
+
+            <section>
+                <h3>The Solution</h3>
+                <p>
+                    We built a framework of modular "Skills" and behavioral definitions (`Agents.md`) that allowed AI agents to perform complex, multi-step operations. These agents were integrated with our source control and internal documentation to ensure all suggestions were grounded in our specific codebase and architecture.
+                </p>
+            </section>
+
+            <section class="features-list">
+                <h3>Key Features</h3>
+                <ul>
+                    <li><strong>Modular Skills:</strong> Extensible library of task-specific capabilities (e.g., automated PR review, dependency triage).</li>
+                    <li><strong>Context Injection:</strong> RAG-based (Retrieval-Augmented Generation) indexing of internal documentation and design patterns.</li>
+                    <li><strong>Behavioral Frameworks:</strong> Standardized agent personas defined in markdown to ensure predictable, high-quality outcomes.</li>
+                </ul>
+            </section>
+
+            <section class="impact-section">
+                <h3>Business Impact</h3>
+                <div class="impact-grid">
+                    <div class="impact-stat">
+                        <span class="value">30%</span>
+                        <span class="label">Increase in Dev Velocity</span>
+                    </div>
+                    <div class="impact-stat">
+                        <span class="value">2x</span>
+                        <span class="label">Faster Onboarding</span>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </article>
+
+    <section class="future-roadmap">
+        <h2>Future Roadmap</h2>
+        <div class="roadmap-card">
+            <p>
+                Expanding the ecosystem to include automated architectural compliance checking and real-time observability feedback loops directly into the agentic workflows.
+            </p>
+        </div>
+    </section>
+</Layout>
+
+<style>
+    section { margin-top: 5rem; }
+    h1 { font-size: 3.5rem; margin-bottom: 0.5rem; font-weight: 800; line-height: 1.1; }
+    .subtitle { font-size: 1.5rem; color: var(--secondary-text); margin-bottom: 2rem; font-weight: 500; }
+
+    .project-featured {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        padding: 4rem;
+        border-radius: 20px;
+        margin-top: 4rem;
+        box-shadow: 0 4px 30px rgba(0,0,0,0.05);
+    }
+
+    @media (max-width: 640px) {
+        .project-featured { padding: 2rem; }
+    }
+
+    .project-label {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: var(--accent-color);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 1rem;
+    }
+
+    .project-featured h2 { 
+        font-size: 2.5rem; 
+        margin: 0 0 1.5rem 0; 
+        font-weight: 800; 
+        border: none;
+    }
+
+    .project-tech { display: flex; flex-wrap: wrap; margin-bottom: 3rem; }
+
+    .project-details section { margin-top: 3rem; border: none; }
+    .project-details h3 { font-size: 1.5rem; margin-bottom: 1rem; color: var(--text-color); font-weight: 700; }
+    .project-details p { font-size: 1.15rem; line-height: 1.8; color: var(--text-color); opacity: 0.9; }
+
+    .features-list ul { padding-left: 1.5rem; }
+    .features-list li { font-size: 1.1rem; line-height: 1.8; color: var(--text-color); margin-bottom: 1rem; opacity: 0.9; }
+    .features-list strong { color: var(--accent-color); }
+
+    .impact-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+        margin-top: 1.5rem;
+    }
+
+    .impact-stat {
+        background: var(--bg-color);
+        padding: 1.5rem;
+        border-radius: 12px;
+        text-align: center;
+        border: 1px solid var(--border-color);
+    }
+
+    .impact-stat .value {
+        display: block;
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: var(--accent-color);
+    }
+
+    .impact-stat .label {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--secondary-text);
+        text-transform: uppercase;
+    }
+
+    .roadmap-card {
+        background: var(--card-bg);
+        border: 1px dashed var(--border-color);
+        padding: 2rem;
+        border-radius: 12px;
+        margin-top: 1.5rem;
+    }
+
+    .roadmap-card p { font-size: 1.1rem; margin: 0; color: var(--secondary-text); font-style: italic; }
+</style>
