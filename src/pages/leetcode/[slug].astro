@@ -5,7 +5,7 @@ import Layout from '../../layouts/Layout.astro';
 export async function getStaticPaths() {
     const posts = await getCollection('leetcode');
     return posts.map(post => ({
-        params: { slug: post.id },
+        params: { slug: post.id.replace(/\.md$/, '') },
         props: { post },
     }));
 }
@@ -22,11 +22,11 @@ const formatDate = (date: Date | undefined) => {
     });
 };
 ---
-<Layout title={post.data.title || post.id.replace(/-/g, ' ')}>
+<Layout title={post.data.title || post.id.replace(/\.md$/, '').replace(/-/g, ' ')}>
     <article class="prose">
         <header>
             <a href="/leetcode" class="back-link">← Back to All Problems</a>
-            <h1>{post.data.title || post.id.replace(/-/g, ' ')}</h1>
+            <h1>{post.data.title || post.id.replace(/\.md$/, '').replace(/-/g, ' ')}</h1>
             <div class="post-metadata">
                 <span class="date">{formatDate(post.data.date)}</span>
                 {post.data.tags && (
