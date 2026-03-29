@@ -1,5 +1,8 @@
-
-# First Unique Character in a String
+---
+title: "First Unique Character in a String"
+date: 2026-03-29
+tags: ["LeetCode"]
+---
 
 ---
 

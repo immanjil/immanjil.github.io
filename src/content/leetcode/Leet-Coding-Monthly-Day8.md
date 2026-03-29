@@ -1,4 +1,8 @@
-# Check If It Is a Straight Line
+---
+title: "Check If It Is a Straight Line"
+date: 2026-03-29
+tags: ["LeetCode"]
+---
 
 ---
 

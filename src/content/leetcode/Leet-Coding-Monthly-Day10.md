@@ -1,4 +1,8 @@
-# Find the Town Judge
+---
+title: "Find the Town Judge"
+date: 2026-03-29
+tags: ["LeetCode"]
+---
 
 ---
 

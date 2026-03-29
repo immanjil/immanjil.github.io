@@ -1,4 +1,8 @@
-# Cousins in Binary Tree
+---
+title: "Cousins in Binary Tree"
+date: 2026-03-29
+tags: ["LeetCode"]
+---
 
 ---
 

@@ -1,5 +1,8 @@
-
-# First Bad Version  
+---
+title: "First Bad Version"
+date: 2026-03-29
+tags: ["LeetCode"]
+---
 
 ---
 
