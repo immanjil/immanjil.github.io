@@ -1,0 +1,42 @@
+---
+const { title, description, tech, link } = Astro.props;
+---
+<div class="project-card">
+    <h3>{title}</h3>
+    <p>{description}</p>
+    <div class="tech-stack">
+        {tech.map((t: string) => <span class="tech">{t}</span>)}
+    </div>
+    {link && <a href={link} target="_blank" rel="noopener noreferrer">View Project →</a>}
+</div>
+
+<style>
+    .project-card {
+        padding: 1.5rem;
+        border: 1px solid var(--border-color);
+        background-color: var(--card-bg);
+        border-radius: 12px;
+        margin-bottom: 1.5rem;
+        transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    }
+    .project-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        border-color: var(--accent-color);
+    }
+    h3 { margin-top: 0; color: var(--text-color); font-size: 1.3rem; }
+    p { color: var(--secondary-text); font-size: 0.95rem; line-height: 1.5; }
+    .tech-stack { margin: 1.25rem 0; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .tech {
+        background: var(--bg-color);
+        border: 1px solid var(--border-color);
+        padding: 0.25rem 0.75rem;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--secondary-text);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    a { color: var(--accent-color); text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+</style>
