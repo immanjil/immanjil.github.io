@@ -18,6 +18,25 @@ import SkillBadge from '../components/SkillBadge.astro';
         </div>
     </section>
 
+    <section class="at-a-glance">
+        <div class="stat-card">
+            <span class="stat-value">9+</span>
+            <span class="stat-label">Years Experience</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-value">6+</span>
+            <span class="stat-label">Engineers Managed</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-value">TX</span>
+            <span class="stat-label">Based (Frisco/Dallas)</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-value">AI</span>
+            <span class="stat-label">Agentic Orchestration</span>
+        </div>
+    </section>
+
     <section id="experience">
         <h2>Professional Experience</h2>
         {profile.experience.map(exp => (
@@ -88,6 +107,52 @@ import SkillBadge from '../components/SkillBadge.astro';
     .resume-button:hover {
         transform: scale(1.05);
         opacity: 0.9;
+    }
+
+    .at-a-glance {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+        margin-top: -2rem;
+        margin-bottom: 6rem;
+    }
+
+    @media (min-width: 768px) {
+        .at-a-glance {
+            grid-template-columns: repeat(4, 1fr);
+        }
+    }
+
+    .stat-card {
+        background-color: var(--card-bg);
+        border: 1px solid var(--border-color);
+        padding: 1.5rem;
+        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        transition: border-color 0.2s;
+    }
+
+    .stat-card:hover {
+        border-color: var(--accent-color);
+    }
+
+    .stat-value {
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--accent-color);
+        line-height: 1;
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--secondary-text);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
     }
 
     section { margin-top: 6rem; }
