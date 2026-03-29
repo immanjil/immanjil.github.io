@@ -9,7 +9,45 @@ import SkillBadge from '../components/SkillBadge.astro';
         <p class="subtitle">Showcasing high-impact engineering and AI initiatives.</p>
     </section>
 
-    <article class="project-featured">
+    <article class="project-featured live-integration">
+        <header>
+            <div class="project-label">Live Integration</div>
+            <h2>AI-Powered DevOps & Agentic Workflow</h2>
+            <div class="project-tech">
+                <SkillBadge name="GitHub Actions" />
+                <SkillBadge name="Gemini CLI" />
+                <SkillBadge name="MCP" />
+                <SkillBadge name="Agentic Workflows" />
+            </div>
+        </header>
+
+        <div class="project-details">
+            <section>
+                <h3>Context & Innovation</h3>
+                <p>
+                    This very portfolio repository is a living demonstration of <strong>Agentic AI Orchestration</strong>. I integrated a custom Gemini CLI pipeline that transforms standard DevOps into an interactive, agentic environment.
+                </p>
+            </section>
+
+            <section class="features-list">
+                <h3>Autonomous Capabilities</h3>
+                <ul>
+                    <li><strong>Intelligent Triage:</strong> Automated issue analysis and labeling using Gemini to categorize incoming requests and bugs.</li>
+                    <li><strong>Agentic Code Generation:</strong> A 'Plan-Execute' workflow that can take an issue description, design a solution, and autonomously open a Pull Request.</li>
+                    <li><strong>Collaborative CLI:</strong> Interactive agent triggers via GitHub comments, allowing for real-time code analysis and refactoring requests.</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>The Architecture</h3>
+                <p>
+                    The system uses a <strong>Dispatcher-Specialist</strong> pattern. A central GitHub Action (The Dispatcher) listens for repository events and routes them to specialized AI sub-agents (Specialists) for review, triage, or implementation, all communicating via the <strong>Model Context Protocol (MCP)</strong>.
+                </p>
+            </section>
+        </div>
+    </article>
+
+    <article class="project-featured secondary">
         <header>
             <div class="project-label">Featured AI Project</div>
             <h2>Internal Coding Agent Ecosystem</h2>
