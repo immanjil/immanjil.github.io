@@ -4,7 +4,7 @@ import Layout from '../../layouts/Layout.astro';
 
 const selectedTag = Astro.url.searchParams.get('tag');
 
-const allPosts = await getCollection('leetcode');
+const allPosts = await getCollection('system-design');
 const posts = allPosts
     .filter(post => !selectedTag || post.data.tags?.includes(selectedTag))
     .sort((a, b) => (b.data.date?.getTime() ?? 0) - (a.data.date?.getTime() ?? 0));
@@ -18,14 +18,14 @@ const formatDate = (date: Date | undefined) => {
     });
 };
 ---
-<Layout title="LeetCode Problems">
+<Layout title="System Design">
     <div class="blog-header">
-        <h1>LeetCode Problems</h1>
-        <p>A monthly series exploring algorithmic challenges and solutions.</p>
+        <h1>System Design Problems</h1>
+        <p>In-depth architectural analysis and high-scale system design breakdowns.</p>
         {selectedTag && (
             <div class="filter-info">
                 Showing problems tagged with <span class="active-tag">#{selectedTag}</span>
-                <a href="/leetcode" class="clear-filter">Clear Filter</a>
+                <a href="/system-design" class="clear-filter">Clear Filter</a>
             </div>
         )}
     </div>
@@ -38,16 +38,17 @@ const formatDate = (date: Date | undefined) => {
                     {post.data.tags && (
                         <div class="post-tags">
                             {post.data.tags.map(tag => (
-                                <a href={`/leetcode?tag=${tag}`} class={`tag ${selectedTag === tag ? 'active' : ''}`}>
+                                <a href={`/system-design?tag=${tag}`} class={`tag ${selectedTag === tag ? 'active' : ''}`}>
                                     #{tag}
                                 </a>
                             ))}
                         </div>
                     )}
                 </div>
-                <a href={`/leetcode/${post.id}`} class="post-link">
+                <a href={`/system-design/${post.id}`} class="post-link">
                     <h2>{post.data.title || post.id.replace(/-/g, ' ')}</h2>
-                    <p>Read more →</p>
+                    <p class="description">{post.data.description}</p>
+                    <p class="read-more">View Architecture Design →</p>
                 </a>
             </article>
         ))}
@@ -56,6 +57,7 @@ const formatDate = (date: Date | undefined) => {
 
 <style>
     .blog-header { margin-bottom: 4rem; margin-top: 2rem; }
+    .blog-header h1 { font-size: 3rem; font-weight: 800; margin-bottom: 0.5rem; }
     .blog-header p { color: var(--secondary-text); font-size: 1.25rem; margin-bottom: 1.5rem; }
     
     .filter-info {
@@ -127,6 +129,7 @@ const formatDate = (date: Date | undefined) => {
         background: rgba(0, 112, 243, 0.05);
     }
 
-    .post-item h2 { margin: 0; font-size: 1.75rem; text-transform: capitalize; border: none; }
-    .post-item p { margin-top: 1.5rem; color: var(--accent-color); font-weight: 600; }
+    .post-item h2 { margin: 0; font-size: 1.75rem; font-weight: 800; border: none; }
+    .description { margin-top: 1rem; color: var(--secondary-text); line-height: 1.6; }
+    .read-more { margin-top: 1.5rem; color: var(--accent-color); font-weight: 700; }
 </style>

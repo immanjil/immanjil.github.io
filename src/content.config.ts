@@ -11,4 +11,14 @@ const leetcode = defineCollection({
     }),
 });
 
-export const collections = { leetcode };
+const systemDesign = defineCollection({
+    loader: glob({ pattern: "**/*.md", base: "./src/content/system-design" }),
+    schema: z.object({
+        title: z.string().optional(),
+        date: z.date().optional(),
+        tags: z.array(z.string()).optional(),
+        description: z.string().optional(),
+    }),
+});
+
+export const collections = { leetcode, 'system-design': systemDesign };

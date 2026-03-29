@@ -1,0 +1,158 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+    const posts = await getCollection('system-design');
+    return posts.map(post => ({
+        params: { slug: post.id },
+        props: { post },
+    }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const formatDate = (date: Date | undefined) => {
+    if (!date) return '';
+    return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+    });
+};
+---
+<Layout title={post.data.title || post.id.replace(/-/g, ' ')}>
+    <article class="prose">
+        <header>
+            <a href="/system-design" class="back-link">← Back to System Design</a>
+            <h1>{post.data.title || post.id.replace(/-/g, ' ')}</h1>
+            <div class="post-metadata">
+                <span class="date">{formatDate(post.data.date)}</span>
+                {post.data.tags && (
+                    <div class="tags">
+                        {post.data.tags.map(tag => <span class="tag">#{tag}</span>)}
+                    </div>
+                )}
+            </div>
+        </header>
+        <div class="content">
+            <Content />
+        </div>
+    </article>
+</Layout>
+
+<style is:global>
+    .prose .content {
+        color: var(--text-color);
+        font-size: 1.125rem;
+        line-height: 1.8;
+    }
+    
+    .prose .content h1, .prose .content h2, .prose .content h3 {
+        margin-top: 3rem;
+        margin-bottom: 1.5rem;
+        border: none;
+        line-height: 1.3;
+        font-weight: 800;
+    }
+
+    .prose .content h2 { font-size: 2rem; color: var(--accent-color); border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }
+    .prose .content h3 { font-size: 1.5rem; }
+    
+    .prose .content a { color: var(--accent-color); text-decoration: underline; text-underline-offset: 4px; }
+    
+    .prose .content pre {
+        background-color: #1a1b26 !important;
+        padding: 1.5rem;
+        border-radius: 12px;
+        overflow-x: auto;
+        margin: 2.5rem 0;
+        border: 1px solid var(--border-color);
+    }
+
+    .prose .content blockquote {
+        border-left: 4px solid var(--accent-color);
+        padding: 1rem 0 1rem 1.5rem;
+        margin: 2rem 0;
+        color: var(--secondary-text);
+        font-style: italic;
+        background-color: var(--bg-color);
+        border-radius: 0 8px 8px 0;
+    }
+
+    .prose .content ul, .prose .content ol {
+        margin: 1.5rem 0;
+        padding-left: 1.5rem;
+    }
+
+    .prose .content li {
+        margin-bottom: 0.75rem;
+    }
+
+    .prose .content strong { color: var(--text-color); font-weight: 700; }
+</style>
+
+<style>
+    .prose {
+        background-color: var(--card-bg);
+        padding: 4rem;
+        border-radius: 16px;
+        border: 1px solid var(--border-color);
+        max-width: 100%;
+    }
+    
+    @media (max-width: 640px) {
+        .prose { padding: 2rem; }
+    }
+
+    header { margin-bottom: 4rem; }
+    
+    .back-link {
+        display: inline-block;
+        margin-bottom: 2rem;
+        color: var(--secondary-text);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 0.95rem;
+        transition: color 0.2s;
+    }
+    
+    .back-link:hover { color: var(--accent-color); }
+    
+    h1 {
+        font-size: 3rem;
+        margin: 0;
+        line-height: 1.1;
+        font-weight: 800;
+        border: none;
+    }
+
+    .post-metadata {
+        margin-top: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+        border-top: 1px solid var(--border-color);
+        padding-top: 1.5rem;
+    }
+
+    .date {
+        color: var(--secondary-text);
+        font-weight: 500;
+        font-size: 0.95rem;
+    }
+
+    .tags {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .tag {
+        color: var(--accent-color);
+        font-weight: 600;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+</style>

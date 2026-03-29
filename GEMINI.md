@@ -16,11 +16,11 @@ The site is transitioning from a legacy Jekyll setup to Astro to leverage better
 - **CI/CD:** GitHub Actions (including custom Gemini CLI integrations)
 
 ## 📂 Project Structure
-- `src/pages/`: Main site routes (`index.astro`, `about.astro`, `projects.astro`, `leetcode/index.astro`, `leetcode/[slug].astro`).
+- `src/pages/`: Main site routes (`index.astro`, `about.astro`, `projects.astro`, `system-design/index.astro`, `leetcode/index.astro`).
 - `src/components/`: Reusable UI components (`ExperienceCard`, `ProjectCard`, `SkillBadge`).
 - `src/layouts/`: Base page layouts (`Layout.astro`).
 - `src/data/`: Centralized profile data (`profile.ts`).
-- `src/content/`: Content collections for LeetCode problems (`leetcode/`).
+- `src/content/`: Content collections for LeetCode problems and System Design architecture.
 - `src/assets/`: Static assets like resumes and images.
 - `public/`: Publicly accessible files (e.g., `.nojekyll`).
 - `.github/`: CI/CD workflows and Gemini CLI custom commands.
@@ -37,10 +37,12 @@ The project features a robust Gemini CLI setup for autonomous and assisted devel
 - **Local Verification:** All changes should be verified locally before any remote interaction is proposed.
 
 ## 📝 Recent Updates (March 2026)
+- **System Design Section:** Launched a new section for architectural deep-dives, starting with a URL Shortener (Bitly) breakdown.
+- **UX Polish:** Enabled Astro View Transitions for seamless page navigation and implemented a professional site-wide footer.
+- **LeetCode Tag Filtering:** Added interactive tag filtering on the LeetCode listing page to improve content discoverability.
 - **Projects Showcase:** Created a dedicated projects page with a deep dive into the "Internal Coding Agent Ecosystem" AI project.
 - **About Page:** Implemented a dedicated "About & Leadership" page detailing mission, philosophy, and team-building expertise.
 - **Stats Section:** Added an "At a Glance" section on the homepage featuring key career metrics (9+ years experience, 6+ engineers managed, TX-based, AI focus).
-- **Server Config:** Updated `astro.config.mjs` to enable host access and set default port `4321`.
 - **Content:** Maintained a monthly LeetCode blogging series in `src/content/leetcode/`.
 
 ## 🛠️ Development
