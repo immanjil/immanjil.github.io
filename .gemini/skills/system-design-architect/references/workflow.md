@@ -1,33 +1,28 @@
-# System Design Workflow
+# System Design Workflow (Interactive)
 
-Follow these steps when designing a new system for the portfolio:
+Follow these steps when designing a new system for the portfolio. **You MUST confirm each step with the user before proceeding to the next.**
 
 ## Step 1: Requirements Clarification
-- Identify functional requirements (e.g., "Users can create short URLs").
-- Identify non-functional requirements (e.g., "High availability", "Low latency").
-- Define the scale (e.g., "100M daily active users").
+- Identify functional and non-functional requirements.
+- Define the target scale.
+- **Wait for confirmation.**
 
 ## Step 2: API Design
-- Define the primary REST/gRPC endpoints.
-- Specify request and response formats.
-- Identify edge cases and error handling.
+- Define the primary REST/gRPC endpoints and data formats.
+- **Wait for confirmation.**
 
 ## Step 3: Capacity Estimation (Back-of-the-envelope)
-- Estimate QPS (Queries Per Second).
-- Calculate storage requirements (e.g., "500GB/day").
-- Determine bandwidth constraints.
+- Estimate QPS, storage requirements, and bandwidth constraints.
+- **Wait for confirmation.**
 
 ## Step 4: High-Level Design
-- Map out the primary components (Load Balancer, Web Servers, Databases, Caches).
-- Define the data flow between components.
-- Choose appropriate database types (SQL vs. NoSQL).
+- Map out primary components (LB, Servers, DBs, Caches) and data flow.
+- **Wait for confirmation.**
 
 ## Step 5: Detailed Design
-- Deep dive into specific components (e.g., Hashing algorithms, Consistency models).
-- Address performance bottlenecks and single points of failure.
-- Explain data partitioning and replication strategies.
+- Deep dive into specific components, algorithms, and sharding strategies.
+- **Wait for confirmation.**
 
 ## Step 6: Trade-offs & Future Improvements
-- Discuss the "Why" behind architectural decisions.
-- Identify limitations and how they might be addressed at higher scale.
-- Mention alternative technologies.
+- Discuss architectural decisions, limitations, and alternatives.
+- **Wait for confirmation.**
