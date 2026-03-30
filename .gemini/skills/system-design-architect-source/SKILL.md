@@ -48,7 +48,9 @@ You **MUST** proceed through the 6 design steps one-by-one. **DO NOT** move to t
 Once all 6 steps are finalized:
 1.  **Draft Markdown**: Use [assets/template.md](assets/template.md) to compile the confirmed notes into a professional deep-dive.
 2.  **Validate Metadata**: Ensure the frontmatter follows [references/schema.md](references/schema.md).
-3.  **Confirm & Write**: Present the complete draft. Once approved, write it to `src/content/system-design/[slug].md`.
+3.  **Correct Numbering**: Ensure sections are numbered sequentially (1. Requirements, 2. API Design, 3. Capacity Estimation, etc.).
+4.  **Character Encoding**: Use standard ASCII characters for mathematical symbols (e.g., use `~` or `approx.` instead of complex unicode symbols) to prevent encoding issues in different terminal environments.
+5.  **Confirm & Write**: Present the complete draft. Once approved, write it to `src/content/system-design/[slug].md`.
 
 ## Core Guidelines
 - **Strict Interaction**: Each step is a conversation. Never skip steps.

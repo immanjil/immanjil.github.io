@@ -35,4 +35,4 @@ category: "System Design"
 [Why these choices? What are the limitations?]
 
 ---
-*This architectural deep-dive was generated with the System Design Architect AI skill.*
+*This architectural deep-dive was collaboratively designed by the user and the System Design Architect AI skill through a structured 6-step interactive process.*
