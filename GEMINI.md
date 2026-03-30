@@ -1,6 +1,6 @@
 # Project Overview: Manjil Thapa Magar Portfolio (Astro)
 
-This project is a modern, high-performance portfolio and blog built with **Astro**. It serves as the professional digital presence for Manjil Thapa Magar, a Software Engineering Manager at Paycom.
+This project is a modern, high-performance portfolio and blog built with **Astro**. It serves as the professional digital presence for Manjil Thapa Magar, a Software Development Team Leader at Paycom.
 
 ## 🚀 Mission & Context
 The site is transitioning from a legacy Jekyll setup to Astro to leverage better performance, developer experience, and modern component-based architecture. It highlights expertise in:

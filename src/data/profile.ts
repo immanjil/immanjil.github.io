@@ -1,6 +1,6 @@
 export const profile = {
     name: "Manjil Thapa Magar",
-    title: "Software Engineering Manager",
+    title: "Software Development Team Leader",
     company: "Paycom",
     location: "Frisco, TX",
     intro: "Strategic Software Engineering Manager with over 9 years of experience leading cross-functional teams in high-scale enterprise environments. Specialized in evolving legacy monoliths into distributed architectures using .NET, PHP, and React, while integrating Agentic AI frameworks to drive engineering velocity.",
