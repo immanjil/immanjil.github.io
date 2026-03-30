@@ -24,8 +24,8 @@ const formatDate = (date: Date | undefined) => {
         <p>In-depth architectural analysis and high-scale system design breakdowns.</p>
         {selectedTag && (
             <div class="filter-info">
-                Showing problems tagged with <span class="active-tag">#{selectedTag}</span>
-                <a href="/system-design" class="clear-filter">Clear Filter</a>
+                FILTER_ON: <span class="active-tag">#{selectedTag}</span>
+                <a href="/system-design" class="clear-filter">[CLEAR_FILTER]</a>
             </div>
         )}
     </div>
@@ -34,7 +34,7 @@ const formatDate = (date: Date | undefined) => {
         {posts.map(post => (
             <article class="post-item">
                 <div class="post-meta">
-                    <span class="post-date">{formatDate(post.data.date)}</span>
+                    <span class="post-date">DATE: {formatDate(post.data.date)}</span>
                     {post.data.tags && (
                         <div class="post-tags">
                             {post.data.tags.map(tag => (
@@ -48,7 +48,7 @@ const formatDate = (date: Date | undefined) => {
                 <a href={`/system-design/${post.id.replace(/\.md$/, '')}`} class="post-link">
                     <h2>{post.data.title || post.id.replace(/\.md$/, '').replace(/-/g, ' ')}</h2>
                     <p class="description">{post.data.description}</p>
-                    <p class="read-more">View Architecture Design →</p>
+                    <p class="read-more">RUN arch_analysis.sh →</p>
                 </a>
             </article>
         ))}
@@ -61,35 +61,35 @@ const formatDate = (date: Date | undefined) => {
     .blog-header p { color: var(--secondary-text); font-size: 1.25rem; margin-bottom: 1.5rem; }
     
     .filter-info {
-        font-size: 1rem;
+        font-size: 0.9rem;
         color: var(--secondary-text);
         display: flex;
         align-items: center;
         gap: 1rem;
-        background: var(--card-bg);
+        background: rgba(0, 59, 0, 0.1);
         padding: 0.75rem 1.25rem;
-        border-radius: 8px;
         border: 1px solid var(--border-color);
         width: fit-content;
     }
 
     .active-tag { color: var(--accent-color); font-weight: 700; }
-    .clear-filter { color: var(--secondary-text); text-decoration: underline; font-size: 0.9rem; }
-    .clear-filter:hover { color: var(--accent-color); }
+    .clear-filter { color: var(--accent-color); text-decoration: none; font-size: 0.8rem; font-weight: 700; }
+    .clear-filter:hover { text-shadow: 0 0 8px var(--accent-color); }
 
-    .posts-list { display: grid; gap: 2rem; }
+    .posts-list { display: grid; gap: 2.5rem; }
     
     .post-item {
         padding: 2.5rem;
-        border-radius: 12px;
-        background-color: var(--card-bg);
+        background-color: rgba(0, 59, 0, 0.05);
         border: 1px solid var(--border-color);
-        transition: transform 0.2s, border-color 0.2s;
+        transition: all 0.3s ease;
+        position: relative;
     }
     
     .post-item:hover {
-        transform: translateY(-4px);
         border-color: var(--accent-color);
+        box-shadow: 0 0 15px rgba(0, 255, 65, 0.1);
+        background: rgba(0, 255, 65, 0.05);
     }
     
     .post-link { text-decoration: none; color: inherit; }
@@ -102,9 +102,9 @@ const formatDate = (date: Date | undefined) => {
     }
 
     .post-date {
-        font-size: 0.9rem;
+        font-size: 0.8rem;
         color: var(--secondary-text);
-        font-weight: 500;
+        font-weight: 600;
     }
 
     .post-tags {
@@ -113,23 +113,24 @@ const formatDate = (date: Date | undefined) => {
     }
 
     .tag {
-        font-size: 0.8rem;
+        font-size: 0.75rem;
         color: var(--secondary-text);
-        font-weight: 600;
+        font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 0.05em;
         text-decoration: none;
         padding: 0.2rem 0.5rem;
-        border-radius: 4px;
+        border: 1px solid transparent;
         transition: all 0.2s;
     }
 
     .tag:hover, .tag.active {
         color: var(--accent-color);
-        background: rgba(0, 112, 243, 0.05);
+        border-color: var(--accent-color);
+        background: rgba(0, 255, 65, 0.05);
     }
 
-    .post-item h2 { margin: 0; font-size: 1.75rem; font-weight: 800; border: none; }
-    .description { margin-top: 1rem; color: var(--secondary-text); line-height: 1.6; }
-    .read-more { margin-top: 1.5rem; color: var(--accent-color); font-weight: 700; }
+    .post-item h2 { margin: 0; font-size: 1.75rem; font-weight: 800; border: none; text-shadow: 0 0 10px rgba(0, 255, 65, 0.3); }
+    .description { margin-top: 1rem; color: var(--text-color); opacity: 0.8; line-height: 1.6; }
+    .read-more { margin-top: 1.5rem; color: var(--accent-color); font-weight: 700; text-transform: uppercase; font-size: 0.9rem; }
 </style>

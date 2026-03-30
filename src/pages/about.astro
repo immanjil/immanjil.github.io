@@ -4,11 +4,11 @@ import { profile } from '../data/profile';
 ---
 
 <Layout title="About & Leadership">
-    <section class="about-hero">
+    <section class="about-hero fade-in">
         <div class="hero-content">
             <div class="hero-text">
                 <h1>About & Leadership</h1>
-                <p class="subtitle">Engineering Manager | Strategic Leader | AI Innovator</p>
+                <p class="subtitle">Software Development Team Leader | Strategic Leader | AI Innovator</p>
             </div>
             {profile.links.avatar && (
                 <div class="profile-image-container">
@@ -18,15 +18,15 @@ import { profile } from '../data/profile';
         </div>
     </section>
 
-    <section class="mission">
-        <h2>Mission</h2>
+    <section class="mission fade-in delay-1">
+        <h2>[MISSION]</h2>
         <p>
             My mission is to build and scale high-performing engineering teams that deliver exceptional value through technical excellence and strategic alignment. With over 9 years of experience, I bridge the gap between complex technical challenges and business objectives, fostering an environment where innovation and efficiency coexist.
         </p>
     </section>
 
-    <section class="leadership-philosophy">
-        <h2>Leadership Philosophy</h2>
+    <section class="leadership-philosophy fade-in delay-2">
+        <h2>[LEADERSHIP_PHILOSOPHY]</h2>
         <div class="values-grid">
             <div class="value-card">
                 <h3>Empowerment</h3>
@@ -43,8 +43,8 @@ import { profile } from '../data/profile';
         </div>
     </section>
 
-    <section class="technical-leadership">
-        <h2>Technical Leadership</h2>
+    <section class="technical-leadership fade-in delay-3">
+        <h2>[TECHNICAL_EXPERTISE]</h2>
         <p>
             My leadership approach is grounded in a deep technical foundation across the full stack. I specialize in:
         </p>
@@ -55,15 +55,15 @@ import { profile } from '../data/profile';
         </ul>
     </section>
 
-    <section class="team-building">
-        <h2>Team Building</h2>
+    <section class="team-building fade-in">
+        <h2>[TEAM_METRICS]</h2>
         <p>
             I currently manage a team of 6+ software engineers at Paycom, where I focus on technical coaching, career development, and building a culture of mutual respect and shared ownership. I believe a team's strength lies in its diversity of thought and its ability to communicate openly.
         </p>
     </section>
 
-    <section class="beyond-code">
-        <h2>Beyond the Code</h2>
+    <section class="beyond-code fade-in">
+        <h2>[BEYOND_THE_CODE]</h2>
         <p>
             When I'm not leading engineering initiatives, I explore the intersection of LLMs and developer productivity. Based in Frisco, Texas, I am an advocate for the local tech community and a lifelong learner, originally holding a degree in Mechanical Engineering from Texas A&M University.
         </p>
@@ -79,16 +79,19 @@ import { profile } from '../data/profile';
         flex-shrink: 0;
         width: 180px;
         height: 180px;
-        border-radius: 20px;
+        border-radius: 0;
         overflow: hidden;
-        border: 4px solid var(--card-bg);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        border: 2px solid var(--border-color);
+        box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
         transform: rotate(-2deg);
-        transition: transform 0.3s ease;
+        transition: all 0.3s ease;
+        filter: grayscale(100%) brightness(0.8) contrast(1.2);
     }
 
     .profile-image-container:hover {
         transform: rotate(0deg) scale(1.05);
+        filter: none;
+        border-color: var(--accent-color);
     }
 
     .profile-image {
@@ -103,11 +106,11 @@ import { profile } from '../data/profile';
     }
 
     h1 { font-size: 3.5rem; margin-bottom: 0.5rem; font-weight: 800; line-height: 1.1; }
-    .subtitle { font-size: 1.5rem; color: var(--secondary-text); margin-bottom: 2rem; font-weight: 500; }
+    .subtitle { font-size: 1.25rem; color: var(--secondary-text); margin-bottom: 2rem; font-weight: 600; text-transform: uppercase; }
     
-    h2 { font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem; }
+    h2 { font-size: 1.75rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--accent-color); border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }
     
-    p { font-size: 1.15rem; line-height: 1.8; color: var(--text-color); opacity: 0.9; max-width: 800px; }
+    p { font-size: 1.1rem; line-height: 1.8; color: var(--text-color); opacity: 0.9; max-width: 800px; }
     
     .values-grid {
         display: grid;
@@ -121,19 +124,23 @@ import { profile } from '../data/profile';
     }
 
     .value-card {
-        background: var(--card-bg);
+        background: rgba(0, 59, 0, 0.05);
         padding: 2rem;
-        border-radius: 12px;
+        border-radius: 0;
         border: 1px solid var(--border-color);
-        transition: border-color 0.2s;
+        transition: all 0.3s ease;
     }
 
-    .value-card:hover { border-color: var(--accent-color); }
+    .value-card:hover { 
+        border-color: var(--accent-color);
+        background: rgba(0, 255, 65, 0.05);
+        box-shadow: 0 0 15px rgba(0, 255, 65, 0.1);
+    }
 
-    .value-card h3 { font-size: 1.25rem; margin-top: 0; margin-bottom: 1rem; color: var(--accent-color); }
-    .value-card p { font-size: 1rem; line-height: 1.6; margin: 0; }
+    .value-card h3 { font-size: 1.1rem; margin-top: 0; margin-bottom: 1rem; color: var(--accent-color); text-transform: uppercase; }
+    .value-card p { font-size: 0.95rem; line-height: 1.6; margin: 0; color: var(--text-color); opacity: 0.8; }
 
-    ul { margin-top: 1.5rem; padding-left: 1.5rem; }
-    li { font-size: 1.15rem; line-height: 1.8; color: var(--text-color); margin-bottom: 0.75rem; opacity: 0.9; }
-    li strong { color: var(--accent-color); }
+    ul { margin-top: 1.5rem; padding-left: 1.5rem; list-style-type: "> "; }
+    li { font-size: 1.1rem; line-height: 1.8; color: var(--text-color); margin-bottom: 0.75rem; opacity: 0.9; }
+    li strong { color: var(--accent-color); text-shadow: 0 0 5px rgba(0, 255, 65, 0.3); }
 </style>

@@ -29,6 +29,7 @@ The site is transitioning from a legacy Jekyll setup to Astro to leverage better
 The project features a robust Gemini CLI setup for autonomous and assisted development:
 - **MCP Servers:** Configured GitHub MCP for repository interactions (Issues, PRs, Commits).
 - **Custom Commands:** Defined in `.github/commands/` for tasks like triage, review, and plan execution.
+- **Mandatory Planning:** For any building-related questions or feature requests, the AI **MUST** start by entering **Plan Mode**. It should provide at least 2-3 distinct architectural or design options for the user to consider before moving forward with any implementation.
 - **Custom Skills:**
     - `system-design-architect`: A specialized skill for designing high-scale systems. It follows a strict **6-step interactive planning process** (Requirements -> API -> Capacity -> High-Level -> Detailed -> Trade-offs) to collaboratively build architectural deep-dives.
 - **Workflows:** Integrated into GitHub Actions for agentic orchestration within the repository.

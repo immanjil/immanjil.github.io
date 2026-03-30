@@ -304,20 +304,41 @@ const latestProject = profile.projects
     }
 
     .insight-card {
-        background: var(--card-bg);
+        background: rgba(0, 38, 0, 0.1);
         border: 1px solid var(--border-color);
         padding: 2rem;
-        border-radius: 12px;
+        border-radius: 4px;
         text-decoration: none;
         color: inherit;
-        transition: transform 0.2s, border-color 0.2s;
+        transition: all 0.3s ease;
         display: flex;
         flex-direction: column;
+        position: relative;
+        overflow: hidden;
     }
 
     .insight-card:hover {
-        transform: translateY(-4px);
         border-color: var(--accent-color);
+        box-shadow: 0 0 12px rgba(0, 204, 51, 0.15);
+        background: rgba(0, 204, 51, 0.03);
+    }
+
+    .insight-card::before {
+        content: "> ";
+        position: absolute;
+        top: 2rem;
+        left: 1rem;
+        color: var(--accent-color);
+        opacity: 0;
+        transition: opacity 0.2s;
+    }
+
+    .insight-card:hover::before {
+        opacity: 1;
+    }
+
+    .insight-card:hover h3 {
+        transform: translateX(1.5rem);
     }
 
     .insight-card.featured {
@@ -328,7 +349,7 @@ const latestProject = profile.projects
         font-size: 0.7rem;
         font-weight: 700;
         text-transform: uppercase;
-        letter-spacing: 0.1em;
+        letter-spacing: 0.15em;
         color: var(--accent-color);
         margin-bottom: 1rem;
     }
@@ -337,6 +358,7 @@ const latestProject = profile.projects
         margin: 0 0 1rem 0;
         font-size: 1.4rem;
         line-height: 1.2;
+        transition: transform 0.3s ease;
     }
 
     .insight-card p {
