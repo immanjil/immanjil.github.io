@@ -25,10 +25,10 @@ const formatDate = (date: Date | undefined) => {
 <Layout title={post.data.title || post.id.replace(/\.md$/, '').replace(/-/g, ' ')}>
     <article class="prose">
         <header>
-            <a href="/system-design" class="back-link">← Back to System Design</a>
+            <a href="/system-design" class="back-link">cd .. // BACK_TO_SYSTEM_DESIGN</a>
             <h1>{post.data.title || post.id.replace(/\.md$/, '').replace(/-/g, ' ')}</h1>
             <div class="post-metadata">
-                <span class="date">{formatDate(post.data.date)}</span>
+                <span class="date">TIMESTAMP: {formatDate(post.data.date)}</span>
                 {post.data.tags && (
                     <div class="tags">
                         {post.data.tags.map(tag => <span class="tag">#{tag}</span>)}
@@ -45,7 +45,7 @@ const formatDate = (date: Date | undefined) => {
 <style is:global>
     .prose .content {
         color: var(--text-color);
-        font-size: 1.125rem;
+        font-size: 1.1rem;
         line-height: 1.8;
     }
     
@@ -55,20 +55,25 @@ const formatDate = (date: Date | undefined) => {
         border: none;
         line-height: 1.3;
         font-weight: 800;
+        color: var(--accent-color);
+        text-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+        text-transform: uppercase;
     }
 
-    .prose .content h2 { font-size: 2rem; color: var(--accent-color); border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }
-    .prose .content h3 { font-size: 1.5rem; }
+    .prose .content h2 { font-size: 1.75rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }
+    .prose .content h3 { font-size: 1.4rem; }
     
     .prose .content a { color: var(--accent-color); text-decoration: underline; text-underline-offset: 4px; }
+    .prose .content a:hover { text-shadow: 0 0 8px var(--accent-color); }
     
     .prose .content pre {
-        background-color: #1a1b26 !important;
+        background-color: #000000 !important;
         padding: 1.5rem;
-        border-radius: 12px;
+        border-radius: 0;
         overflow-x: auto;
         margin: 2.5rem 0;
         border: 1px solid var(--border-color);
+        box-shadow: inset 0 0 15px rgba(0, 255, 65, 0.05);
     }
 
     .prose .content blockquote {
@@ -77,29 +82,31 @@ const formatDate = (date: Date | undefined) => {
         margin: 2rem 0;
         color: var(--secondary-text);
         font-style: italic;
-        background-color: var(--bg-color);
-        border-radius: 0 8px 8px 0;
+        background-color: rgba(0, 59, 0, 0.05);
+        border-radius: 0;
     }
 
     .prose .content ul, .prose .content ol {
         margin: 1.5rem 0;
         padding-left: 1.5rem;
+        list-style-type: "> ";
     }
 
     .prose .content li {
         margin-bottom: 0.75rem;
     }
 
-    .prose .content strong { color: var(--text-color); font-weight: 700; }
+    .prose .content strong { color: var(--accent-color); font-weight: 700; text-shadow: 0 0 5px rgba(0, 255, 65, 0.2); }
 </style>
 
 <style>
     .prose {
-        background-color: var(--card-bg);
+        background-color: rgba(0, 59, 0, 0.02);
         padding: 4rem;
-        border-radius: 16px;
+        border-radius: 0;
         border: 1px solid var(--border-color);
         max-width: 100%;
+        box-shadow: 0 0 30px rgba(0, 255, 65, 0.02);
     }
     
     @media (max-width: 640px) {
@@ -111,14 +118,14 @@ const formatDate = (date: Date | undefined) => {
     .back-link {
         display: inline-block;
         margin-bottom: 2rem;
-        color: var(--secondary-text);
+        color: var(--accent-color);
         text-decoration: none;
-        font-weight: 500;
-        font-size: 0.95rem;
-        transition: color 0.2s;
+        font-weight: 700;
+        font-size: 0.9rem;
+        transition: all 0.2s;
     }
     
-    .back-link:hover { color: var(--accent-color); }
+    .back-link:hover { text-shadow: 0 0 8px var(--accent-color); transform: translateX(-5px); }
     
     h1 {
         font-size: 3rem;
@@ -126,6 +133,8 @@ const formatDate = (date: Date | undefined) => {
         line-height: 1.1;
         font-weight: 800;
         border: none;
+        text-shadow: 0 0 20px rgba(0, 255, 65, 0.4);
+        text-transform: uppercase;
     }
 
     .post-metadata {
@@ -139,8 +148,8 @@ const formatDate = (date: Date | undefined) => {
 
     .date {
         color: var(--secondary-text);
-        font-weight: 500;
-        font-size: 0.95rem;
+        font-weight: 700;
+        font-size: 0.85rem;
     }
 
     .tags {
@@ -150,9 +159,9 @@ const formatDate = (date: Date | undefined) => {
 
     .tag {
         color: var(--accent-color);
-        font-weight: 600;
-        font-size: 0.85rem;
+        font-weight: 700;
+        font-size: 0.8rem;
         text-transform: uppercase;
-        letter-spacing: 0.05em;
+        letter-spacing: 0.1em;
     }
 </style>

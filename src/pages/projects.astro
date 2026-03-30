@@ -114,12 +114,25 @@ import SkillBadge from '../components/SkillBadge.astro';
     .subtitle { font-size: 1.5rem; color: var(--secondary-text); margin-bottom: 2rem; font-weight: 500; }
 
     .project-featured {
-        background: var(--card-bg);
+        background: rgba(0, 59, 0, 0.05);
         border: 1px solid var(--border-color);
         padding: 4rem;
-        border-radius: 20px;
+        border-radius: 0;
         margin-top: 4rem;
-        box-shadow: 0 4px 30px rgba(0,0,0,0.05);
+        box-shadow: 0 0 20px rgba(0, 255, 65, 0.05);
+        position: relative;
+    }
+
+    .project-featured::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 0 40px 40px 0;
+        border-color: transparent var(--border-color) transparent transparent;
     }
 
     @media (max-width: 640px) {
@@ -127,12 +140,22 @@ import SkillBadge from '../components/SkillBadge.astro';
     }
 
     .project-label {
-        font-size: 0.85rem;
+        font-size: 0.8rem;
         font-weight: 700;
         color: var(--accent-color);
         text-transform: uppercase;
-        letter-spacing: 0.1em;
-        margin-bottom: 1rem;
+        letter-spacing: 0.2em;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .project-label::before {
+        content: "[";
+    }
+    .project-label::after {
+        content: "]";
     }
 
     .project-featured h2 { 
@@ -140,6 +163,7 @@ import SkillBadge from '../components/SkillBadge.astro';
         margin: 0 0 1.5rem 0; 
         font-weight: 800; 
         border: none;
+        text-shadow: 0 0 15px rgba(0, 255, 65, 0.4);
     }
 
     .project-tech { display: flex; flex-wrap: wrap; margin-bottom: 3rem; }

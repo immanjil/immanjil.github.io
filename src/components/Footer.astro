@@ -5,18 +5,18 @@ const currentYear = new Date().getFullYear();
 <footer>
     <div class="footer-content">
         <div class="footer-info">
-            <p class="copyright">© {currentYear} {profile.name}. All rights reserved.</p>
+            <p class="copyright">SYSTEM_LOG // © {currentYear} {profile.name}</p>
             <p class="tagline">{profile.title} @ {profile.company}</p>
         </div>
         
         <div class="footer-links">
-            <a href={profile.links.linkedin} target="_blank">LinkedIn</a>
-            <a href={profile.links.github} target="_blank">GitHub</a>
-            <a href={profile.links.email}>Email</a>
+            <a href={profile.links.linkedin} target="_blank">[LINKEDIN]</a>
+            <a href={profile.links.github} target="_blank">[GITHUB]</a>
+            <a href={profile.links.email}>[EMAIL]</a>
         </div>
 
         <div class="footer-meta">
-            <span>Built with <a href="https://astro.build" target="_blank">Astro</a></span>
+            <span>CORE_OS: <a href="https://astro.build" target="_blank">ASTRO_V6</a></span>
         </div>
     </div>
 </footer>
@@ -26,6 +26,7 @@ const currentYear = new Date().getFullYear();
         margin-top: 8rem;
         padding: 4rem 0;
         border-top: 1px solid var(--border-color);
+        background: linear-gradient(to bottom, transparent, rgba(0, 59, 0, 0.05));
     }
 
     .footer-content {
@@ -45,20 +46,23 @@ const currentYear = new Date().getFullYear();
     }
 
     .footer-info p { margin: 0; }
-    .copyright { font-weight: 600; color: var(--text-color); }
-    .tagline { font-size: 0.9rem; color: var(--secondary-text); margin-top: 0.25rem; }
+    .copyright { font-weight: 700; color: var(--text-color); letter-spacing: 0.05em; }
+    .tagline { font-size: 0.85rem; color: var(--secondary-text); margin-top: 0.5rem; text-transform: uppercase; }
 
     .footer-links { display: flex; gap: 1.5rem; }
     .footer-links a { 
         text-decoration: none; 
-        color: var(--secondary-text); 
-        font-size: 0.95rem; 
-        font-weight: 500;
-        transition: color 0.2s;
+        color: var(--accent-color); 
+        font-size: 0.9rem; 
+        font-weight: 700;
+        transition: all 0.2s;
     }
-    .footer-links a:hover { color: var(--accent-color); }
+    .footer-links a:hover { 
+        text-shadow: 0 0 10px var(--accent-color);
+        transform: translateY(-2px);
+    }
 
-    .footer-meta { font-size: 0.85rem; color: var(--secondary-text); }
-    .footer-meta a { color: var(--text-color); font-weight: 600; text-decoration: none; }
-    .footer-meta a:hover { color: var(--accent-color); }
+    .footer-meta { font-size: 0.8rem; color: var(--secondary-text); font-weight: 600; }
+    .footer-meta a { color: var(--text-color); font-weight: 700; text-decoration: none; }
+    .footer-meta a:hover { color: var(--accent-color); text-shadow: 0 0 8px var(--accent-color); }
 </style>

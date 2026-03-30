@@ -44,22 +44,38 @@ const { title } = Astro.props;
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style is:global>
         :root {
-            --bg-color: #fafafa;
-            --text-color: #333;
-            --secondary-text: #666;
-            --accent-color: #0070f3;
-            --card-bg: #ffffff;
-            --border-color: #eaeaea;
-            --font-main: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            --bg-color: #050505;
+            --text-color: #00ff41; /* Classic Matrix Green */
+            --secondary-text: #008f11;
+            --accent-color: #00ff41;
+            --card-bg: #0a0a0a;
+            --border-color: #003b00;
+            --font-main: 'JetBrains Mono', 'Courier New', Courier, monospace;
         }
 
         :root.dark {
-            --bg-color: #111111;
-            --text-color: #eeeeee;
-            --secondary-text: #aaaaaa;
-            --accent-color: #3291ff;
-            --card-bg: #1e1e1e;
-            --border-color: #333333;
+            --bg-color: #000000;
+            --text-color: #00ff41;
+            --secondary-text: #008f11;
+            --accent-color: #00ff41;
+            --card-bg: #050505;
+            --border-color: #003b00;
+        }
+
+        /* Matrix Scanline Effect */
+        body::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            z-index: 2000;
+            background-size: 100% 3px, 3px 100%;
+            pointer-events: none;
+            opacity: 0.8;
         }
 
         * { transition: background-color 0.2s, color 0.2s, border-color 0.2s; }
@@ -67,11 +83,18 @@ const { title } = Astro.props;
         body {
             font-family: var(--font-main);
             line-height: 1.6;
-            max-width: 850px;
+            max-width: 900px;
             margin: 0 auto;
             padding: 2rem;
             background-color: var(--bg-color);
             color: var(--text-color);
+            text-shadow: 0 0 8px rgba(0, 255, 65, 0.3);
+        }
+
+        h1, h2, h3 {
+            text-shadow: 0 0 12px rgba(0, 255, 65, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
         nav {

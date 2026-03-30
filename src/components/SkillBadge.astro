@@ -6,20 +6,22 @@ const { name } = Astro.props;
 <style>
     .skill-badge {
         display: inline-block;
-        background: var(--card-bg);
+        background: transparent;
         color: var(--text-color);
         border: 1px solid var(--border-color);
-        padding: 0.4rem 1rem;
-        border-radius: 8px;
-        font-size: 0.9rem;
-        font-weight: 500;
+        padding: 0.3rem 0.8rem;
+        border-radius: 0; /* Sharp corners for terminal look */
+        font-size: 0.85rem;
+        font-weight: 600;
         margin-right: 0.75rem;
         margin-bottom: 0.75rem;
         transition: all 0.2s;
+        text-transform: uppercase;
     }
     .skill-badge:hover {
         border-color: var(--accent-color);
-        color: var(--accent-color);
-        transform: scale(1.05);
+        background: rgba(0, 255, 65, 0.1);
+        box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+        transform: translateY(-2px);
     }
 </style>
