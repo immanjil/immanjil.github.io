@@ -3,10 +3,23 @@ import Layout from '../layouts/Layout.astro';
 import { profile } from '../data/profile';
 import ExperienceCard from '../components/ExperienceCard.astro';
 import SkillBadge from '../components/SkillBadge.astro';
+import { getCollection } from 'astro:content';
+
+const systemDesignPosts = await getCollection('system-design');
+const leetcodePosts = await getCollection('leetcode');
+
+// Get latest 2 from each
+const latestSystemDesign = systemDesignPosts
+    .sort((a, b) => new Date(b.data.pubDate || b.data.date || 0).getTime() - new Date(a.data.pubDate || a.data.date || 0).getTime())
+    .slice(0, 2);
+
+const latestLeetcode = leetcodePosts
+    .sort((a, b) => new Date(b.data.pubDate || b.data.date || 0).getTime() - new Date(a.data.pubDate || a.data.date || 0).getTime())
+    .slice(0, 2);
 ---
 
 <Layout title="Home">
-    <section class="intro">
+    <section class="intro fade-in">
         <div class="intro-content">
             <div class="intro-text">
                 <h1>{profile.name}</h1>
@@ -32,7 +45,7 @@ import SkillBadge from '../components/SkillBadge.astro';
         </div>
     </section>
 
-    <section class="at-a-glance">
+    <section class="at-a-glance fade-in delay-1">
         <div class="stat-card">
             <span class="stat-value">9+</span>
             <span class="stat-label">Years Experience</span>
@@ -51,7 +64,35 @@ import SkillBadge from '../components/SkillBadge.astro';
         </div>
     </section>
 
-    <section id="experience">
+    <section id="latest-insights" class="fade-in delay-2">
+        <div class="section-header">
+            <h2>Latest Insights</h2>
+            <div class="header-links">
+                <a href="/system-design">View All System Design</a>
+                <a href="/leetcode">View All LeetCode</a>
+            </div>
+        </div>
+        <div class="insights-grid">
+            {latestSystemDesign.map(post => (
+                <a href={`/system-design/${post.id.replace(/\.md$/, '')}`} class="insight-card">
+                    <span class="category">System Design</span>
+                    <h3>{post.data.title}</h3>
+                    <p>{post.data.description}</p>
+                    <span class="read-more">Read Architecture →</span>
+                </a>
+            ))}
+            {latestLeetcode.map(post => (
+                <a href={`/leetcode/${post.id.replace(/\.md$/, '')}`} class="insight-card">
+                    <span class="category">LeetCode</span>
+                    <h3>{post.data.title}</h3>
+                    <p>{post.data.description}</p>
+                    <span class="read-more">View Solution →</span>
+                </a>
+            ))}
+        </div>
+    </section>
+
+    <section id="experience" class="fade-in delay-3">
         <h2>Professional Experience</h2>
         {profile.experience.map(exp => (
             <ExperienceCard {...exp} />
@@ -201,7 +242,99 @@ import SkillBadge from '../components/SkillBadge.astro';
     }
 
     section { margin-top: 6rem; }
-    h2 { font-size: 2rem; font-weight: 700; margin-bottom: 3rem; }
+    h2 { font-size: 2rem; font-weight: 700; margin-bottom: 3rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }
+
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 3rem;
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 0.5rem;
+    }
+
+    .section-header h2 {
+        margin: 0;
+        border: none;
+        padding: 0;
+    }
+
+    .header-links {
+        display: flex;
+        gap: 1.5rem;
+    }
+
+    .header-links a {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--accent-color);
+        text-decoration: none;
+    }
+
+    .header-links a:hover {
+        text-decoration: underline;
+    }
+
+    .insights-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+        .insights-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    .insight-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        padding: 2rem;
+        border-radius: 12px;
+        text-decoration: none;
+        color: inherit;
+        transition: transform 0.2s, border-color 0.2s;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .insight-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent-color);
+    }
+
+    .insight-card .category {
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--accent-color);
+        margin-bottom: 1rem;
+    }
+
+    .insight-card h3 {
+        margin: 0 0 1rem 0;
+        font-size: 1.4rem;
+        line-height: 1.2;
+    }
+
+    .insight-card p {
+        font-size: 1rem;
+        color: var(--secondary-text);
+        margin: 0 0 2rem 0;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        flex: 1;
+    }
+
+    .read-more {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--accent-color);
+    }
     
     .skills-category h3 { 
         margin-top: 2.5rem; 

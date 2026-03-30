@@ -9,7 +9,7 @@ The site is transitioning from a legacy Jekyll setup to Astro to leverage better
 - **Agentic AI:** Integrating AI-assisted workflows and internal coding agent ecosystems.
 
 ## 🛠️ Tech Stack
-- **Framework:** [Astro v4.0.0](https://astro.build/)
+- **Framework:** [Astro v6.1.1](https://astro.build/) (Upgraded from v4.0.0)
 - **Language:** TypeScript
 - **Styling:** Vanilla CSS (Modern CSS variables, Grid, Flexbox)
 - **Deployment:** GitHub Pages (via `master` branch)
@@ -30,7 +30,7 @@ The project features a robust Gemini CLI setup for autonomous and assisted devel
 - **MCP Servers:** Configured GitHub MCP for repository interactions (Issues, PRs, Commits).
 - **Custom Commands:** Defined in `.github/commands/` for tasks like triage, review, and plan execution.
 - **Custom Skills:**
-    - `system-design-architect`: A specialized skill for designing high-scale systems and generating standardized Astro content for the "System Design" section. Use this for adding new architectural deep-dives (e.g., Rate Limiter, Distributed Cache).
+    - `system-design-architect`: A specialized skill for designing high-scale systems. It follows a strict **6-step interactive planning process** (Requirements -> API -> Capacity -> High-Level -> Detailed -> Trade-offs) to collaboratively build architectural deep-dives.
 - **Workflows:** Integrated into GitHub Actions for agentic orchestration within the repository.
 
 ### ⚠️ Remote Safety Protocol
@@ -39,13 +39,11 @@ The project features a robust Gemini CLI setup for autonomous and assisted devel
 - **Local Verification:** All changes should be verified locally before any remote interaction is proposed.
 
 ## 📝 Recent Updates (March 2026)
-- **System Design Section:** Launched a new section for architectural deep-dives, starting with a URL Shortener (Bitly) breakdown.
-- **UX Polish:** Enabled Astro View Transitions for seamless page navigation and implemented a professional site-wide footer.
-- **LeetCode Tag Filtering:** Added interactive tag filtering on the LeetCode listing page to improve content discoverability.
-- **Projects Showcase:** Created a dedicated projects page with a deep dive into the "Internal Coding Agent Ecosystem" AI project.
-- **About Page:** Implemented a dedicated "About & Leadership" page detailing mission, philosophy, and team-building expertise.
-- **Stats Section:** Added an "At a Glance" section on the homepage featuring key career metrics (9+ years experience, 6+ engineers managed, TX-based, AI focus).
-- **Content:** Maintained a monthly LeetCode blogging series in `src/content/leetcode/`.
+- **Astro 6+ Migration:** Successfully migrated to Astro 6.1.1, resolving `ViewTransitions` deprecation by moving to `ClientRouter`.
+- **System Design Section:** Launched a new section for architectural deep-dives, starting with "Distributed Rate Limiter" and "URL Shortener (Bitly)" breakdowns.
+- **Interactive AI Skill:** Implemented and refined the `system-design-architect` skill to support collaborative, step-by-step design sessions.
+- **Project Structure:** Moved custom skills to `.gemini/skills/` and tracked them in version control for portability.
+- **UX Polish:** Improved slug sanitization and routing to ensure clean URLs across all content collections.
 
 ## 🛠️ Development
 - `npm run dev`: Start local development server.
