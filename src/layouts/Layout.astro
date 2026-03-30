@@ -1,6 +1,7 @@
 ---
 import { ClientRouter } from 'astro:transitions';
 import Footer from '../components/Footer.astro';
+import AICopilot from '../components/AICopilot.astro';
 const { title } = Astro.props;
 ---
 <script is:inline>
@@ -254,6 +255,7 @@ const { title } = Astro.props;
     <main>
         <slot />
     </main>
+    <AICopilot />
     <Footer />
 
     <script>
