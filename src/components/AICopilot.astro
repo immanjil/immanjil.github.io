@@ -1,0 +1,318 @@
+---
+import { agentManifest } from '../data/agentManifest';
+---
+
+<div id="ai-copilot-container" class="ai-copilot-closed" data-manifest={JSON.stringify(agentManifest)}>
+    <!-- Trigger Button -->
+    <button id="ai-trigger" aria-label="Open AI Copilot">
+        <span class="trigger-icon">>_</span>
+        <span class="trigger-pulse"></span>
+    </button>
+
+    <!-- Terminal Window -->
+    <div id="ai-terminal" class="terminal-hidden">
+        <div class="terminal-header">
+            <span class="terminal-title">AGENTIC_COPILOT_v1.0.0</span>
+            <button id="ai-close" aria-label="Close Terminal">×</button>
+        </div>
+        <div id="terminal-output" class="terminal-content">
+            <div class="line welcome-message">{agentManifest.responses.welcome}</div>
+        </div>
+        <div class="terminal-input-area">
+            <span class="prompt">></span>
+            <input type="text" id="terminal-input" placeholder="Type 'help'..." autofocus autocomplete="off" />
+        </div>
+        <div class="terminal-scanlines"></div>
+    </div>
+</div>
+
+<style>
+    #ai-copilot-container {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        z-index: 10000;
+        font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Trigger Button Styles */
+    #ai-trigger {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: #020202;
+        border: 2px solid var(--accent-color);
+        color: var(--accent-color);
+        font-size: 1.5rem;
+        font-weight: bold;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        box-shadow: 0 0 15px rgba(0, 204, 51, 0.2);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    #ai-trigger:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 25px rgba(0, 204, 51, 0.4);
+    }
+
+    .trigger-pulse {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        border: 2px solid var(--accent-color);
+        animation: pulse-ring 2s infinite;
+        pointer-events: none;
+    }
+
+    @keyframes pulse-ring {
+        0% { transform: scale(0.8); opacity: 0.8; }
+        100% { transform: scale(1.5); opacity: 0; }
+    }
+
+    /* Terminal Window Styles */
+    #ai-terminal {
+        position: absolute;
+        bottom: 80px;
+        right: 0;
+        width: 400px;
+        height: 500px;
+        background: #020202; /* Always dark background for Matrix feel */
+        border: 1px solid #002600;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+        border-radius: 8px;
+        overflow: hidden;
+        transition: transform 0.3s ease, opacity 0.3s ease;
+        transform-origin: bottom right;
+    }
+
+    :global(.dark) #ai-terminal {
+        border-color: var(--border-color);
+    }
+
+    .terminal-hidden {
+        transform: scale(0.8);
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .terminal-header {
+        background: #111;
+        padding: 0.5rem 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #222;
+    }
+
+    .terminal-title {
+        font-size: 0.75rem;
+        color: #00802b;
+        font-weight: 700;
+        letter-spacing: 1px;
+    }
+
+    #ai-close {
+        background: none;
+        border: none;
+        color: #666;
+        font-size: 1.25rem;
+        cursor: pointer;
+    }
+
+    .terminal-content {
+        flex: 1;
+        padding: 1rem;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        font-size: 0.9rem !important;
+        background: #020202 !important; /* Force black background */
+        scrollbar-width: thin;
+        scrollbar-color: #002600 transparent;
+    }
+
+    #ai-terminal .line { 
+        color: #00cc33 !important; 
+        line-height: 1.4 !important; 
+        word-break: break-word !important; 
+        text-shadow: none !important;
+    }
+    
+    #ai-terminal .line.command { 
+        color: #00ff41 !important; 
+        font-weight: bold !important; 
+    }
+    
+    #ai-terminal .line.response { 
+        opacity: 0.9 !important; 
+        margin-bottom: 0.5rem !important; 
+        white-space: pre-wrap !important; 
+    }
+
+    .terminal-input-area {
+        padding: 0.75rem 1rem;
+        display: flex;
+        gap: 0.5rem;
+        background: #050505 !important;
+        border-top: 1px solid #002600;
+    }
+
+    #ai-terminal .prompt { 
+        color: #00ff41 !important; 
+        font-weight: bold !important; 
+    }
+
+    #terminal-input {
+        background: none !important;
+        border: none !important;
+        color: #00ff41 !important; /* Fixed bright green for input */
+        flex: 1;
+        font-family: 'JetBrains Mono', monospace !important;
+        font-size: 0.9rem !important;
+        outline: none !important;
+        box-shadow: none !important;
+    }
+
+    #terminal-input::placeholder {
+        color: #004411; /* Darker green placeholder */
+    }
+
+    /* Scanlines effect inside terminal */
+    .terminal-scanlines {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.05) 50%);
+        background-size: 100% 4px;
+        pointer-events: none;
+        z-index: 10;
+        opacity: 0.5;
+    }
+
+    @media (max-width: 480px) {
+        #ai-terminal {
+            width: calc(100vw - 4rem);
+            height: 60vh;
+        }
+    }
+</style>
+
+<script>
+    const container = document.getElementById('ai-copilot-container');
+    const manifest = JSON.parse(container?.getAttribute('data-manifest') || '{}');
+    
+    const trigger = document.getElementById('ai-trigger');
+    const terminal = document.getElementById('ai-terminal');
+    const closeBtn = document.getElementById('ai-close');
+    const input = document.getElementById('terminal-input') as HTMLInputElement;
+    const output = document.getElementById('terminal-output');
+
+    const toggleTerminal = () => {
+        terminal?.classList.toggle('terminal-hidden');
+        if (!terminal?.classList.contains('terminal-hidden')) {
+            input?.focus();
+        }
+    };
+
+    trigger?.addEventListener('click', toggleTerminal);
+    closeBtn?.addEventListener('click', toggleTerminal);
+
+    const addLine = (text: string, type: 'command' | 'response' = 'response') => {
+        if (!output) return;
+        const line = document.createElement('div');
+        line.className = `line ${type}`;
+        output.appendChild(line);
+        
+        if (type === 'response') {
+            typeWriter(text, line);
+        } else {
+            line.textContent = `> ${text}`;
+        }
+        
+        output.scrollTop = output.scrollHeight;
+    };
+
+    const typeWriter = (text: string, element: HTMLElement, i = 0) => {
+        if (i < text.length) {
+            element.textContent += text.charAt(i);
+            setTimeout(() => typeWriter(text, element, i + 1), 5);
+            if (output) output.scrollTop = output.scrollHeight;
+        }
+    };
+
+    const processCommand = (cmd: string) => {
+        const cleanCmd = cmd.toLowerCase().trim().replace(/\s+/g, ' ');
+        const tokens = cleanCmd.split(' ');
+        const primary = tokens[0];
+        
+        addLine(cmd, 'command');
+
+        // Helper for exact match or primary token match
+        const isMatch = (keywords: string[]) => keywords.some(k => cleanCmd === k || primary === k);
+
+        if (isMatch(['help', '?', 'protocol', 'commands'])) {
+            const helpText = manifest.commands.map((c: any) => `${c.cmd.padEnd(12)} - ${c.desc}`).join('\n');
+            addLine(`AVAILABLE SYSTEM PROTOCOLS:\n${helpText}`);
+        } 
+        else if (cleanCmd.includes('knowledge') || cleanCmd.includes('data') || cleanCmd === 'kb') {
+            const kbSummary = [
+                `IDENTiTY: ${manifest.identity.name}`,
+                `PROJECTS: ${manifest.knowledge.projects.length} nodes detected`,
+                `EXPERiENCE: ${manifest.knowledge.experience.length} career segments`,
+                `SKiLLS: Verified tech stack available`,
+                `EDUCATiON: BS Mechanical Engineering`,
+                `\nUse 'help' to see specific access commands.`
+            ].join('\n');
+            addLine(`ACCESSING KNOWLEDGE BASE SUMMARY...\n\n${kbSummary}`);
+        }
+        else if (isMatch(['whoami', 'who am i', 'about', 'manjil'])) {
+            addLine(`${manifest.identity.name}\n${manifest.identity.title} @ ${manifest.identity.company}\n\n${manifest.identity.bio}`);
+        }
+        else if (isMatch(['skills', 'stack', 'tech'])) {
+            const skills = manifest.knowledge.skills;
+            const skillText = [
+                `LANGUAGES: ${skills.languages.join(', ')}`,
+                `FRAMEWORKS: ${skills.frameworks.join(', ')}`,
+                `BACKEND/CLOUD: ${skills.backend.join(', ')}`,
+                `TOOLS/SPECIALTIES: ${skills.tools.join(', ')}`
+            ].join('\n');
+            addLine(`Pinging system capabilities...\n\n${skillText}\n\nSYSTEM STATUS: OPTIMAL`);
+        }
+        else if (isMatch(['ls', 'projects', 'list', 'dir', 'work'])) {
+            const projectList = manifest.knowledge.projects.map((p: any) => `[PROJ] ${p.title}\n      ${p.tech.join(', ')}`).join('\n\n');
+            addLine(`RETRIEVING FEATURED PROJECTS...\n\n${projectList}`);
+        }
+        else if (isMatch(['experience', 'career', 'history', 'cat'])) {
+            const expList = manifest.knowledge.experience.map((e: any) => `[${e.period}] ${e.role} @ ${e.company}\n      ${e.description}`).join('\n\n');
+            addLine(`CORE CAREER DATA DETECTED:\n\n${expList}`);
+        }
+        else if (isMatch(['resume', 'cv', 'get'])) {
+            addLine(`LINKING TO EXTERNAL DATA...`);
+            setTimeout(() => {
+                window.open(manifest.knowledge.links.resume, '_blank');
+                addLine(`RESOURCE OPENED IN NEW NODE.`);
+            }, 500);
+        }
+        else if (isMatch(['clear', 'cls', 'reset'])) {
+            if (output) output.innerHTML = '';
+            addLine(manifest.responses.welcome);
+        }
+        else {
+            addLine(manifest.responses.unknown);
+        }
+    };
+
+    input?.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && input.value) {
+            processCommand(input.value);
+            input.value = '';
+        }
+    });
+</script>
