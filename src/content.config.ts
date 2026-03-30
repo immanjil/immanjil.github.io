@@ -5,7 +5,8 @@ const leetcode = defineCollection({
     loader: glob({ pattern: "**/*.md", base: "./src/content/leetcode" }),
     schema: z.object({
         title: z.string().optional(),
-        date: z.date().optional(),
+        date: z.date().or(z.string()).optional(),
+        pubDate: z.date().or(z.string()).optional(),
         tags: z.array(z.string()).optional(),
         description: z.string().optional(),
     }),
@@ -15,7 +16,8 @@ const systemDesign = defineCollection({
     loader: glob({ pattern: "**/*.md", base: "./src/content/system-design" }),
     schema: z.object({
         title: z.string().optional(),
-        date: z.date().optional(),
+        date: z.date().or(z.string()).optional(),
+        pubDate: z.date().or(z.string()).optional(),
         tags: z.array(z.string()).optional(),
         description: z.string().optional(),
     }),
