@@ -4,5 +4,4 @@ dist/
 .DS_Store
 *.log
 
-.gemini/
 gha-creds-*.json
