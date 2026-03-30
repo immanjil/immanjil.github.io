@@ -39,7 +39,8 @@ export const profile = {
             title: "Internal Coding Agent Ecosystem",
             description: "Integrated an internal coding agent ecosystem by defining modular 'Skills' and behavioral frameworks (Agents.md) to standardize AI-assisted workflows.",
             tech: ["Agentic AI", "Python", "LLMs"],
-            link: "https://github.com/immanjil"
+            link: "/projects",
+            date: "2026-03-20"
         }
     ],
     skills: {
