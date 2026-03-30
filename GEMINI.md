@@ -29,6 +29,8 @@ The site is transitioning from a legacy Jekyll setup to Astro to leverage better
 The project features a robust Gemini CLI setup for autonomous and assisted development:
 - **MCP Servers:** Configured GitHub MCP for repository interactions (Issues, PRs, Commits).
 - **Custom Commands:** Defined in `.github/commands/` for tasks like triage, review, and plan execution.
+- **Custom Skills:**
+    - `system-design-architect`: A specialized skill for designing high-scale systems and generating standardized Astro content for the "System Design" section. Use this for adding new architectural deep-dives (e.g., Rate Limiter, Distributed Cache).
 - **Workflows:** Integrated into GitHub Actions for agentic orchestration within the repository.
 
 ### ⚠️ Remote Safety Protocol
