@@ -3,6 +3,12 @@ import { agentManifest } from '../data/agentManifest';
 ---
 
 <div id="ai-copilot-container" class="ai-copilot-closed" data-manifest={JSON.stringify(agentManifest)}>
+    <!-- Tooltip -->
+    <div id="ai-tooltip" class="tooltip-hidden">
+        <span class="tooltip-prefix">[SYSTEM]:</span> Terminal access established. Type 'help'.
+        <div class="tooltip-arrow"></div>
+    </div>
+
     <!-- Trigger Button -->
     <button id="ai-trigger" aria-label="Open AI Copilot">
         <span class="trigger-icon">>_</span>
@@ -72,6 +78,46 @@ import { agentManifest } from '../data/agentManifest';
     @keyframes pulse-ring {
         0% { transform: scale(0.8); opacity: 0.8; }
         100% { transform: scale(1.5); opacity: 0; }
+    }
+
+    /* Tooltip Styles */
+    #ai-tooltip {
+        position: absolute;
+        bottom: 80px;
+        right: 0;
+        background: #020202;
+        border: 1px solid #00ff41;
+        color: #00cc33;
+        padding: 0.75rem 1rem;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        width: 220px;
+        box-shadow: 0 0 15px rgba(0, 255, 65, 0.2);
+        transition: opacity 0.5s ease, transform 0.5s ease;
+        pointer-events: none;
+        z-index: 10001;
+    }
+
+    .tooltip-hidden {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    .tooltip-prefix {
+        color: #00ff41;
+        font-weight: bold;
+    }
+
+    .tooltip-arrow {
+        position: absolute;
+        bottom: -6px;
+        right: 25px;
+        width: 10px;
+        height: 10px;
+        background: #020202;
+        border-right: 1px solid #00ff41;
+        border-bottom: 1px solid #00ff41;
+        transform: rotate(45deg);
     }
 
     /* Terminal Window Styles */
@@ -218,11 +264,35 @@ import { agentManifest } from '../data/agentManifest';
         terminal?.classList.toggle('terminal-hidden');
         if (!terminal?.classList.contains('terminal-hidden')) {
             input?.focus();
+            hideTooltip();
         }
     };
 
     trigger?.addEventListener('click', toggleTerminal);
     closeBtn?.addEventListener('click', toggleTerminal);
+
+    // Tooltip Logic - Refactored for reliability
+    const tooltip = document.getElementById('ai-tooltip');
+    
+    const showTooltip = () => {
+        if (terminal?.classList.contains('terminal-hidden') && !sessionStorage.getItem('copilot_hint_shown')) {
+            tooltip?.classList.remove('tooltip-hidden');
+            sessionStorage.setItem('copilot_hint_shown', 'true');
+            setTimeout(hideTooltip, 10000);
+        }
+    };
+
+    const hideTooltip = () => {
+        tooltip?.classList.add('tooltip-hidden');
+    };
+
+    // Initialize on load
+    setTimeout(showTooltip, 3000);
+
+    // Re-initialize for Astro View Transitions
+    document.addEventListener('astro:after-swap', () => {
+        setTimeout(showTooltip, 2000);
+    });
 
     const addLine = (text: string, type: 'command' | 'response' = 'response') => {
         if (!output) return;
