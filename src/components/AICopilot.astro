@@ -26,7 +26,16 @@ import { agentManifest } from '../data/agentManifest';
         </div>
         <div class="terminal-input-area">
             <span class="prompt">></span>
-            <input type="text" id="terminal-input" placeholder="Type 'help'..." autofocus autocomplete="off" />
+            <input 
+                type="text" 
+                id="terminal-input" 
+                placeholder="Type 'help'..." 
+                autocomplete="off" 
+                autocorrect="off" 
+                autocapitalize="off" 
+                spellcheck="false"
+                inputmode="text"
+            />
         </div>
         <div class="terminal-scanlines"></div>
     </div>
@@ -58,6 +67,7 @@ import { agentManifest } from '../data/agentManifest';
         position: relative;
         box-shadow: 0 0 15px rgba(0, 204, 51, 0.2);
         transition: transform 0.3s ease, box-shadow 0.3s ease;
+        touch-action: manipulation;
     }
 
     #ai-trigger:hover {
@@ -127,7 +137,7 @@ import { agentManifest } from '../data/agentManifest';
         right: 0;
         width: 400px;
         height: 500px;
-        background: #020202; /* Always dark background for Matrix feel */
+        background: #020202;
         border: 1px solid #002600;
         display: flex;
         flex-direction: column;
@@ -168,8 +178,9 @@ import { agentManifest } from '../data/agentManifest';
         background: none;
         border: none;
         color: #666;
-        font-size: 1.25rem;
+        font-size: 1.5rem;
         cursor: pointer;
+        padding: 0 0.5rem;
     }
 
     .terminal-content {
@@ -180,7 +191,7 @@ import { agentManifest } from '../data/agentManifest';
         flex-direction: column;
         gap: 0.5rem;
         font-size: 0.9rem !important;
-        background: #020202 !important; /* Force black background */
+        background: #020202 !important;
         scrollbar-width: thin;
         scrollbar-color: #002600 transparent;
     }
@@ -219,16 +230,16 @@ import { agentManifest } from '../data/agentManifest';
     #terminal-input {
         background: none !important;
         border: none !important;
-        color: #00ff41 !important; /* Fixed bright green for input */
+        color: #00ff41 !important;
         flex: 1;
         font-family: 'JetBrains Mono', monospace !important;
-        font-size: 0.9rem !important;
+        font-size: 16px !important; /* Prevent iOS zoom on focus */
         outline: none !important;
         box-shadow: none !important;
     }
 
     #terminal-input::placeholder {
-        color: #004411; /* Darker green placeholder */
+        color: #004411;
     }
 
     /* Scanlines effect inside terminal */
@@ -243,146 +254,171 @@ import { agentManifest } from '../data/agentManifest';
     }
 
     @media (max-width: 480px) {
+        #ai-copilot-container {
+            bottom: 1rem;
+            right: 1rem;
+        }
         #ai-terminal {
-            width: calc(100vw - 4rem);
-            height: 60vh;
+            width: calc(100vw - 2rem);
+            height: 70vh;
+            max-height: 500px;
+            bottom: 70px;
+        }
+        #ai-tooltip {
+            width: 180px;
+            bottom: 70px;
         }
     }
 </style>
 
 <script>
-    const container = document.getElementById('ai-copilot-container');
-    const manifest = JSON.parse(container?.getAttribute('data-manifest') || '{}');
-    
-    const trigger = document.getElementById('ai-trigger');
-    const terminal = document.getElementById('ai-terminal');
-    const closeBtn = document.getElementById('ai-close');
-    const input = document.getElementById('terminal-input') as HTMLInputElement;
-    const output = document.getElementById('terminal-output');
+    function setupAICopilot() {
+        const container = document.getElementById('ai-copilot-container');
+        if (!container) return;
 
-    const toggleTerminal = () => {
-        terminal?.classList.toggle('terminal-hidden');
-        if (!terminal?.classList.contains('terminal-hidden')) {
-            input?.focus();
-            hideTooltip();
-        }
-    };
+        const manifest = JSON.parse(container.getAttribute('data-manifest') || '{}');
+        const trigger = document.getElementById('ai-trigger');
+        const terminal = document.getElementById('ai-terminal');
+        const closeBtn = document.getElementById('ai-close');
+        const input = document.getElementById('terminal-input') as HTMLInputElement;
+        const output = document.getElementById('terminal-output');
+        const tooltip = document.getElementById('ai-tooltip');
 
-    trigger?.addEventListener('click', toggleTerminal);
-    closeBtn?.addEventListener('click', toggleTerminal);
+        const toggleTerminal = (e?: Event) => {
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            terminal?.classList.toggle('terminal-hidden');
+            if (!terminal?.classList.contains('terminal-hidden')) {
+                input?.focus();
+                hideTooltip();
+            }
+        };
 
-    // Tooltip Logic - Refactored for reliability
-    const tooltip = document.getElementById('ai-tooltip');
-    
-    const showTooltip = () => {
-        if (terminal?.classList.contains('terminal-hidden') && !sessionStorage.getItem('copilot_hint_shown')) {
-            tooltip?.classList.remove('tooltip-hidden');
-            sessionStorage.setItem('copilot_hint_shown', 'true');
-            setTimeout(hideTooltip, 10000);
-        }
-    };
+        const showTooltip = () => {
+            if (terminal?.classList.contains('terminal-hidden') && !sessionStorage.getItem('copilot_hint_shown')) {
+                tooltip?.classList.remove('tooltip-hidden');
+                sessionStorage.setItem('copilot_hint_shown', 'true');
+                setTimeout(hideTooltip, 10000);
+            }
+        };
 
-    const hideTooltip = () => {
-        tooltip?.classList.add('tooltip-hidden');
-    };
+        const hideTooltip = () => {
+            tooltip?.classList.add('tooltip-hidden');
+        };
 
-    // Initialize on load
-    setTimeout(showTooltip, 3000);
+        // Event Listeners
+        trigger?.addEventListener('click', toggleTerminal);
+        trigger?.addEventListener('touchstart', (e) => {
+            // Only toggle if terminal is hidden to prevent accidental double-toggles
+            if (terminal?.classList.contains('terminal-hidden')) {
+                toggleTerminal(e);
+            }
+        }, { passive: false });
 
-    // Re-initialize for Astro View Transitions
-    document.addEventListener('astro:after-swap', () => {
-        setTimeout(showTooltip, 2000);
-    });
+        closeBtn?.addEventListener('click', toggleTerminal);
+        closeBtn?.addEventListener('touchstart', toggleTerminal, { passive: false });
 
-    const addLine = (text: string, type: 'command' | 'response' = 'response') => {
-        if (!output) return;
-        const line = document.createElement('div');
-        line.className = `line ${type}`;
-        output.appendChild(line);
-        
-        if (type === 'response') {
-            typeWriter(text, line);
-        } else {
-            line.textContent = `> ${text}`;
-        }
-        
-        output.scrollTop = output.scrollHeight;
-    };
+        const typeWriter = (text: string, element: HTMLElement, i = 0) => {
+            if (i < text.length) {
+                element.textContent += text.charAt(i);
+                const timer = setTimeout(() => typeWriter(text, element, i + 1), 5);
+                if (output) output.scrollTop = output.scrollHeight;
+                // Store timer on element to clear if needed (though not strictly necessary here)
+            }
+        };
 
-    const typeWriter = (text: string, element: HTMLElement, i = 0) => {
-        if (i < text.length) {
-            element.textContent += text.charAt(i);
-            setTimeout(() => typeWriter(text, element, i + 1), 5);
-            if (output) output.scrollTop = output.scrollHeight;
-        }
-    };
+        const addLine = (text: string, type: 'command' | 'response' = 'response') => {
+            if (!output) return;
+            const line = document.createElement('div');
+            line.className = `line ${type}`;
+            output.appendChild(line);
+            
+            if (type === 'response') {
+                typeWriter(text, line);
+            } else {
+                line.textContent = `> ${text}`;
+            }
+            
+            output.scrollTop = output.scrollHeight;
+        };
 
-    const processCommand = (cmd: string) => {
-        const cleanCmd = cmd.toLowerCase().trim().replace(/\s+/g, ' ');
-        const tokens = cleanCmd.split(' ');
-        const primary = tokens[0];
-        
-        addLine(cmd, 'command');
+        const processCommand = (cmd: string) => {
+            const cleanCmd = cmd.toLowerCase().trim().replace(/\s+/g, ' ');
+            const tokens = cleanCmd.split(' ');
+            const primary = tokens[0];
+            
+            addLine(cmd, 'command');
 
-        // Helper for exact match or primary token match
-        const isMatch = (keywords: string[]) => keywords.some(k => cleanCmd === k || primary === k);
+            const isMatch = (keywords: string[]) => keywords.some(k => cleanCmd === k || primary === k);
 
-        if (isMatch(['help', '?', 'protocol', 'commands'])) {
-            const helpText = manifest.commands.map((c: any) => `${c.cmd.padEnd(12)} - ${c.desc}`).join('\n');
-            addLine(`AVAILABLE SYSTEM PROTOCOLS:\n${helpText}`);
-        } 
-        else if (cleanCmd.includes('knowledge') || cleanCmd.includes('data') || cleanCmd === 'kb') {
-            const kbSummary = [
-                `IDENTiTY: ${manifest.identity.name}`,
-                `PROJECTS: ${manifest.knowledge.projects.length} nodes detected`,
-                `EXPERiENCE: ${manifest.knowledge.experience.length} career segments`,
-                `SKiLLS: Verified tech stack available`,
-                `EDUCATiON: BS Mechanical Engineering`,
-                `\nUse 'help' to see specific access commands.`
-            ].join('\n');
-            addLine(`ACCESSING KNOWLEDGE BASE SUMMARY...\n\n${kbSummary}`);
-        }
-        else if (isMatch(['whoami', 'who am i', 'about', 'manjil'])) {
-            addLine(`${manifest.identity.name}\n${manifest.identity.title} @ ${manifest.identity.company}\n\n${manifest.identity.bio}`);
-        }
-        else if (isMatch(['skills', 'stack', 'tech'])) {
-            const skills = manifest.knowledge.skills;
-            const skillText = [
-                `LANGUAGES: ${skills.languages.join(', ')}`,
-                `FRAMEWORKS: ${skills.frameworks.join(', ')}`,
-                `BACKEND/CLOUD: ${skills.backend.join(', ')}`,
-                `TOOLS/SPECIALTIES: ${skills.tools.join(', ')}`
-            ].join('\n');
-            addLine(`Pinging system capabilities...\n\n${skillText}\n\nSYSTEM STATUS: OPTIMAL`);
-        }
-        else if (isMatch(['ls', 'projects', 'list', 'dir', 'work'])) {
-            const projectList = manifest.knowledge.projects.map((p: any) => `[PROJ] ${p.title}\n      ${p.tech.join(', ')}`).join('\n\n');
-            addLine(`RETRIEVING FEATURED PROJECTS...\n\n${projectList}`);
-        }
-        else if (isMatch(['experience', 'career', 'history', 'cat'])) {
-            const expList = manifest.knowledge.experience.map((e: any) => `[${e.period}] ${e.role} @ ${e.company}\n      ${e.description}`).join('\n\n');
-            addLine(`CORE CAREER DATA DETECTED:\n\n${expList}`);
-        }
-        else if (isMatch(['resume', 'cv', 'get'])) {
-            addLine(`LINKING TO EXTERNAL DATA...`);
-            setTimeout(() => {
-                window.open(manifest.knowledge.links.resume, '_blank');
-                addLine(`RESOURCE OPENED IN NEW NODE.`);
-            }, 500);
-        }
-        else if (isMatch(['clear', 'cls', 'reset'])) {
-            if (output) output.innerHTML = '';
-            addLine(manifest.responses.welcome);
-        }
-        else {
-            addLine(manifest.responses.unknown);
-        }
-    };
+            if (isMatch(['help', '?', 'protocol', 'commands'])) {
+                const helpText = manifest.commands.map((c: any) => `${c.cmd.padEnd(12)} - ${c.desc}`).join('\n');
+                addLine(`AVAILABLE SYSTEM PROTOCOLS:\n${helpText}`);
+            } 
+            else if (cleanCmd.includes('knowledge') || cleanCmd.includes('data') || cleanCmd === 'kb') {
+                const kbSummary = [
+                    `IDENTiTY: ${manifest.identity.name}`,
+                    `PROJECTS: ${manifest.knowledge.projects.length} nodes detected`,
+                    `EXPERiENCE: ${manifest.knowledge.experience.length} career segments`,
+                    `SKiLLS: Verified tech stack available`,
+                    `EDUCATiON: BS Mechanical Engineering`,
+                    `\nUse 'help' to see specific access commands.`
+                ].join('\n');
+                addLine(`ACCESSING KNOWLEDGE BASE SUMMARY...\n\n${kbSummary}`);
+            }
+            else if (isMatch(['whoami', 'who am i', 'about', 'manjil'])) {
+                addLine(`${manifest.identity.name}\n${manifest.identity.title} @ ${manifest.identity.company}\n\n${manifest.identity.bio}`);
+            }
+            else if (isMatch(['skills', 'stack', 'tech'])) {
+                const skills = manifest.knowledge.skills;
+                const skillText = [
+                    `LANGUAGES: ${skills.languages.join(', ')}`,
+                    `FRAMEWORKS: ${skills.frameworks.join(', ')}`,
+                    `BACKEND/CLOUD: ${skills.backend.join(', ')}`,
+                    `TOOLS/SPECIALTIES: ${skills.tools.join(', ')}`
+                ].join('\n');
+                addLine(`Pinging system capabilities...\n\n${skillText}\n\nSYSTEM STATUS: OPTIMAL`);
+            }
+            else if (isMatch(['ls', 'projects', 'list', 'dir', 'work'])) {
+                const projectList = manifest.knowledge.projects.map((p: any) => `[PROJ] ${p.title}\n      ${p.tech.join(', ')}`).join('\n\n');
+                addLine(`RETRIEVING FEATURED PROJECTS...\n\n${projectList}`);
+            }
+            else if (isMatch(['experience', 'career', 'history', 'cat'])) {
+                const expList = manifest.knowledge.experience.map((e: any) => `[${e.period}] ${e.role} @ ${e.company}\n      ${e.description}`).join('\n\n');
+                addLine(`CORE CAREER DATA DETECTED:\n\n${expList}`);
+            }
+            else if (isMatch(['resume', 'cv', 'get'])) {
+                addLine(`LINKING TO EXTERNAL DATA...`);
+                setTimeout(() => {
+                    window.open(manifest.knowledge.links.resume, '_blank');
+                    addLine(`RESOURCE OPENED IN NEW NODE.`);
+                }, 500);
+            }
+            else if (isMatch(['clear', 'cls', 'reset'])) {
+                if (output) output.innerHTML = '';
+                addLine(manifest.responses.welcome);
+            }
+            else {
+                addLine(manifest.responses.unknown);
+            }
+        };
 
-    input?.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && input.value) {
-            processCommand(input.value);
-            input.value = '';
-        }
-    });
+        input?.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && input.value) {
+                processCommand(input.value);
+                input.value = '';
+            }
+        });
+
+        // Initialize tooltip
+        setTimeout(showTooltip, 3000);
+    }
+
+    // Run on initial load
+    setupAICopilot();
+
+    // Re-run on view transitions
+    document.addEventListener('astro:page-load', setupAICopilot);
 </script>
