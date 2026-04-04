@@ -194,11 +194,13 @@ const searchIndex = [
 
     .terminal-header {
         background: #111;
-        padding: 0.5rem 1rem;
+        padding: 0.25rem 1rem;
         display: flex;
         justify-content: space-between;
         align-items: center;
         border-bottom: 1px solid #222;
+        position: relative;
+        z-index: 20;
     }
 
     .terminal-title {
@@ -212,9 +214,19 @@ const searchIndex = [
         background: none;
         border: none;
         color: #666;
-        font-size: 1.5rem;
+        font-size: 1.8rem;
         cursor: pointer;
-        padding: 0 0.5rem;
+        padding: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 44px;
+        min-height: 44px;
+        transition: color 0.2s;
+    }
+
+    #ai-close:hover, #ai-close:active {
+        color: #00ff41;
     }
 
     .terminal-content {
@@ -314,7 +326,8 @@ const searchIndex = [
 <script>
     function setupAICopilot() {
         const container = document.getElementById('ai-copilot-container');
-        if (!container) return;
+        if (!container || container.hasAttribute('data-initialized')) return;
+        container.setAttribute('data-initialized', 'true');
 
         const manifest = JSON.parse(container.getAttribute('data-manifest') || '{}');
         const searchIndex = JSON.parse(container.getAttribute('data-search-index') || '[]');
@@ -487,9 +500,6 @@ const searchIndex = [
         setTimeout(showTooltip, 3000);
     }
 
-    // Run on initial load
-    setupAICopilot();
-
-    // Re-run on view transitions
+    // Initialize on page load and view transitions
     document.addEventListener('astro:page-load', setupAICopilot);
 </script>
