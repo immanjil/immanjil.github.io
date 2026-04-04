@@ -1,0 +1,327 @@
+---
+interface Props {
+    initialCode?: string;
+    title?: string;
+    id?: string;
+    isReadOnly?: boolean;
+    description?: string;
+}
+
+const { 
+    initialCode = '<?php\necho "Hello from PHP WASM!";\n?>', 
+    title = 'PHP Sandbox',
+    id = 'default',
+    isReadOnly = false,
+    description = "Write and run PHP code directly in your browser using WebAssembly."
+} = Astro.props;
+---
+
+<div class="sandbox-component fade-in" id={`sandbox-${id}`} data-sandbox-id={id} data-readonly={isReadOnly ? 'true' : 'false'}>
+    <header class="sandbox-header">
+        <h3>{title}</h3>
+        {description && <p>{description}</p>}
+    </header>
+
+    <div class="editor-section">
+        <div class="editor-header">
+            <span class="file-name">sandbox.php</span>
+            <div class="status-indicator">
+                <span class="status-dot"></span>
+                <span class="status-text">INITIALIZING_WASM...</span>
+            </div>
+        </div>
+        <textarea 
+            id={`php-editor-${id}`} 
+            spellcheck="false" 
+            readonly={isReadOnly}
+            placeholder="Write your PHP code here...">{initialCode}</textarea>
+        {isReadOnly && <div class="editor-overlay">READ_ONLY_MODE // EDIT_IN_FULL_SANDBOX</div>}
+        
+        <div class="controls">
+            <button id={`run-btn-${id}`} disabled class="run-btn">
+                <span class="btn-text">RUN_CODE</span>
+                <span class="spinner"></span>
+            </button>
+            <button id={`clear-btn-${id}`} class="clear-btn">CLEAR_OUTPUT</button>
+        </div>
+    </div>
+
+    <div class="output-section">
+        <h3>STANDARD_OUTPUT</h3>
+        <pre id={`php-output-${id}`} class="output-area">PHP WASM is loading, please wait...</pre>
+    </div>
+</div>
+
+<style>
+    .sandbox-component {
+        max-width: 1000px;
+        margin: 2rem 0;
+    }
+
+    .sandbox-header h3 {
+        margin-bottom: 0.5rem;
+        color: var(--accent-color);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+    }
+
+    .sandbox-header p {
+        color: var(--secondary-text);
+        font-size: 0.9rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .editor-section {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        position: relative;
+    }
+
+    .editor-header {
+        background: var(--border-color);
+        padding: 0.5rem 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.8rem;
+        font-family: 'JetBrains Mono', monospace;
+    }
+
+    .file-name {
+        font-weight: 600;
+        color: var(--secondary-text);
+    }
+
+    .status-indicator {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 700;
+        font-size: 0.7rem;
+    }
+
+    .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #ffcc00;
+    }
+
+    .status-dot.ready {
+        background: var(--accent-color);
+        box-shadow: 0 0 8px var(--accent-color);
+    }
+
+    textarea {
+        width: 100%;
+        height: 300px;
+        background: transparent;
+        color: var(--text-color);
+        border: none;
+        padding: 1.5rem;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.9rem;
+        line-height: 1.5;
+        resize: vertical;
+        outline: none;
+    }
+
+    .editor-overlay {
+        position: absolute;
+        top: 40px;
+        right: 15px;
+        font-size: 0.7rem;
+        color: var(--accent-color);
+        opacity: 0.5;
+        font-weight: 700;
+        pointer-events: none;
+    }
+
+    .controls {
+        padding: 0.75rem 1rem;
+        border-top: 1px solid var(--border-color);
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+    }
+
+    .run-btn, .clear-btn {
+        padding: 0.5rem 1.25rem;
+        border-radius: 4px;
+        border: 1px solid var(--border-color);
+        cursor: pointer;
+        font-weight: 700;
+        transition: all 0.2s;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.8rem;
+    }
+
+    .run-btn {
+        background: var(--accent-color);
+        color: #000;
+        border-color: var(--accent-color);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .run-btn:disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+    }
+
+    .run-btn:hover:not(:disabled) {
+        transform: translateY(-1px);
+        box-shadow: 0 0 15px var(--accent-color);
+    }
+
+    .clear-btn {
+        background: transparent;
+        color: var(--text-color);
+    }
+
+    .clear-btn:hover {
+        background: var(--border-color);
+    }
+
+    .output-section h3 {
+        margin-top: 0;
+        margin-bottom: 0.75rem;
+        font-size: 0.85rem;
+        color: var(--secondary-text);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+    }
+
+    .output-area {
+        font-family: 'JetBrains Mono', monospace;
+        white-space: pre-wrap;
+        word-break: break-all;
+        background: #000;
+        padding: 1.5rem;
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        font-size: 0.9rem;
+        min-height: 100px;
+        max-height: 400px;
+        overflow-y: auto;
+        color: var(--accent-color);
+    }
+
+    .spinner {
+        display: none;
+        width: 12px;
+        height: 12px;
+        border: 2px solid rgba(0, 0, 0, 0.3);
+        border-top: 2px solid black;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .run-btn.loading .spinner { display: block; }
+    .run-btn.loading .btn-text { opacity: 0.7; }
+</style>
+
+<script is:inline type="module">
+    import { PhpWeb } from 'https://cdn.jsdelivr.net/npm/php-wasm/PhpWeb.mjs';
+
+    function initSandbox(id) {
+        const container = document.getElementById(`sandbox-${id}`);
+        if (!container) return;
+
+        const runBtn = document.getElementById(`run-btn-${id}`);
+        const clearBtn = document.getElementById(`clear-btn-${id}`);
+        const editor = document.getElementById(`php-editor-${id}`);
+        const output = document.getElementById(`php-output-${id}`);
+        const statusDot = container.querySelector('.status-dot');
+        const statusText = container.querySelector('.status-text');
+
+        let php;
+
+        async function start() {
+            try {
+                php = new PhpWeb();
+                
+                php.addEventListener('ready', () => {
+                    statusDot.classList.add('ready');
+                    statusText.textContent = 'SYSTEM_READY';
+                    runBtn.disabled = false;
+                    output.textContent = 'PHP WASM loaded. System ready.';
+                });
+
+                php.addEventListener('output', (event) => {
+                    output.textContent += event.detail;
+                });
+
+                php.addEventListener('error', (event) => {
+                    output.textContent += '\n[PHP Error]: ' + event.detail;
+                });
+
+            } catch (err) {
+                console.error(`Failed to initialize PHP WASM for sandbox ${id}:`, err);
+                statusText.textContent = 'INIT_FAILED';
+                statusDot.style.background = '#ff4d4d';
+                output.textContent = 'Error: Module initialization failed.';
+            }
+        }
+
+        runBtn.addEventListener('click', async () => {
+            if (!php) return;
+
+            output.textContent = '';
+            runBtn.classList.add('loading');
+            runBtn.disabled = true;
+
+            const code = editor.value;
+            
+            try {
+                if (typeof php.refresh === 'function') {
+                    php.refresh();
+                }
+
+                let finalCode = code.trim();
+                if (!finalCode.startsWith('<?php')) {
+                    finalCode = '<?php\n' + finalCode;
+                }
+
+                await php.run(finalCode);
+            } catch (err) {
+                output.textContent += '\n[Execution Error]: ' + err.message;
+            } finally {
+                runBtn.classList.remove('loading');
+                runBtn.disabled = false;
+            }
+        });
+
+        clearBtn.addEventListener('click', () => {
+            output.textContent = '';
+        });
+
+        start();
+    }
+
+    // Initialize all sandboxes on the page
+    const sandboxes = document.querySelectorAll('.sandbox-component');
+    sandboxes.forEach(sb => {
+        const id = sb.getAttribute('data-sandbox-id');
+        initSandbox(id);
+    });
+
+    // Handle View Transitions
+    document.addEventListener('astro:after-swap', () => {
+        const sandboxes = document.querySelectorAll('.sandbox-component');
+        sandboxes.forEach(sb => {
+            const id = sb.getAttribute('data-sandbox-id');
+            initSandbox(id);
+        });
+    });
+</script>
