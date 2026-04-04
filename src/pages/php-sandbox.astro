@@ -1,0 +1,319 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const defaultCode = `<?php
+// PHP Sandbox powered by WebAssembly (php-wasm)
+echo "Hello, world! Today is " . date('l, F j, Y') . "\\n";
+
+$numbers = [1, 2, 3, 4, 5];
+$squared = array_map(fn($n) => $n * $n, $numbers);
+
+echo "Squared numbers: " . implode(', ', $squared) . "\\n";
+
+function greet($name) {
+    return "Greetings, " . $name . "!\\n";
+}
+
+echo greet("Manjil");
+?>`;
+---
+
+<Layout title="PHP Sandbox">
+    <div class="sandbox-container fade-in">
+        <header class="sandbox-header">
+            <h1>PHP Sandbox</h1>
+            <p>Write and run PHP code directly in your browser using WebAssembly.</p>
+        </header>
+
+        <div class="editor-section">
+            <div class="editor-header">
+                <span class="file-name">sandbox.php</span>
+                <div class="status-indicator" id="wasm-status">
+                    <span class="status-dot"></span>
+                    <span class="status-text">Initializing PHP WASM...</span>
+                </div>
+            </div>
+            <textarea id="php-editor" spellcheck="false">{defaultCode}</textarea>
+            
+            <div class="controls">
+                <button id="run-btn" disabled>
+                    <span class="btn-text">Run Code</span>
+                    <span class="spinner"></span>
+                </button>
+                <button id="clear-btn">Clear Output</button>
+            </div>
+        </div>
+
+        <div class="output-section">
+            <h3>Standard Output</h3>
+            <pre id="php-output" class="output-area">PHP WASM is loading, please wait...</pre>
+        </div>
+    </div>
+
+    <style>
+        .sandbox-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .sandbox-header {
+            margin-bottom: 2rem;
+        }
+
+        .sandbox-header p {
+            color: var(--secondary-text);
+        }
+
+        .editor-section {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .editor-header {
+            background: var(--border-color);
+            padding: 0.5rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            font-family: var(--font-main);
+        }
+
+        .file-name {
+            font-weight: 600;
+            color: var(--secondary-text);
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ffcc00; /* Yellow for loading */
+        }
+
+        .status-dot.ready {
+            background: #00cc33; /* Green for ready */
+            box-shadow: 0 0 8px rgba(0, 204, 51, 0.4);
+        }
+
+        #php-editor {
+            width: 100%;
+            height: 300px;
+            background: transparent;
+            color: var(--text-color);
+            border: none;
+            padding: 1rem;
+            font-family: 'JetBrains Mono', 'Courier New', Courier, monospace;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            resize: vertical;
+            outline: none;
+        }
+
+        .controls {
+            padding: 1rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        #run-btn, #clear-btn {
+            padding: 0.6rem 1.5rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+            font-family: var(--font-main);
+        }
+
+        #run-btn {
+            background: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        #run-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: var(--secondary-text);
+            border-color: var(--secondary-text);
+        }
+
+        #run-btn:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 230, 64, 0.2);
+        }
+
+        #clear-btn {
+            background: transparent;
+            color: var(--text-color);
+        }
+
+        #clear-btn:hover {
+            background: var(--border-color);
+        }
+
+        .output-section {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .output-section h3 {
+            margin-top: 0;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            color: var(--secondary-text);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .output-area {
+            font-family: 'JetBrains Mono', 'Courier New', Courier, monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+            background: rgba(0, 0, 0, 0.05);
+            padding: 1rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            min-height: 100px;
+            color: var(--text-color);
+        }
+
+        :root.dark .output-area {
+            background: rgba(0, 204, 51, 0.05);
+        }
+
+        /* Spinner for running state */
+        .spinner {
+            display: none;
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #run-btn.loading .spinner {
+            display: block;
+        }
+        
+        #run-btn.loading .btn-text {
+            opacity: 0.7;
+        }
+    </style>
+
+    <script is:inline type="module">
+        import { PhpWeb } from 'https://cdn.jsdelivr.net/npm/php-wasm/PhpWeb.mjs';
+
+        const runBtn = document.getElementById('run-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const editor = document.getElementById('php-editor');
+        const output = document.getElementById('php-output');
+        const statusDot = document.querySelector('.status-dot');
+        const statusText = document.querySelector('.status-text');
+
+        let php;
+
+        async function initPhp() {
+            if (php) return; // Already initialized
+
+            try {
+                php = new PhpWeb();
+                
+                php.addEventListener('ready', () => {
+                    statusDot.classList.add('ready');
+                    statusText.textContent = 'PHP WASM Ready';
+                    runBtn.disabled = false;
+                    output.textContent = 'System ready. Write some PHP and hit Run!';
+                });
+
+                php.addEventListener('output', (event) => {
+                    output.textContent += event.detail;
+                });
+
+                php.addEventListener('error', (event) => {
+                    output.textContent += '\n[PHP Error]: ' + event.detail;
+                });
+
+            } catch (err) {
+                console.error('Failed to initialize PHP WASM:', err);
+                statusText.textContent = 'Error loading PHP WASM';
+                statusDot.style.background = '#ff4d4d';
+                output.textContent = 'Initialization failed. Please refresh the page.';
+            }
+        }
+
+        runBtn.addEventListener('click', async () => {
+            if (!php) return;
+
+            output.textContent = '';
+            runBtn.classList.add('loading');
+            runBtn.disabled = true;
+
+            const code = editor.value;
+            
+            try {
+                // Clear state between runs to avoid "Cannot redeclare" errors
+                if (typeof php.refresh === 'function') {
+                    php.refresh();
+                }
+
+                // Ensure code is wrapped in <?php if not already
+                let finalCode = code.trim();
+                if (!finalCode.startsWith('<?php')) {
+                    finalCode = '<?php\n' + finalCode;
+                }
+
+                await php.run(finalCode);
+            } catch (err) {
+                output.textContent += '\n[Execution Error]: ' + err.message;
+            } finally {
+                runBtn.classList.remove('loading');
+                runBtn.disabled = false;
+            }
+        });
+
+        clearBtn.addEventListener('click', () => {
+            output.textContent = '';
+        });
+
+        // Initialize on page load
+        initPhp();
+
+        // Handle view transitions
+        document.addEventListener('astro:after-swap', () => {
+            // Re-bind elements after swap
+            const newRunBtn = document.getElementById('run-btn');
+            if (newRunBtn) {
+                // Since php instance might persist or needs re-init depending on how php-wasm works
+                // we should probably re-init or at least re-bind.
+                // For now, let's just re-init if needed.
+                initPhp();
+            }
+        });
+    </script>
+</Layout>
