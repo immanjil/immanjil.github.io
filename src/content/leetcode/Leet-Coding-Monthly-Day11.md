@@ -2,6 +2,63 @@
 title: "Flood Fill"
 date: 2026-03-29
 tags: ["LeetCode"]
+solution: |
+  <?php
+  class Solution {
+  
+      /**
+       * @param Integer[][] $image
+       * @param Integer $sr
+       * @param Integer $sc
+       * @param Integer $newColor
+       * @return Integer[][]
+       */
+      function floodFill($image, $sr, $sc, $newColor) {
+          // Base cases 
+          if ($sr < 0 || $sc < 0 || ($image[$sr][$sc] == $newColor)) 
+              return $image; 
+  
+          // Replace the color at (x, y) 
+          $image[$sr][$sc] = $newColor; 
+  
+          $queue = new \Ds\Queue();
+          $queue->allocate([$sr, $sc]);
+          var_dump($queue);
+          
+          while (!$queue->isEmpty()){
+              [$r, $c] = $queue->pop();
+              if (
+                  (0 <= $r && $r< count($image)) 
+                  && (0 <= $c && $c< count($image[0]))) {
+                  $image[$r][$c] = $newColor;
+                  $queue->push([r+1, c]);
+                  $queue->push([r-1, c]);
+                  $queue->push([r, c+1]);
+                  $queue->push([r, c-1]);
+              }
+          }
+          return $image;        
+        }
+      }
+  
+      class Solution:
+      def floodFill(self, image: List[List[int]], sr: int, sc: int, newColor: int) -> List[List[int]]:     
+          if newColor == image[sr][sc]:
+              return image
+          
+          queue, prevColor = [(sr, sc)], image[sr][sc]
+          
+          while queue:
+              r, c = queue.pop(0)
+              
+              if 0 <= r < len(image) and 0 <= c < len(image[0]) and image[r][c] == prevColor:
+                  image[r][c] = newColor
+                  queue.append((r+1, c))
+                  queue.append((r-1, c))
+                  queue.append((r, c+1))
+                  queue.append((r, c-1))
+          
+          return image
 ---
 
 ---
@@ -59,24 +116,4 @@ tags: ["LeetCode"]
 ---
 
 ### Solution - Using Breadth First Search implemented on Python3
-
->     class Solution:
->     def floodFill(self, image: List[List[int]], sr: int, sc: int, newColor: int) -> List[List[int]]:     
->         if newColor == image[sr][sc]:
->             return image
->         
->         queue, prevColor = [(sr, sc)], image[sr][sc]
->         
->         while queue:
->             r, c = queue.pop(0)
->             
->             if 0 <= r < len(image) and 0 <= c < len(image[0]) and image[r][c] == prevColor:
->                 image[r][c] = newColor
->                 queue.append((r+1, c))
->                 queue.append((r-1, c))
->                 queue.append((r, c+1))
->                 queue.append((r, c-1))
->         
->         return image
-
-
+

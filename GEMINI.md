@@ -47,6 +47,16 @@ For significant architectural shifts, new feature implementations, or critical b
 - **High-Stakes Actions:** This includes, but is not limited to: `git push`, creating or updating Pull Requests, merging branches, and modifying GitHub Issues or Labels via MCP tools.
 - **Local Verification:** All changes should be verified locally before any remote interaction is proposed.
 
+## 🧩 Engineering Principles & Patterns
+- **DRY (Don't Repeat Yourself):** Always prioritize modularity and reusability. Any cross-cutting functionality (e.g., interactive code execution, UI components) must be consolidated into a single, reusable component rather than being duplicated across pages.
+- **Pattern Learning:** When introducing new capabilities (like WebAssembly engines or interactive components), analyze the codebase to identify recurring needs. Implement these as standardized patterns that can be easily adopted by other sections of the project.
+- **Client-Side Autonomy:** Prefer client-side execution (WASM, Browser APIs) for interactive features to maintain the site's high-performance static nature and user privacy.
+
+## 📝 Recent Updates (April 2026)
+- **Interactive PHP WASM Integration:** Implemented a reusable `PhpSandbox.astro` component powered by `php-wasm`. This allows running PHP code directly in the browser across the main Sandbox page and all LeetCode problem pages.
+- **LeetCode Console:** Automatically extracts solution code from Markdown content (including legacy blockquote formats) and pre-fills the interactive console for immediate execution.
+- **State Persistence Fix:** Integrated `php.refresh()` logic to allow multiple code runs within the same session without function redeclaration errors.
+
 ## 📝 Recent Updates (March 2026)
 - **Astro 6+ Migration:** Successfully migrated to Astro 6.1.1, resolving `ViewTransitions` deprecation by moving to `ClientRouter`.
 - **System Design Section:** Launched a new section for architectural deep-dives, starting with "Distributed Rate Limiter" and "URL Shortener (Bitly)" breakdowns.

@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
+import PhpSandbox from '../../components/PhpSandbox.astro';
 
 export async function getStaticPaths() {
     const posts = await getCollection('leetcode');
@@ -12,6 +13,8 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
+
+const extractedCode = post.data.solution || '';
 
 const formatDate = (date: Date | undefined) => {
     if (!date) return '';
@@ -36,9 +39,21 @@ const formatDate = (date: Date | undefined) => {
                 )}
             </div>
         </header>
+        
         <div class="content">
             <Content />
         </div>
+
+        {extractedCode && (
+            <div class="solution-sandbox-wrapper fade-in delay-3">
+                <PhpSandbox 
+                    id={`leetcode-${post.id.replace(/\.md$/, '')}`}
+                    title="Interactive Solution Console"
+                    initialCode={extractedCode}
+                    description="Run the PHP solution above directly in your browser. Feel free to modify the test cases!"
+                />
+            </div>
+        )}
     </article>
 </Layout>
 
@@ -92,6 +107,13 @@ const formatDate = (date: Date | undefined) => {
     }
 
     .prose .content strong { color: var(--accent-color); }
+
+    /* Fix for nested sandbox styling */
+    .solution-sandbox-wrapper {
+        margin-top: 5rem;
+        border-top: 2px solid var(--accent-color);
+        padding-top: 2rem;
+    }
 </style>
 
 <style>

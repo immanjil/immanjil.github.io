@@ -9,6 +9,7 @@ const leetcode = defineCollection({
         pubDate: z.coerce.date().optional(),
         tags: z.array(z.string()).optional(),
         description: z.string().optional(),
+        solution: z.string().optional(),
     }),
 });
 
@@ -20,6 +21,7 @@ const systemDesign = defineCollection({
         pubDate: z.coerce.date().optional(),
         tags: z.array(z.string()).optional(),
         description: z.string().optional(),
+        solution: z.string().optional(),
     }),
 });
 
