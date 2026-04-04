@@ -14,73 +14,7 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const { Content } = await render(post);
 
-// Robust extraction of PHP code from Markdown (handles code blocks and blockquotes)
-const extractPhpCode = (body: string) => {
-    if (!body) return '';
-
-    // 1. Check for standard Markdown code blocks first
-    const codeBlockMatch = body.match(/```php([\s\S]*?)```/);
-    if (codeBlockMatch) return codeBlockMatch[1].trim();
-
-    // 2. Check for blockquote style (common in older Jekyll-style posts)
-    const lines = body.split('\n');
-    let inQuote = false;
-    let foundSolution = false;
-    const collectedLines = [];
-
-    for (let i = 0; i < lines.length; i++) {
-        const line = lines[i];
-        const trimmed = line.trim();
-
-        // Start collecting if we see a blockquote start ('>') after a solution header
-        // or if we see '<?php' inside a blockquote.
-        if (trimmed.toLowerCase().includes('### solution')) {
-            foundSolution = true;
-            continue;
-        }
-
-        if (trimmed.startsWith('>') && (foundSolution || trimmed.includes('<?php') || inQuote)) {
-            // If it's the first line of a blockquote and we haven't found a solution header yet,
-            // we'll only start if it looks like code (e.g., contains '<?php' or 'function')
-            if (!inQuote && !foundSolution && !trimmed.includes('<?php') && !trimmed.includes('function') && !trimmed.includes('$')) {
-                continue;
-            }
-
-            inQuote = true;
-            // Remove the '>' and handle potential leading spaces
-            const content = line.replace(/^\s*>\s?/, '');
-            collectedLines.push(content);
-        } else if (inQuote && trimmed === '') {
-            // Keep empty lines within the quote
-            collectedLines.push('');
-        } else if (inQuote) {
-            // End of the blockquote section
-            // But if we only have one or two lines, it might just be a regular quote.
-            // Let's check if we actually found something that looks like code.
-            const fullText = collectedLines.join('\n');
-            if (fullText.includes('<?php') || fullText.includes('function') || fullText.includes('class') || fullText.includes('$')) {
-                break;
-            } else {
-                // Not code, reset and keep looking
-                inQuote = false;
-                collectedLines.length = 0;
-            }
-        }
-    }
-
-    if (collectedLines.length > 0) {
-        let code = collectedLines.join('\n').trim();
-        // Ensure it starts with <?php for the WASM engine
-        if (!code.startsWith('<?php')) {
-            code = '<?php\n' + code;
-        }
-        return code;
-    }
-
-    return '';
-};
-
-const extractedCode = extractPhpCode(post.body || '');
+const extractedCode = post.data.solution || '';
 
 const formatDate = (date: Date | undefined) => {
     if (!date) return '';

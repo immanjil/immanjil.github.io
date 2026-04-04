@@ -2,6 +2,67 @@
 title: "Find the Town Judge"
 date: 2026-03-29
 tags: ["LeetCode"]
+solution: |
+  <?php
+  class Solution {
+  
+      /**
+       * @param Integer $num
+       * @return Boolean
+       */
+      function isPerfectSquare($num) {
+          if(in_array($num,[0, 2,3])) {
+              return false;
+          }
+          if(in_array($num,[1])) {
+              return true;
+          }
+          $i = 1;
+          $result = 0;
+          while($i < $num) {
+              $i++;
+              $result = $i * $i;
+              if ($result === $num) {
+                  return true;
+              }
+          }
+          return false;
+      }
+  
+      /**
+       * Binary Search Approach
+       * @param Integer $num
+       * @return Boolean
+       */
+      function isPerfectSquareBinary($num) {
+          if(in_array($num,[0, 2,3])) {
+              return false;
+          }
+          if(in_array($num,[1])) {
+              return true;
+          }
+          $left = 1;
+          $right = $num;
+          while ($left <= $right) {
+  
+              $mid = $left + floor(($right - $left) / 2);
+              if ($mid * $mid == $num) {
+                  return true;
+              } else if (($mid * $mid < $num)) {
+                  $left = $mid +1;
+              } else {
+                  $right = $mid - 1;
+              }
+          }
+          
+          return false;
+      }
+  }
+
+  // Test cases
+  $solution = new Solution();
+  var_dump($solution->isPerfectSquare(16));
+  var_dump($solution->isPerfectSquareBinary(16));
 ---
 
 ---
@@ -21,64 +82,7 @@ tags: ["LeetCode"]
 
 ### Solution - Simple Search
 
->     class Solution {
-> 
->     /**
->      * @param Integer $num
->      * @return Boolean
->      */
->     function isPerfectSquare($num) {
->         if(in_array($num,[0, 2,3])) {
->             return false;
->         }
->         if(in_array($num,[1])) {
->             return true;
->         }
->         $i = 1;
->         $result = 0;
->         while($i < $num) {
->             $i++;
->             $result = $i * $i;
->             if ($result === $num) {
->                 return true;
->             }
->         }
->         return false;
->       }
->     }
-
 ---
 
 ### Solution - Binary Search
-
->     class Solution {
-> 
->     /**
->      * @param Integer $num
->      * @return Boolean
->      */
->     function isPerfectSquare($num) {
->         if(in_array($num,[0, 2,3])) {
->             return false;
->         }
->         if(in_array($num,[1])) {
->             return true;
->         }
->         $left = 1;
->         $right = $num;
->         while ($left <= $right) {
-> 
->             $mid = $left + floor(($right - $left) / 2);
->             var_dump($mid);
->             if ($mid * $mid == $num) {
->                 return true;
->             } else if (($mid * $mid < $num)) {
->                 $left = $mid +1;
->             } else {
->                 $right = $mid - 1;
->             }
->         }
->         
->         return false;
->       }
->     }
+
