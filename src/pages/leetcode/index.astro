@@ -7,7 +7,18 @@ const selectedTag = Astro.url.searchParams.get('tag');
 const allPosts = await getCollection('leetcode');
 const posts = allPosts
     .filter(post => !selectedTag || post.data.tags?.includes(selectedTag))
-    .sort((a, b) => (b.data.date?.getTime() ?? 0) - (a.data.date?.getTime() ?? 0));
+    .sort((a, b) => {
+        const priorityA = a.data.priority ?? 0;
+        const priorityB = b.data.priority ?? 0;
+
+        if (priorityA !== priorityB) {
+            return priorityB - priorityA;
+        }
+
+        const dateA = a.data.date?.getTime() ?? 0;
+        const dateB = b.data.date?.getTime() ?? 0;
+        return dateB - dateA;
+    });
 
 const formatDate = (date: Date | undefined) => {
     if (!date) return '';
