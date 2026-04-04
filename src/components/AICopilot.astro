@@ -1,8 +1,42 @@
 ---
+import { getCollection } from 'astro:content';
 import { agentManifest } from '../data/agentManifest';
+import { profile } from '../data/profile';
+
+const leetcode = await getCollection('leetcode');
+const systemDesign = await getCollection('system-design');
+
+const searchIndex = [
+    ...profile.projects.map(p => ({
+        title: p.title,
+        description: p.description,
+        tags: p.tech,
+        url: p.link,
+        type: 'Project'
+    })),
+    ...leetcode.map(post => ({
+        title: post.data.title || post.id,
+        description: post.data.description || '',
+        tags: post.data.tags || [],
+        url: `/leetcode/${post.id.replace(/\.md$/, '')}`,
+        type: 'LeetCode'
+    })),
+    ...systemDesign.map(post => ({
+        title: post.data.title || post.id,
+        description: post.data.description || '',
+        tags: post.data.tags || [],
+        url: `/system-design/${post.id.replace(/\.md$/, '')}`,
+        type: 'System Design'
+    }))
+];
 ---
 
-<div id="ai-copilot-container" class="ai-copilot-closed" data-manifest={JSON.stringify(agentManifest)}>
+<div 
+    id="ai-copilot-container" 
+    class="ai-copilot-closed" 
+    data-manifest={JSON.stringify(agentManifest)}
+    data-search-index={JSON.stringify(searchIndex)}
+>
     <!-- Tooltip -->
     <div id="ai-tooltip" class="tooltip-hidden">
         <span class="tooltip-prefix">[SYSTEM]:</span> Terminal access established. Type 'help'.
@@ -18,7 +52,7 @@ import { agentManifest } from '../data/agentManifest';
     <!-- Terminal Window -->
     <div id="ai-terminal" class="terminal-hidden">
         <div class="terminal-header">
-            <span class="terminal-title">AGENTIC_COPILOT_v1.0.0</span>
+            <span class="terminal-title">AGENTIC_COPILOT_v1.1.0</span>
             <button id="ai-close" aria-label="Close Terminal">×</button>
         </div>
         <div id="terminal-output" class="terminal-content">
@@ -26,7 +60,16 @@ import { agentManifest } from '../data/agentManifest';
         </div>
         <div class="terminal-input-area">
             <span class="prompt">></span>
-            <input type="text" id="terminal-input" placeholder="Type 'help'..." autofocus autocomplete="off" />
+            <input 
+                type="text" 
+                id="terminal-input" 
+                placeholder="Type 'help' or search..." 
+                autocomplete="off" 
+                autocorrect="off" 
+                autocapitalize="off" 
+                spellcheck="false"
+                inputmode="text"
+            />
         </div>
         <div class="terminal-scanlines"></div>
     </div>
@@ -58,6 +101,7 @@ import { agentManifest } from '../data/agentManifest';
         position: relative;
         box-shadow: 0 0 15px rgba(0, 204, 51, 0.2);
         transition: transform 0.3s ease, box-shadow 0.3s ease;
+        touch-action: manipulation;
     }
 
     #ai-trigger:hover {
@@ -127,7 +171,7 @@ import { agentManifest } from '../data/agentManifest';
         right: 0;
         width: 400px;
         height: 500px;
-        background: #020202; /* Always dark background for Matrix feel */
+        background: #020202;
         border: 1px solid #002600;
         display: flex;
         flex-direction: column;
@@ -150,11 +194,13 @@ import { agentManifest } from '../data/agentManifest';
 
     .terminal-header {
         background: #111;
-        padding: 0.5rem 1rem;
+        padding: 0.25rem 1rem;
         display: flex;
         justify-content: space-between;
         align-items: center;
         border-bottom: 1px solid #222;
+        position: relative;
+        z-index: 20;
     }
 
     .terminal-title {
@@ -168,8 +214,19 @@ import { agentManifest } from '../data/agentManifest';
         background: none;
         border: none;
         color: #666;
-        font-size: 1.25rem;
+        font-size: 1.8rem;
         cursor: pointer;
+        padding: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 44px;
+        min-height: 44px;
+        transition: color 0.2s;
+    }
+
+    #ai-close:hover, #ai-close:active {
+        color: #00ff41;
     }
 
     .terminal-content {
@@ -180,7 +237,7 @@ import { agentManifest } from '../data/agentManifest';
         flex-direction: column;
         gap: 0.5rem;
         font-size: 0.9rem !important;
-        background: #020202 !important; /* Force black background */
+        background: #020202 !important;
         scrollbar-width: thin;
         scrollbar-color: #002600 transparent;
     }
@@ -203,6 +260,12 @@ import { agentManifest } from '../data/agentManifest';
         white-space: pre-wrap !important; 
     }
 
+    #ai-terminal .line.system {
+        color: #00802b !important;
+        font-style: italic;
+        font-size: 0.8rem;
+    }
+
     .terminal-input-area {
         padding: 0.75rem 1rem;
         display: flex;
@@ -219,16 +282,16 @@ import { agentManifest } from '../data/agentManifest';
     #terminal-input {
         background: none !important;
         border: none !important;
-        color: #00ff41 !important; /* Fixed bright green for input */
+        color: #00ff41 !important;
         flex: 1;
         font-family: 'JetBrains Mono', monospace !important;
-        font-size: 0.9rem !important;
+        font-size: 16px !important; /* Prevent iOS zoom on focus */
         outline: none !important;
         box-shadow: none !important;
     }
 
     #terminal-input::placeholder {
-        color: #004411; /* Darker green placeholder */
+        color: #004411;
     }
 
     /* Scanlines effect inside terminal */
@@ -243,146 +306,200 @@ import { agentManifest } from '../data/agentManifest';
     }
 
     @media (max-width: 480px) {
+        #ai-copilot-container {
+            bottom: 1rem;
+            right: 1rem;
+        }
         #ai-terminal {
-            width: calc(100vw - 4rem);
-            height: 60vh;
+            width: calc(100vw - 2rem);
+            height: 70vh;
+            max-height: 500px;
+            bottom: 70px;
+        }
+        #ai-tooltip {
+            width: 180px;
+            bottom: 70px;
         }
     }
 </style>
 
 <script>
-    const container = document.getElementById('ai-copilot-container');
-    const manifest = JSON.parse(container?.getAttribute('data-manifest') || '{}');
-    
-    const trigger = document.getElementById('ai-trigger');
-    const terminal = document.getElementById('ai-terminal');
-    const closeBtn = document.getElementById('ai-close');
-    const input = document.getElementById('terminal-input') as HTMLInputElement;
-    const output = document.getElementById('terminal-output');
+    function setupAICopilot() {
+        const container = document.getElementById('ai-copilot-container');
+        if (!container || container.hasAttribute('data-initialized')) return;
+        container.setAttribute('data-initialized', 'true');
 
-    const toggleTerminal = () => {
-        terminal?.classList.toggle('terminal-hidden');
-        if (!terminal?.classList.contains('terminal-hidden')) {
-            input?.focus();
-            hideTooltip();
-        }
-    };
+        const manifest = JSON.parse(container.getAttribute('data-manifest') || '{}');
+        const searchIndex = JSON.parse(container.getAttribute('data-search-index') || '[]');
+        const trigger = document.getElementById('ai-trigger');
+        const terminal = document.getElementById('ai-terminal');
+        const closeBtn = document.getElementById('ai-close');
+        const input = document.getElementById('terminal-input') as HTMLInputElement;
+        const output = document.getElementById('terminal-output');
+        const tooltip = document.getElementById('ai-tooltip');
 
-    trigger?.addEventListener('click', toggleTerminal);
-    closeBtn?.addEventListener('click', toggleTerminal);
+        const toggleTerminal = (e?: Event) => {
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            terminal?.classList.toggle('terminal-hidden');
+            if (!terminal?.classList.contains('terminal-hidden')) {
+                input?.focus();
+                hideTooltip();
+            }
+        };
 
-    // Tooltip Logic - Refactored for reliability
-    const tooltip = document.getElementById('ai-tooltip');
-    
-    const showTooltip = () => {
-        if (terminal?.classList.contains('terminal-hidden') && !sessionStorage.getItem('copilot_hint_shown')) {
-            tooltip?.classList.remove('tooltip-hidden');
-            sessionStorage.setItem('copilot_hint_shown', 'true');
-            setTimeout(hideTooltip, 10000);
-        }
-    };
+        const showTooltip = () => {
+            if (terminal?.classList.contains('terminal-hidden') && !sessionStorage.getItem('copilot_hint_shown')) {
+                tooltip?.classList.remove('tooltip-hidden');
+                sessionStorage.setItem('copilot_hint_shown', 'true');
+                setTimeout(hideTooltip, 10000);
+            }
+        };
 
-    const hideTooltip = () => {
-        tooltip?.classList.add('tooltip-hidden');
-    };
+        const hideTooltip = () => {
+            tooltip?.classList.add('tooltip-hidden');
+        };
 
-    // Initialize on load
-    setTimeout(showTooltip, 3000);
+        // Event Listeners
+        trigger?.addEventListener('click', toggleTerminal);
+        trigger?.addEventListener('touchstart', (e) => {
+            if (terminal?.classList.contains('terminal-hidden')) {
+                toggleTerminal(e);
+            }
+        }, { passive: false });
 
-    // Re-initialize for Astro View Transitions
-    document.addEventListener('astro:after-swap', () => {
-        setTimeout(showTooltip, 2000);
-    });
+        closeBtn?.addEventListener('click', toggleTerminal);
+        closeBtn?.addEventListener('touchstart', toggleTerminal, { passive: false });
 
-    const addLine = (text: string, type: 'command' | 'response' = 'response') => {
-        if (!output) return;
-        const line = document.createElement('div');
-        line.className = `line ${type}`;
-        output.appendChild(line);
-        
-        if (type === 'response') {
-            typeWriter(text, line);
-        } else {
-            line.textContent = `> ${text}`;
-        }
-        
-        output.scrollTop = output.scrollHeight;
-    };
+        const typeWriter = (text: string, element: HTMLElement, i = 0, speed = 5) => {
+            if (i < text.length) {
+                element.textContent += text.charAt(i);
+                setTimeout(() => typeWriter(text, element, i + 1, speed), speed);
+                if (output) output.scrollTop = output.scrollHeight;
+            }
+        };
 
-    const typeWriter = (text: string, element: HTMLElement, i = 0) => {
-        if (i < text.length) {
-            element.textContent += text.charAt(i);
-            setTimeout(() => typeWriter(text, element, i + 1), 5);
-            if (output) output.scrollTop = output.scrollHeight;
-        }
-    };
+        const addLine = (text: string, type: 'command' | 'response' | 'system' = 'response') => {
+            if (!output) return;
+            const line = document.createElement('div');
+            line.className = `line ${type}`;
+            output.appendChild(line);
+            
+            if (type === 'response') {
+                typeWriter(text, line);
+            } else if (type === 'system') {
+                line.textContent = `[SYSTEM]: ${text}`;
+            } else {
+                line.textContent = `> ${text}`;
+            }
+            
+            output.scrollTop = output.scrollHeight;
+            return line;
+        };
 
-    const processCommand = (cmd: string) => {
-        const cleanCmd = cmd.toLowerCase().trim().replace(/\s+/g, ' ');
-        const tokens = cleanCmd.split(' ');
-        const primary = tokens[0];
-        
-        addLine(cmd, 'command');
+        const performSearch = (query: string) => {
+            const tokens = query.toLowerCase().split(' ').filter(t => t.length > 2);
+            if (tokens.length === 0 && query.length < 3) return [];
 
-        // Helper for exact match or primary token match
-        const isMatch = (keywords: string[]) => keywords.some(k => cleanCmd === k || primary === k);
+            return searchIndex.map((item: any) => {
+                let score = 0;
+                const title = item.title.toLowerCase();
+                const desc = item.description.toLowerCase();
+                const tags = item.tags.map((t: string) => t.toLowerCase());
 
-        if (isMatch(['help', '?', 'protocol', 'commands'])) {
-            const helpText = manifest.commands.map((c: any) => `${c.cmd.padEnd(12)} - ${c.desc}`).join('\n');
-            addLine(`AVAILABLE SYSTEM PROTOCOLS:\n${helpText}`);
-        } 
-        else if (cleanCmd.includes('knowledge') || cleanCmd.includes('data') || cleanCmd === 'kb') {
-            const kbSummary = [
-                `IDENTiTY: ${manifest.identity.name}`,
-                `PROJECTS: ${manifest.knowledge.projects.length} nodes detected`,
-                `EXPERiENCE: ${manifest.knowledge.experience.length} career segments`,
-                `SKiLLS: Verified tech stack available`,
-                `EDUCATiON: BS Mechanical Engineering`,
-                `\nUse 'help' to see specific access commands.`
-            ].join('\n');
-            addLine(`ACCESSING KNOWLEDGE BASE SUMMARY...\n\n${kbSummary}`);
-        }
-        else if (isMatch(['whoami', 'who am i', 'about', 'manjil'])) {
-            addLine(`${manifest.identity.name}\n${manifest.identity.title} @ ${manifest.identity.company}\n\n${manifest.identity.bio}`);
-        }
-        else if (isMatch(['skills', 'stack', 'tech'])) {
-            const skills = manifest.knowledge.skills;
-            const skillText = [
-                `LANGUAGES: ${skills.languages.join(', ')}`,
-                `FRAMEWORKS: ${skills.frameworks.join(', ')}`,
-                `BACKEND/CLOUD: ${skills.backend.join(', ')}`,
-                `TOOLS/SPECIALTIES: ${skills.tools.join(', ')}`
-            ].join('\n');
-            addLine(`Pinging system capabilities...\n\n${skillText}\n\nSYSTEM STATUS: OPTIMAL`);
-        }
-        else if (isMatch(['ls', 'projects', 'list', 'dir', 'work'])) {
-            const projectList = manifest.knowledge.projects.map((p: any) => `[PROJ] ${p.title}\n      ${p.tech.join(', ')}`).join('\n\n');
-            addLine(`RETRIEVING FEATURED PROJECTS...\n\n${projectList}`);
-        }
-        else if (isMatch(['experience', 'career', 'history', 'cat'])) {
-            const expList = manifest.knowledge.experience.map((e: any) => `[${e.period}] ${e.role} @ ${e.company}\n      ${e.description}`).join('\n\n');
-            addLine(`CORE CAREER DATA DETECTED:\n\n${expList}`);
-        }
-        else if (isMatch(['resume', 'cv', 'get'])) {
-            addLine(`LINKING TO EXTERNAL DATA...`);
-            setTimeout(() => {
-                window.open(manifest.knowledge.links.resume, '_blank');
-                addLine(`RESOURCE OPENED IN NEW NODE.`);
-            }, 500);
-        }
-        else if (isMatch(['clear', 'cls', 'reset'])) {
-            if (output) output.innerHTML = '';
-            addLine(manifest.responses.welcome);
-        }
-        else {
-            addLine(manifest.responses.unknown);
-        }
-    };
+                if (title.includes(query.toLowerCase())) score += 10;
+                tokens.forEach(token => {
+                    if (title.includes(token)) score += 5;
+                    if (desc.includes(token)) score += 2;
+                    if (tags.some((t: string) => t.includes(token))) score += 3;
+                });
 
-    input?.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && input.value) {
-            processCommand(input.value);
-            input.value = '';
-        }
-    });
+                return { ...item, score };
+            })
+            .filter((item: any) => item.score > 0)
+            .sort((a: any, b: any) => b.score - a.score)
+            .slice(0, 3);
+        };
+
+        const processCommand = async (cmd: string) => {
+            const cleanCmd = cmd.toLowerCase().trim().replace(/\s+/g, ' ');
+            const tokens = cleanCmd.split(' ');
+            const primary = tokens[0];
+            
+            addLine(cmd, 'command');
+
+            // Thinking simulation
+            const thinkingLine = addLine('COMPUTING RESPONSE...', 'system');
+            await new Promise(resolve => setTimeout(resolve, 600 + Math.random() * 800));
+            if (thinkingLine) thinkingLine.remove();
+
+            const isMatch = (keywords: string[]) => keywords.some(k => cleanCmd === k || primary === k || cleanCmd.includes(k));
+
+            // Core Commands
+            if (isMatch(['help', '?', 'protocol', 'commands'])) {
+                const helpText = [
+                    ...manifest.commands.map((c: any) => `${c.cmd.padEnd(12)} - ${c.desc}`),
+                    `search <query> - Scan site-wide intelligence nodes.`
+                ].join('\n');
+                addLine(`AVAILABLE SYSTEM PROTOCOLS:\n${helpText}`);
+            } 
+            else if (isMatch(['whoami', 'about', 'identity', 'manjil'])) {
+                addLine(`${manifest.identity.name}\n${manifest.identity.title} @ ${manifest.identity.company}\n\n${manifest.identity.bio}`);
+            }
+            else if (isMatch(['skills', 'stack', 'tech', 'capabilities'])) {
+                const skills = manifest.knowledge.skills;
+                const skillText = [
+                    `LANGUAGES: ${skills.languages.join(', ')}`,
+                    `FRAMEWORKS: ${skills.frameworks.join(', ')}`,
+                    `BACKEND/CLOUD: ${skills.backend.join(', ')}`,
+                    `TOOLS/SPECIALTIES: ${skills.tools.join(', ')}`
+                ].join('\n');
+                addLine(`SYSTEM CAPABILITIES PING:\n\n${skillText}\n\nSTATUS: OPTIMAL`);
+            }
+            else if (isMatch(['ls', 'projects', 'work', 'portfolio'])) {
+                const projectList = manifest.knowledge.projects.map((p: any) => `[PROJ] ${p.title}\n      ${p.tech.join(', ')}`).join('\n\n');
+                addLine(`FEATURED PROJECTS RETRIEVED:\n\n${projectList}`);
+            }
+            else if (isMatch(['experience', 'career', 'history', 'resume', 'cv'])) {
+                addLine(`CAREER SUMMARY & ASSETS:\nType 'get resume' for direct link.\n\n${manifest.knowledge.experience.map((e: any) => `[${e.period}] ${e.role} @ ${e.company}`).join('\n')}`);
+            }
+            else if (isMatch(['get resume', 'download'])) {
+                addLine(`INITIATING RESOURCE DOWNLOAD...`);
+                setTimeout(() => {
+                    window.open(manifest.knowledge.links.resume, '_blank');
+                    addLine(`RESOURCE DISPATCHED TO NEW WINDOW.`);
+                }, 500);
+            }
+            else if (isMatch(['clear', 'cls', 'reset'])) {
+                if (output) output.innerHTML = '';
+                addLine(manifest.responses.welcome);
+            }
+            // Search Logic
+            else {
+                const searchQuery = cleanCmd.replace(/^search\s+/, '');
+                const results = performSearch(searchQuery);
+
+                if (results.length > 0) {
+                    addLine(`SEARCH RESULTS FOR: '${searchQuery.toUpperCase()}'\n${results.map((r: any) => `\n[${r.type.toUpperCase()}] ${r.title}\nURL: ${r.url}`).join('\n')}`);
+                } else {
+                    addLine(manifest.responses.unknown + "\nTry 'search <topic>' for site-wide results.");
+                }
+            }
+        };
+
+        input?.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && input.value) {
+                processCommand(input.value);
+                input.value = '';
+            }
+        });
+
+        // Initialize tooltip
+        setTimeout(showTooltip, 3000);
+    }
+
+    // Initialize on page load and view transitions
+    document.addEventListener('astro:page-load', setupAICopilot);
 </script>

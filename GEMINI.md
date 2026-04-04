@@ -34,6 +34,14 @@ The project features a robust Gemini CLI setup for autonomous and assisted devel
     - `system-design-architect`: A specialized skill for designing high-scale systems. It follows a strict **6-step interactive planning process** (Requirements -> API -> Capacity -> High-Level -> Detailed -> Trade-offs) to collaboratively build architectural deep-dives.
 - **Workflows:** Integrated into GitHub Actions for agentic orchestration within the repository.
 
+### ✨ Auto Gemini Change Protocol
+For significant architectural shifts, new feature implementations, or critical bug fixes that impact the project's foundational understanding, Gemini CLI will proactively propose updates to `GEMINI.md` (and other relevant documentation). This protocol ensures the project documentation remains current and accurately reflects the codebase's state.
+
+- **Proactive Suggestion:** Gemini will identify major changes and suggest specific updates to the documentation.
+- **User Confirmation:** All proposed documentation updates will require explicit user approval before execution.
+- **Adherence to Protocols:** Documentation updates will follow the existing "Mandatory Planning" and "Remote Safety Protocol," especially for changes affecting core architectural descriptions or remote interactions.
+- **Verification:** After any documentation update, Gemini will ensure the changes are correctly reflected and integrated.
+
 ### ⚠️ Remote Safety Protocol
 - **Mandatory Confirmation:** The AI **MUST** always check with the developer and receive explicit approval before performing any action on the **Remote Origin**.
 - **High-Stakes Actions:** This includes, but is not limited to: `git push`, creating or updating Pull Requests, merging branches, and modifying GitHub Issues or Labels via MCP tools.

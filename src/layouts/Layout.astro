@@ -276,7 +276,7 @@ const { title } = Astro.props;
         
         navLinks.forEach(link => {
             const href = link.getAttribute('href');
-            if (href === currentPath || (href !== '/' && currentPath.startsWith(href))) {
+            if (href && (href === currentPath || (href !== '/' && currentPath.startsWith(href)))) {
                 link.classList.add('active');
             }
         });
@@ -288,8 +288,7 @@ const { title } = Astro.props;
             
             navLinks.forEach(link => {
                 const href = link.getAttribute('href');
-                if (href === currentPath || (href !== '/' && currentPath.startsWith(href))) {
-                    link.classList.add('active');
+                if (href && (href === currentPath || (href !== '/' && currentPath.startsWith(href)))) {                    link.classList.add('active');
                 } else {
                     link.classList.remove('active');
                 }
