@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "astro": "^6.1.1",
+    "open": "^11.0.0",
+    "php-wasm": "^0.0.8",
     "typescript": "^5.2.2"
   },
   "devDependencies": {

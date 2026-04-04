@@ -10,6 +10,7 @@ const leetcode = defineCollection({
         tags: z.array(z.string()).optional(),
         description: z.string().optional(),
         solution: z.string().optional(),
+        priority: z.number().optional().default(0),
     }),
 });
 
