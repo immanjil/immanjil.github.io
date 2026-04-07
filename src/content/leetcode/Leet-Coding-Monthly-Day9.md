@@ -5,37 +5,36 @@ tags: ["LeetCode"]
 solution: |
   <?php
   class Solution {
-  
       /**
        * @param Integer $num
        * @return Boolean
        */
       function isPerfectSquare($num) {
-          if(in_array($num,[0, 2,3])) {
-              return false;
-          }
-          if(in_array($num,[1])) {
-              return true;
-          }
+          if ($num < 1) return false;
           $left = 1;
           $right = $num;
           while ($left <= $right) {
-  
               $mid = $left + floor(($right - $left) / 2);
-              var_dump($mid);
-              if ($mid * $mid == $num) {
+              $square = $mid * $mid;
+              if ($square == $num) {
                   return true;
-              } else if (($mid * $mid < $num)) {
-                  $left = $mid +1;
+              } elseif ($square < $num) {
+                  $left = $mid + 1;
               } else {
                   $right = $mid - 1;
               }
           }
-          
           return false;
-        }
       }
----
+  }
+testCases: |
+  $sol = new Solution();
+  $cases = [16, 14, 1];
+  foreach ($cases as $num) {
+      $res = $sol->isPerfectSquare($num) ? "true" : "false";
+      echo "Input: $num => Result: $res\n";
+  }
+
 
 ---
 

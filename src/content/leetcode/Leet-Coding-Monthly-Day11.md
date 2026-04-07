@@ -4,62 +4,54 @@ date: 2026-03-29
 tags: ["LeetCode"]
 solution: |
   <?php
-  class Solution {
-  
-      /**
-       * @param Integer[][] $image
-       * @param Integer $sr
-       * @param Integer $sc
-       * @param Integer $newColor
-       * @return Integer[][]
-       */
-      function floodFill($image, $sr, $sc, $newColor) {
-          // Base cases 
-          if ($sr < 0 || $sc < 0 || ($image[$sr][$sc] == $newColor)) 
-              return $image; 
-  
-          // Replace the color at (x, y) 
-          $image[$sr][$sc] = $newColor; 
-  
-          $queue = new \Ds\Queue();
-          $queue->allocate([$sr, $sc]);
-          var_dump($queue);
+  /**
+   * @param Integer[][] $image
+   * @param Integer $sr
+   * @param Integer $sc
+   * @param Integer $newColor
+   * @return Integer[][]
+   */
+  function floodFill($image, $sr, $sc, $newColor) {
+      $oldColor = $image[$sr][$sc];
+      if ($oldColor === $newColor) return $image;
+      
+      $rows = count($image);
+      $cols = count($image[0]);
+      $queue = [[$sr, $sc]];
+      $image[$sr][$sc] = $newColor;
+      
+      while (!empty($queue)) {
+          [$r, $c] = array_shift($queue);
           
-          while (!$queue->isEmpty()){
-              [$r, $c] = $queue->pop();
-              if (
-                  (0 <= $r && $r< count($image)) 
-                  && (0 <= $c && $c< count($image[0]))) {
-                  $image[$r][$c] = $newColor;
-                  $queue->push([r+1, c]);
-                  $queue->push([r-1, c]);
-                  $queue->push([r, c+1]);
-                  $queue->push([r, c-1]);
+          $directions = [[0, 1], [0, -1], [1, 0], [-1, 0]];
+          foreach ($directions as [$dr, $dc]) {
+              $nr = $r + $dr;
+              $nc = $c + $dc;
+              
+              if ($nr >= 0 && $nr < $rows && $nc >= 0 && $nc < $cols && $image[$nr][$nc] === $oldColor) {
+                  $image[$nr][$nc] = $newColor;
+                  $queue[] = [$nr, $nc];
               }
           }
-          return $image;        
-        }
       }
-  
-      class Solution:
-      def floodFill(self, image: List[List[int]], sr: int, sc: int, newColor: int) -> List[List[int]]:     
-          if newColor == image[sr][sc]:
-              return image
-          
-          queue, prevColor = [(sr, sc)], image[sr][sc]
-          
-          while queue:
-              r, c = queue.pop(0)
-              
-              if 0 <= r < len(image) and 0 <= c < len(image[0]) and image[r][c] == prevColor:
-                  image[r][c] = newColor
-                  queue.append((r+1, c))
-                  queue.append((r-1, c))
-                  queue.append((r, c+1))
-                  queue.append((r, c-1))
-          
-          return image
----
+      return $image;
+  }
+testCases: |
+  $cases = [
+      ['image' => [[1,1,1],[1,1,0],[1,0,1]], 'sr' => 1, 'sc' => 1, 'newColor' => 2],
+      ['image' => [[0,0,0],[0,0,0]], 'sr' => 0, 'sc' => 0, 'newColor' => 2],
+      ['image' => [[1,1,1],[1,1,0],[1,0,1]], 'sr' => 1, 'sc' => 1, 'newColor' => 1]
+  ];
+
+  foreach ($cases as $index => $case) {
+      $res = floodFill($case['image'], $case['sr'], $case['sc'], $case['newColor']);
+      echo "Case " . ($index + 1) . " result:\n";
+      foreach ($res as $row) {
+          echo "[" . implode(",", $row) . "]\n";
+      }
+      echo "\n";
+  }
+
 
 ---
 

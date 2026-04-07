@@ -4,23 +4,34 @@ date: 2026-03-29
 tags: ["LeetCode"]
 solution: |
   <?php
-      /**
-       * @param String $J
-       * @param String $S
-       * @return Integer
-       */
-      function numJewelsInStones($J, $S) {
-          $jArr = str_split($J);
-          $sArr = str_split($S);
-          $totalGems = 0;
-          foreach ($sArr as $sItem) {
-              if (in_array($sItem, $jArr)) {
-                  $totalGems++;
-              }
+  /**
+   * @param String $J
+   * @param String $S
+   * @return Integer
+   */
+  function numJewelsInStones($J, $S) {
+      $jArr = str_split($J);
+      $sArr = str_split($S);
+      $totalGems = 0;
+      foreach ($sArr as $sItem) {
+          if (in_array($sItem, $jArr)) {
+              $totalGems++;
           }
-          return $totalGems;        
       }
----
+      return $totalGems;        
+  }
+testCases: |
+  $cases = [
+      ["aA", "aAAbbbb"],
+      ["z", "ZZ"],
+      ["ABC", "AABBCCdef"]
+  ];
+
+  foreach ($cases as $case) {
+      $result = numJewelsInStones($case[0], $case[1]);
+      echo "J: {$case[0]}, S: {$case[1]} => Result: $result\n";
+  }
+
 
 ---
 

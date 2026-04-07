@@ -5,84 +5,58 @@ tags: ["LeetCode"]
 solution: |
   <?php
   class Solution {
-  
       /**
-       * @param Integer $num
-       * @return Boolean
+       * @param Integer $n
+       * @param Integer[][] $trust
+       * @return Integer
        */
-      function isPerfectSquare($num) {
-          if(in_array($num,[0, 2,3])) {
-              return false;
+      function findJudge($n, $trust) {
+          if ($n === 1 && empty($trust)) return 1;
+          
+          $trustCounts = array_fill(1, $n, 0);
+          
+          foreach ($trust as $t) {
+              $trustCounts[$t[0]]--;
+              $trustCounts[$t[1]]++;
           }
-          if(in_array($num,[1])) {
-              return true;
-          }
-          $i = 1;
-          $result = 0;
-          while($i < $num) {
-              $i++;
-              $result = $i * $i;
-              if ($result === $num) {
-                  return true;
-              }
-          }
-          return false;
-      }
-  
-      /**
-       * Binary Search Approach
-       * @param Integer $num
-       * @return Boolean
-       */
-      function isPerfectSquareBinary($num) {
-          if(in_array($num,[0, 2,3])) {
-              return false;
-          }
-          if(in_array($num,[1])) {
-              return true;
-          }
-          $left = 1;
-          $right = $num;
-          while ($left <= $right) {
-  
-              $mid = $left + floor(($right - $left) / 2);
-              if ($mid * $mid == $num) {
-                  return true;
-              } else if (($mid * $mid < $num)) {
-                  $left = $mid +1;
-              } else {
-                  $right = $mid - 1;
+          
+          foreach ($trustCounts as $person => $score) {
+              if ($score === $n - 1) {
+                  return $person;
               }
           }
           
-          return false;
+          return -1;
       }
   }
+testCases: |
+  $sol = new Solution();
+  $cases = [
+      ['n' => 2, 'trust' => [[1, 2]]],
+      ['n' => 3, 'trust' => [[1, 3], [2, 3]]],
+      ['n' => 3, 'trust' => [[1, 3], [2, 3], [3, 1]]]
+  ];
 
-  // Test cases
-  $solution = new Solution();
-  var_dump($solution->isPerfectSquare(16));
-  var_dump($solution->isPerfectSquareBinary(16));
+  foreach ($cases as $index => $case) {
+      $res = $sol->findJudge($case['n'], $case['trust']);
+      echo "Case " . ($index + 1) . ": Judge is person $res\n";
+  }
 ---
 
 ---
 
-### In a town, there are N people labelled from 1 to N.  There is a rumor that one of these people is secretly the town judge.
-    
+### In a town, there are n people labeled from 1 to n. There is a rumor that one of these people is secretly the town judge.
+
 ### If the town judge exists, then:
-    
-### The town judge trusts nobody.
-### Everybody (except for the town judge) trusts the town judge.
-### There is exactly one person that satisfies properties 1 and 2.
-### You are given trust, an array of pairs trust[i] = [a, b] representing that the person labelled a trusts the person labelled b.
-    
-### If the town judge exists and can be identified, return the label of the town judge.  Otherwise, return -1.
+1. The town judge trusts nobody.
+2. Everybody (except for the town judge) trusts the town judge.
+3. There is exactly one person that satisfies properties 1 and 2.
+
+### You are given an array trust where trust[i] = [ai, bi] representing that the person labeled ai trusts the person labeled bi.
+
+### Return the label of the town judge if the town judge exists and can be identified, or return -1 otherwise.
 
 ---
 
-### Solution - Simple Search
-
----
-
-### Solution - Binary Search
-
+### Solution - Counting Trusts
+We use an array to track the "trust score" of each person. If a person trusts someone, their score decreases. If they are trusted by someone, their score increases. The judge will have a score of `n - 1` (trusted by everyone else, trusts no one).

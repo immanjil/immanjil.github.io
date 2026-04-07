@@ -2,7 +2,12 @@
 import { ClientRouter } from 'astro:transitions';
 import Footer from '../components/Footer.astro';
 import AICopilot from '../components/AICopilot.astro';
-const { title } = Astro.props;
+interface Props {
+    title: string;
+    isFullWidth?: boolean;
+}
+
+const { title, isFullWidth = false } = Astro.props;
 ---
 <script is:inline>
     const theme = (() => {
@@ -93,6 +98,10 @@ const { title } = Astro.props;
             background-color: var(--bg-color);
             color: var(--text-color);
             text-shadow: none;
+        }
+
+        body.full-width {
+            max-width: 1400px;
         }
 
         /* Glow effects ONLY in Retro Matrix Mode */
@@ -232,7 +241,7 @@ const { title } = Astro.props;
         }
     </style>
 </head>
-<body>
+<body class={isFullWidth ? 'full-width' : ''}>
     <nav>
         <div class="nav-links">
             <a href="/">Home</a>
