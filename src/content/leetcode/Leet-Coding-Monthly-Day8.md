@@ -5,40 +5,41 @@ tags: ["LeetCode"]
 solution: |
   <?php
   class Solution {
-  
-      function slope($x1, $y1, $x2, $y2) 
-      { 
-          return ($y2 - $y1) /  
-                 ($x2 - $x1); 
-      } 
       /**
        * @param Integer[][] $coordinates
        * @return Boolean
        */
       function checkStraightLine($coordinates) {
-          if(count($coordinates) <= 2) {
-              echo '2 points' . PHP_EOL;
-              return true;
-          }
-  
-          $m = $this->slope($coordinates[0][0],$coordinates[0][1], $coordinates[1][0], $coordinates[1][1]);
-          $b = $coordinates[0][1] - $m*$coordinates[0][0];
-  
-          echo 'Slope' . PHP_EOL;
-          var_dump($m);
-          echo '$b' . PHP_EOL;
-          var_dump($b);
-          unset($coordinates[0]);
-          unset($coordinates[1]);
-          foreach ($coordinates as $c) {
-              if ($c[1] !== (($m * $c[0]) + $b)) {
+          if (count($coordinates) <= 2) return true;
+          
+          $x0 = $coordinates[0][0];
+          $y0 = $coordinates[0][1];
+          $x1 = $coordinates[1][0];
+          $y1 = $coordinates[1][1];
+          
+          for ($i = 2; $i < count($coordinates); $i++) {
+              $x = $coordinates[$i][0];
+              $y = $coordinates[$i][1];
+              if (($y1 - $y0) * ($x - $x1) !== ($y - $y1) * ($x1 - $x0)) {
                   return false;
               }
           }
           return true;
-        }
       }
----
+  }
+testCases: |
+  $sol = new Solution();
+  $cases = [
+      [[1,2],[2,3],[3,4],[4,5],[5,6],[6,7]],
+      [[1,1],[2,2],[3,4],[4,5],[5,6],[7,7]],
+      [[0,0],[0,1],[0,5]]
+  ];
+
+  foreach ($cases as $index => $coordinates) {
+      $res = $sol->checkStraightLine($coordinates) ? "true" : "false";
+      echo "Case " . ($index + 1) . ": $res\n";
+  }
+
 
 ---
 

@@ -1,6 +1,13 @@
 ---
+interface Solution {
+    label: string;
+    code: string;
+}
+
 interface Props {
     initialCode?: string;
+    solutions?: Solution[];
+    testCaseInitialCode?: string;
     title?: string;
     id?: string;
     isReadOnly?: boolean;
@@ -9,106 +16,262 @@ interface Props {
 
 const { 
     initialCode = '<?php\necho "Hello from PHP WASM!";\n?>', 
+    solutions = [],
+    testCaseInitialCode = '',
     title = 'PHP Sandbox',
     id = 'default',
     isReadOnly = false,
     description = "Write and run PHP code directly in your browser using WebAssembly."
 } = Astro.props;
+
+// Merge primary solution with alternative solutions
+const allSolutions = initialCode 
+    ? [{ label: 'Primary', code: initialCode }, ...solutions]
+    : solutions;
 ---
 
 <div class="sandbox-component fade-in" id={`sandbox-${id}`} data-sandbox-id={id} data-readonly={isReadOnly ? 'true' : 'false'}>
     <header class="sandbox-header">
-        <h3>{title}</h3>
-        {description && <p>{description}</p>}
+        <div class="title-row">
+            <h3>{title}</h3>
+            <div class="status-indicator">
+                <span class="status-dot"></span>
+                <span class="status-text">INITIALIZING...</span>
+            </div>
+        </div>
+        {description && <p class="sandbox-desc">{description}</p>}
     </header>
 
     <div class="editor-section">
         <div class="editor-header">
-            <span class="file-name">sandbox.php</span>
-            <div class="status-indicator">
-                <span class="status-dot"></span>
-                <span class="status-text">INITIALIZING_WASM...</span>
+            <div class="editor-tabs" id={`sol-tabs-${id}`}>
+                {allSolutions.map((sol, index) => (
+                    <button 
+                        class={`sol-tab ${index === 0 ? 'active' : ''}`} 
+                        data-index={index}
+                    >
+                        {sol.label}.php
+                    </button>
+                ))}
+            </div>
+            <div class="editor-actions">
+                 {isReadOnly && <span class="read-only-tag">READ_ONLY</span>}
             </div>
         </div>
-        <textarea 
-            id={`php-editor-${id}`} 
-            spellcheck="false" 
-            readonly={isReadOnly}
-            placeholder="Write your PHP code here...">{initialCode}</textarea>
-        {isReadOnly && <div class="editor-overlay">READ_ONLY_MODE // EDIT_IN_FULL_SANDBOX</div>}
+        
+        <div class="editor-container">
+            <div class="line-numbers" id={`line-numbers-${id}`}>
+                <div>1</div>
+            </div>
+            <textarea 
+                id={`php-editor-${id}`} 
+                spellcheck="false" 
+                readonly={isReadOnly}
+                placeholder="Write your PHP code here...">{allSolutions[0]?.code || initialCode}</textarea>
+        </div>
         
         <div class="controls">
-            <button id={`run-btn-${id}`} disabled class="run-btn">
-                <span class="btn-text">RUN_CODE</span>
-                <span class="spinner"></span>
-            </button>
-            <button id={`clear-btn-${id}`} class="clear-btn">CLEAR_OUTPUT</button>
+            <div class="left-controls">
+                <button id={`clear-btn-${id}`} class="clear-btn">CLEAR_CONSOLE</button>
+            </div>
+            <div class="right-controls">
+                <button id={`run-btn-${id}`} disabled class="run-btn">
+                    <span class="btn-text">RUN_CODE</span>
+                    <span class="spinner"></span>
+                </button>
+            </div>
         </div>
     </div>
 
+    <!-- Store solutions as JSON to avoid data-attribute issues -->
+    <script id={`solutions-data-${id}`} type="application/json" is:inline set:html={JSON.stringify(allSolutions)}></script>
+
     <div class="output-section">
-        <h3>STANDARD_OUTPUT</h3>
-        <pre id={`php-output-${id}`} class="output-area">PHP WASM is loading, please wait...</pre>
+        <div class="output-tabs">
+            <button class="output-tab active" data-tab="console">CONSOLE</button>
+            <button class="output-tab" data-tab="testcase">TEST_CASES</button>
+            <button class="output-tab" data-tab="result">RESULT_HUB</button>
+        </div>
+        <div class="tab-content">
+            <div class="tab-pane active" id={`pane-console-${id}`}>
+                <pre id={`php-output-${id}`} class="output-area">PHP WASM is loading, please wait...</pre>
+            </div>
+            <div class="tab-pane" id={`pane-testcase-${id}`}>
+                <div class="testcase-editor-container">
+                    <div class="testcase-header">
+                        <span>// test-cases.php</span>
+                        <button class="copy-test-btn" id={`copy-test-${id}`}>COPY_TEMPLATE</button>
+                    </div>
+                    <textarea 
+                        id={`php-testcase-${id}`} 
+                        spellcheck="false" 
+                        placeholder="Write your test script here (e.g., $sol = new Solution(); echo $sol->method();)...">{testCaseInitialCode}</textarea>
+                </div>
+            </div>
+            <div class="tab-pane" id={`pane-result-${id}`}>
+                <div id={`result-hub-content-${id}`} class="result-hub-view">
+                    <div class="result-placeholder">
+                        <p>Execution results and test outputs will appear here after running the code.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
 <style>
     .sandbox-component {
-        max-width: 1000px;
-        margin: 2rem 0;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .sandbox-header {
+        padding: 0.75rem 1rem;
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-bottom: none;
+        border-radius: 8px 8px 0 0;
+    }
+
+    .title-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
 
     .sandbox-header h3 {
-        margin-bottom: 0.5rem;
+        margin: 0;
         color: var(--accent-color);
+        font-size: 0.9rem;
+        letter-spacing: 0.05em;
         text-transform: uppercase;
-        letter-spacing: 0.1em;
     }
 
-    .sandbox-header p {
+    .sandbox-desc {
         color: var(--secondary-text);
-        font-size: 0.9rem;
-        margin-bottom: 1.5rem;
+        font-size: 0.75rem;
+        margin: 0.25rem 0 0 0;
     }
 
     .editor-section {
         background: var(--card-bg);
         border: 1px solid var(--border-color);
-        border-radius: 8px;
-        overflow: hidden;
-        margin-bottom: 1.5rem;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
         position: relative;
     }
 
     .editor-header {
-        background: var(--border-color);
-        padding: 0.5rem 1rem;
+        background: #111;
+        padding: 0 1rem;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        font-size: 0.8rem;
-        font-family: 'JetBrains Mono', monospace;
+        border-bottom: 1px solid var(--border-color);
     }
 
-    .file-name {
-        font-weight: 600;
+    .editor-tabs {
+        display: flex;
+        overflow-x: auto;
+        scrollbar-width: none;
+    }
+    
+    .editor-tabs::-webkit-scrollbar { display: none; }
+
+    .sol-tab {
+        background: none;
+        border: none;
+        padding: 0.6rem 1rem;
+        font-size: 0.7rem;
         color: var(--secondary-text);
+        border-bottom: 2px solid transparent;
+        font-family: 'JetBrains Mono', monospace;
+        font-weight: 600;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: all 0.2s;
+    }
+
+    .sol-tab:hover {
+        color: var(--text-color);
+        background: rgba(255, 255, 255, 0.02);
+    }
+
+    .sol-tab.active {
+        color: var(--accent-color);
+        border-bottom-color: var(--accent-color);
+        background: rgba(0, 255, 65, 0.05);
+    }
+
+    .read-only-tag {
+        font-size: 0.6rem;
+        background: rgba(255, 204, 0, 0.1);
+        color: #ffcc00;
+        padding: 0.1rem 0.4rem;
+        border-radius: 3px;
+        font-weight: 700;
+    }
+
+    .editor-container {
+        display: flex;
+        position: relative;
+        background: #000;
+        flex-grow: 1;
+        min-height: 400px;
+        overflow: hidden;
+    }
+
+    .line-numbers {
+        padding: 1rem 0;
+        background: #080808;
+        color: #444;
+        text-align: right;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.85rem;
+        line-height: 1.6;
+        min-width: 45px;
+        padding-right: 10px;
+        user-select: none;
+        border-right: 1px solid #1a1a1a;
+        overflow: hidden;
+    }
+
+    .line-numbers div {
+        height: 1.6em;
+    }
+
+    textarea {
+        flex-grow: 1;
+        background: transparent;
+        color: #e0e0e0;
+        border: none;
+        padding: 1rem;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.85rem;
+        line-height: 1.6;
+        resize: none;
+        outline: none;
+        overflow-y: auto;
+        white-space: pre;
+        tab-size: 4;
     }
 
     .status-indicator {
         display: flex;
         align-items: center;
-        gap: 0.5rem;
+        gap: 0.4rem;
         font-weight: 700;
-        font-size: 0.7rem;
+        font-size: 0.6rem;
+        color: var(--secondary-text);
     }
 
     .status-dot {
-        width: 8px;
-        height: 8px;
+        width: 6px;
+        height: 6px;
         border-radius: 50%;
-        background: #ffcc00;
+        background: #333;
     }
 
     .status-dot.ready {
@@ -116,48 +279,24 @@ const {
         box-shadow: 0 0 8px var(--accent-color);
     }
 
-    textarea {
-        width: 100%;
-        height: 300px;
-        background: transparent;
-        color: var(--text-color);
-        border: none;
-        padding: 1.5rem;
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 0.9rem;
-        line-height: 1.5;
-        resize: vertical;
-        outline: none;
-    }
-
-    .editor-overlay {
-        position: absolute;
-        top: 40px;
-        right: 15px;
-        font-size: 0.7rem;
-        color: var(--accent-color);
-        opacity: 0.5;
-        font-weight: 700;
-        pointer-events: none;
-    }
-
     .controls {
-        padding: 0.75rem 1rem;
+        padding: 0.5rem 1rem;
+        background: #111;
         border-top: 1px solid var(--border-color);
         display: flex;
-        gap: 1rem;
+        justify-content: space-between;
         align-items: center;
     }
 
     .run-btn, .clear-btn {
-        padding: 0.5rem 1.25rem;
+        padding: 0.35rem 0.85rem;
         border-radius: 4px;
         border: 1px solid var(--border-color);
         cursor: pointer;
         font-weight: 700;
         transition: all 0.2s;
         font-family: 'JetBrains Mono', monospace;
-        font-size: 0.8rem;
+        font-size: 0.7rem;
     }
 
     .run-btn {
@@ -166,7 +305,7 @@ const {
         border-color: var(--accent-color);
         display: flex;
         align-items: center;
-        gap: 0.5rem;
+        gap: 0.4rem;
     }
 
     .run-btn:disabled {
@@ -176,46 +315,196 @@ const {
 
     .run-btn:hover:not(:disabled) {
         transform: translateY(-1px);
-        box-shadow: 0 0 15px var(--accent-color);
+        box-shadow: 0 0 12px var(--accent-color);
     }
 
     .clear-btn {
         background: transparent;
-        color: var(--text-color);
+        color: var(--secondary-text);
     }
 
     .clear-btn:hover {
-        background: var(--border-color);
+        color: var(--text-color);
+        background: rgba(255, 255, 255, 0.05);
     }
 
-    .output-section h3 {
-        margin-top: 0;
-        margin-bottom: 0.75rem;
-        font-size: 0.85rem;
+    .output-section {
+        background: #000;
+        border: 1px solid var(--border-color);
+        border-top: none;
+        border-radius: 0 0 8px 8px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .output-tabs {
+        display: flex;
+        background: #111;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .output-tab {
+        background: none;
+        border: none;
+        padding: 0.5rem 1rem;
         color: var(--secondary-text);
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.65rem;
+        font-weight: 700;
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+    }
+
+    .output-tab.active {
+        color: var(--accent-color);
+        border-bottom-color: var(--accent-color);
+    }
+
+    .tab-content {
+        position: relative;
+    }
+
+    .tab-pane {
+        display: none;
+        padding: 0;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .tab-pane.active {
+        display: flex;
+        flex-direction: column;
     }
 
     .output-area {
+        margin: 0;
         font-family: 'JetBrains Mono', monospace;
         white-space: pre-wrap;
         word-break: break-all;
-        background: #000;
-        padding: 1.5rem;
-        border: 1px solid var(--border-color);
-        border-radius: 4px;
-        font-size: 0.9rem;
-        min-height: 100px;
-        max-height: 400px;
+        padding: 1rem;
+        font-size: 0.8rem;
+        min-height: 150px;
+        max-height: 350px;
         overflow-y: auto;
         color: var(--accent-color);
+        line-height: 1.5;
+        flex-grow: 1;
+    }
+
+    .testcase-editor-container {
+        display: flex;
+        flex-direction: column;
+        background: #000;
+        height: 100%;
+        min-height: 150px;
+    }
+
+    .testcase-header {
+        padding: 0.4rem 1rem;
+        background: #080808;
+        border-bottom: 1px solid #1a1a1a;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.6rem;
+        color: var(--secondary-text);
+        flex-shrink: 0;
+    }
+
+    .copy-test-btn {
+        background: transparent;
+        border: 1px solid #333;
+        color: #666;
+        font-size: 0.55rem;
+        padding: 0.15rem 0.4rem;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+
+    .copy-test-btn:hover {
+        border-color: var(--accent-color);
+        color: var(--accent-color);
+    }
+
+    .testcase-editor-container textarea {
+        width: 100% !important;
+        min-height: 150px !important;
+        max-height: 350px !important;
+        height: 250px;
+        padding: 1rem;
+        background: transparent;
+        color: #e0e0e0;
+        font-size: 0.8rem;
+        line-height: 1.6;
+        border: none;
+        outline: none;
+        resize: vertical;
+        flex-grow: 1;
+    }
+
+    .result-hub-view {
+        min-height: 150px;
+        max-height: 400px;
+        overflow-y: auto;
+        padding: 0;
+    }
+
+    .result-placeholder {
+        padding: 3rem 2rem;
+        text-align: center;
+        color: var(--secondary-text);
+        font-size: 0.75rem;
+    }
+
+    .result-summary-container {
+        padding: 1.5rem;
+    }
+
+    .result-card {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .result-card h4 {
+        margin: 0 0 0.75rem 0;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .test-output-block {
+        margin-top: 1.5rem;
+    }
+
+    .test-output-block h5 {
+        color: var(--secondary-text);
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        margin: 0 0 0.75rem 0;
+        border-left: 2px solid var(--accent-color);
+        padding-left: 0.5rem;
+    }
+
+    .test-output-pre {
+        background: #050505;
+        border: 1px solid #1a1a1a;
+        padding: 1rem;
+        color: #ccc;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.8rem;
+        line-height: 1.5;
+        white-space: pre-wrap;
+        margin: 0;
     }
 
     .spinner {
         display: none;
-        width: 12px;
-        height: 12px;
+        width: 10px;
+        height: 10px;
         border: 2px solid rgba(0, 0, 0, 0.3);
         border-top: 2px solid black;
         border-radius: 50%;
@@ -241,11 +530,84 @@ const {
         const runBtn = document.getElementById(`run-btn-${id}`);
         const clearBtn = document.getElementById(`clear-btn-${id}`);
         const editor = document.getElementById(`php-editor-${id}`);
+        const testCaseEditor = document.getElementById(`php-testcase-${id}`);
         const output = document.getElementById(`php-output-${id}`);
         const statusDot = container.querySelector('.status-dot');
         const statusText = container.querySelector('.status-text');
+        const outputTabs = container.querySelectorAll('.output-tab');
+        const panes = container.querySelectorAll('.tab-pane');
+        const resultHub = document.getElementById(`result-hub-content-${id}`);
+        const lineNumbers = document.getElementById(`line-numbers-${id}`);
+        const copyBtn = document.getElementById(`copy-test-${id}`);
+        const solTabs = container.querySelectorAll('.sol-tab');
+        
+        // Read solutions from the JSON script tag
+        const solutionsDataTag = document.getElementById(`solutions-data-${id}`);
+        let solutions = [];
+        try {
+            solutions = JSON.parse(solutionsDataTag.textContent);
+        } catch (e) {
+            console.error('Failed to parse solutions data', e);
+        }
 
         let php;
+        let lastFullOutput = '';
+
+        // Initialize line numbers
+        const updateLineNumbers = () => {
+            const lines = editor.value.split('\n').length;
+            lineNumbers.innerHTML = Array.from({ length: lines }, (_, i) => `<div>${i + 1}</div>`).join('');
+        };
+        updateLineNumbers();
+
+        editor.addEventListener('input', updateLineNumbers);
+
+        // Sync scroll
+        editor.addEventListener('scroll', () => {
+            lineNumbers.scrollTop = editor.scrollTop;
+        });
+
+        // Solution Tab Switching
+        solTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const index = parseInt(tab.getAttribute('data-index'));
+                const solution = solutions[index];
+                
+                if (solution) {
+                    solTabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    
+                    // Update editor content
+                    editor.value = solution.code;
+                    updateLineNumbers();
+                    editor.scrollTop = 0;
+                }
+            });
+        });
+
+        // Output Tab switching
+        outputTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const target = tab.getAttribute('data-tab');
+                outputTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                panes.forEach(p => p.classList.remove('active'));
+                const activePane = document.getElementById(`pane-${target}-${id}`);
+                if (activePane) activePane.classList.add('active');
+            });
+        });
+
+        // Copy template
+        if (copyBtn) {
+            copyBtn.addEventListener('click', () => {
+                const template = `$sol = new Solution();\n$res = $sol->method(args);\nvar_dump($res);`;
+                navigator.clipboard.writeText(template);
+                const originalText = copyBtn.textContent;
+                copyBtn.textContent = 'COPIED!';
+                setTimeout(() => copyBtn.textContent = originalText, 1500);
+            });
+        }
 
         async function start() {
             try {
@@ -253,22 +615,24 @@ const {
                 
                 php.addEventListener('ready', () => {
                     statusDot.classList.add('ready');
-                    statusText.textContent = 'SYSTEM_READY';
+                    statusText.textContent = 'READY';
                     runBtn.disabled = false;
-                    output.textContent = 'PHP WASM loaded. System ready.';
+                    output.textContent = 'PHP WASM Loaded. Ready to execute.\n';
                 });
 
                 php.addEventListener('output', (event) => {
                     output.textContent += event.detail;
+                    lastFullOutput += event.detail;
                 });
 
                 php.addEventListener('error', (event) => {
                     output.textContent += '\n[PHP Error]: ' + event.detail;
+                    lastFullOutput += '\n[PHP Error]: ' + event.detail;
                 });
 
             } catch (err) {
                 console.error(`Failed to initialize PHP WASM for sandbox ${id}:`, err);
-                statusText.textContent = 'INIT_FAILED';
+                statusText.textContent = 'FAILED';
                 statusDot.style.background = '#ff4d4d';
                 output.textContent = 'Error: Module initialization failed.';
             }
@@ -278,10 +642,13 @@ const {
             if (!php) return;
 
             output.textContent = '';
+            lastFullOutput = '';
             runBtn.classList.add('loading');
             runBtn.disabled = true;
 
             const code = editor.value;
+            const testCode = testCaseEditor ? testCaseEditor.value : '';
+            const startTime = performance.now();
             
             try {
                 if (typeof php.refresh === 'function') {
@@ -293,9 +660,70 @@ const {
                     finalCode = '<?php\n' + finalCode;
                 }
 
+                finalCode = finalCode.replace(/\?>\s*$/, '');
+                
+                if (testCode.trim()) {
+                    let sanitizedTestCode = testCode.trim();
+                    sanitizedTestCode = sanitizedTestCode.replace(/^<\?php/, '');
+                    finalCode += '\n\necho "___TEST_RESULTS_START___\\n";\n' + sanitizedTestCode + '\necho "\\n___TEST_RESULTS_END___";';
+                }
+                
+                if (!finalCode.endsWith('?>')) {
+                    finalCode += '\n?>';
+                }
+
                 await php.run(finalCode);
+                
+                const duration = (performance.now() - startTime).toFixed(2);
+                
+                let testOutput = '';
+                const startMarker = "___TEST_RESULTS_START___\n";
+                const endMarker = "\n___TEST_RESULTS_END___";
+                
+                const startIndex = lastFullOutput.indexOf(startMarker);
+                const endIndex = lastFullOutput.indexOf(endMarker);
+                
+                if (startIndex !== -1 && endIndex !== -1) {
+                    testOutput = lastFullOutput.substring(startIndex + startMarker.length, endIndex);
+                    output.textContent = lastFullOutput.replace(startMarker, '').replace(endMarker, '');
+                } else {
+                    testOutput = lastFullOutput;
+                }
+
+                resultHub.innerHTML = `
+                    <div class="result-summary-container">
+                        <div class="result-card">
+                            <h4 style="color: var(--accent-color);">SUCCESS</h4>
+                            <div style="font-size: 0.75rem; color: #888;">
+                                Execution Time: <strong>${duration}ms</strong><br>
+                                Status: Process completed normally.
+                            </div>
+                        </div>
+                        
+                        ${testOutput.trim() ? `
+                        <div class="test-output-block">
+                            <h5>Test Case Output</h5>
+                            <pre class="test-output-pre">${testOutput.trim()}</pre>
+                        </div>
+                        ` : ''}
+                    </div>
+                `;
+
+                const resultTab = container.querySelector('[data-tab="result"]');
+                if (resultTab) resultTab.click();
+
             } catch (err) {
                 output.textContent += '\n[Execution Error]: ' + err.message;
+                resultHub.innerHTML = `
+                    <div class="result-summary-container">
+                        <div class="result-card" style="border-color: #ff4d4d33;">
+                            <h4 style="color: #ff4d4d;">RUNTIME_ERROR</h4>
+                            <p style="font-size: 0.75rem; color: #ccc;">${err.message}</p>
+                        </div>
+                    </div>
+                `;
+                const resultTab = container.querySelector('[data-tab="result"]');
+                if (resultTab) resultTab.click();
             } finally {
                 runBtn.classList.remove('loading');
                 runBtn.disabled = false;
@@ -309,14 +737,12 @@ const {
         start();
     }
 
-    // Initialize all sandboxes on the page
     const sandboxes = document.querySelectorAll('.sandbox-component');
     sandboxes.forEach(sb => {
         const id = sb.getAttribute('data-sandbox-id');
         initSandbox(id);
     });
 
-    // Handle View Transitions
     document.addEventListener('astro:after-swap', () => {
         const sandboxes = document.querySelectorAll('.sandbox-component');
         sandboxes.forEach(sb => {

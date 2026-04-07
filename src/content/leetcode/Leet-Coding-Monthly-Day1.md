@@ -4,35 +4,41 @@ date: 2026-03-29
 tags: ["LeetCode"]
 solution: |
   <?php
-  
-      function isBadVersion($n) {
-      $badVersion = range(4, 1000);
-      if (in_array($n, $badVersion)) {
-          return true;
-      }
-      return false; }
-  
-      /**  * returns first bad version for given version  *  * @param
-      Integer $n  * @return Integer  */ function firstBadVersion($n) {
+  /**
+   * @param Integer $n
+   * @return Integer
+   */
+  function isBadVersion($n) {
+      // Mock API for testing
+      global $firstBad;
+      return $n >= $firstBad;
+  }
+
+  function firstBadVersion($n) {
       $left = 1;
       $right = $n;
       while ($left < $right) {
-  
           $mid = floor($left + ($right - $left) / 2);
-  
           if (isBadVersion($mid)) {
               $right = $mid;
           } else {
               $left = $mid + 1;
           }
       }
-      return $left; }
-  
-      // Test cases to be run $testCases = [5, 100, 444]; foreach
-      foreach ($testCases as $testCase) {
-          $sol = firstBadVersion(5);
-          echo "Then $sol is the first bad version for input: $testCase" . PHP_EOL; 
-      }
+      return $left;
+  }
+testCases: |
+  $testCases = [
+      ['n' => 5, 'bad' => 4],
+      ['n' => 1, 'bad' => 1],
+      ['n' => 10, 'bad' => 7]
+  ];
+
+  foreach ($testCases as $case) {
+      $GLOBALS['firstBad'] = $case['bad'];
+      $result = firstBadVersion($case['n']);
+      echo "Input: n = {$case['n']}, bad = {$case['bad']}\nOutput: $result\n\n";
+  }
 ---
 
 ---

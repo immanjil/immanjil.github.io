@@ -4,30 +4,31 @@ date: 2026-03-29
 tags: ["LeetCode"]
 solution: |
   <?php
-      /**
-       * @param Integer[] $nums
-       * @return Integer
-       */
-      function majorityElement($nums) {
-          $count = count($nums)/2;
-          $numsCount = array_count_values ($nums);
-          foreach ($numsCount as $k=>$v) {
-              if ($v > $count) {
-                  return $k;
-              }
+  /**
+   * @param Integer[] $nums
+   * @return Integer
+   */
+  function majorityElement($nums) {
+      $count = count($nums) / 2;
+      $numsCount = array_count_values($nums);
+      foreach ($numsCount as $k => $v) {
+          if ($v > $count) {
+              return $k;
           }
-          return $sol;
       }
-  
-      // Test cases to be run $testCases = [5, 100, 444]; foreach
-      $testCases = [[2,2,1,1,1,2,2], [3,2,3]];
-      foreach ($testCases as $testCase) {
-          $sol = majorityElement($testCase);
-          echo "Input:" . PHP_EOL;
-          var_dump($testCase) . PHP_EOL;
-          echo "Solution: $sol" . PHP_EOL;
-      }
----
+      return -1;
+  }
+testCases: |
+  $cases = [
+      [3, 2, 3],
+      [2, 2, 1, 1, 1, 2, 2],
+      [1, 1, 1, 2, 2, 2, 2]
+  ];
+  foreach ($cases as $nums) {
+      $result = majorityElement($nums);
+      echo "Input: [" . implode(",", $nums) . "] => Majority: $result\n";
+  }
+
 
 ---
 

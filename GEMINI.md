@@ -53,6 +53,9 @@ For significant architectural shifts, new feature implementations, or critical b
 - **Client-Side Autonomy:** Prefer client-side execution (WASM, Browser APIs) for interactive features to maintain the site's high-performance static nature and user privacy.
 
 ## 📝 Recent Updates (April 2026)
+- **Multi-Solution Support:** Enhanced the LeetCode sandbox to support multiple solution versions per problem. Users can now switch between different approaches (e.g., O(n) vs. Brute Force) using a tabbed interface within the code editor.
+- **LeetCode Test Case Integration:** Added a dedicated "TEST_CASES" tab to the PHP Sandbox. Users can now write and execute test scripts (e.g., instantiating a `Solution` class) directly alongside their code, mimicking the LeetCode DX. The sandbox automatically combines the solution and test scripts into a single execution context.
+- **LeetCode Interface Upgrade:** Re-engineered the PHP Sandbox into a multi-pane, "LeetCode-like" interface. Features a side-by-side split view for problem description and code editor, line numbers, and a tabbed output console (Console vs. Results Hub) for enhanced DX.
 - **Interactive PHP WASM Integration:** Implemented a reusable `PhpSandbox.astro` component powered by `php-wasm`. This allows running PHP code directly in the browser across the main Sandbox page and all LeetCode problem pages.
 - **LeetCode Console:** Automatically extracts solution code from Markdown content (including legacy blockquote formats) and pre-fills the interactive console for immediate execution.
 - **State Persistence Fix:** Integrated `php.refresh()` logic to allow multiple code runs within the same session without function redeclaration errors.

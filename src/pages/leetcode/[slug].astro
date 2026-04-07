@@ -15,6 +15,8 @@ const { post } = Astro.props;
 const { Content } = await render(post);
 
 const extractedCode = post.data.solution || '';
+const altSolutions = post.data.solutions || [];
+const testCases = post.data.testCases || '';
 
 const formatDate = (date: Date | undefined) => {
     if (!date) return '';
@@ -25,159 +27,191 @@ const formatDate = (date: Date | undefined) => {
     });
 };
 ---
-<Layout title={post.data.title || post.id.replace(/\.md$/, '').replace(/-/g, ' ')}>
-    <article class="prose">
-        <header>
-            <a href="/leetcode" class="back-link">cd ../.. // BACK_TO_LEETCODE</a>
-            <h1>{post.data.title || post.id.replace(/\.md$/, '').replace(/-/g, ' ')}</h1>
-            <div class="post-metadata">
-                <span class="date">TIMESTAMP: {formatDate(post.data.date)}</span>
-                {post.data.tags && (
-                    <div class="tags">
-                        {post.data.tags.map(tag => <span class="tag">#{tag}</span>)}
-                    </div>
-                )}
+<Layout title={post.data.title || post.id.replace(/\.md$/, '').replace(/-/g, ' ')} isFullWidth={true}>
+    <div class="leetcode-workspace fade-in">
+        <aside class="problem-description">
+            <header>
+                <a href="/leetcode" class="back-link">cd ../.. // BACK_TO_LEETCODE</a>
+                <h1>{post.data.title || post.id.replace(/\.md$/, '').replace(/-/g, ' ')}</h1>
+                <div class="post-metadata">
+                    <span class="date">TIMESTAMP: {formatDate(post.data.date)}</span>
+                    {post.data.tags && (
+                        <div class="tags">
+                            {post.data.tags.map(tag => <span class="tag">#{tag}</span>)}
+                        </div>
+                    )}
+                </div>
+            </header>
+            
+            <div class="content prose-content">
+                <Content />
             </div>
-        </header>
-        
-        <div class="content">
-            <Content />
-        </div>
+        </aside>
 
-        {extractedCode && (
-            <div class="solution-sandbox-wrapper fade-in delay-3">
-                <PhpSandbox 
-                    id={`leetcode-${post.id.replace(/\.md$/, '')}`}
-                    title="Interactive Solution Console"
-                    initialCode={extractedCode}
-                    description="Run the PHP solution above directly in your browser. Feel free to modify the test cases!"
-                />
-            </div>
-        )}
-    </article>
+        <main class="solution-area">
+            {extractedCode && (
+                <div class="sandbox-container">
+                    <PhpSandbox 
+                        id={`leetcode-${post.id.replace(/\.md$/, '')}`}
+                        title="Interactive Solution Console"
+                        initialCode={extractedCode}
+                        solutions={altSolutions}
+                        testCaseInitialCode={testCases}
+                        description="Modify the solution and run tests in real-time."
+                    />
+                </div>
+            )}
+        </main>
+    </div>
 </Layout>
 
 <style is:global>
     /* Matrix theme typography for the rendered content */
-    .prose .content {
+    .prose-content {
         color: var(--text-color);
-        font-size: 1.1rem;
-        line-height: 1.8;
+        font-size: 1rem;
+        line-height: 1.6;
     }
     
-    .prose .content h1, .prose .content h2, .prose .content h3 {
-        margin-top: 2.5rem;
-        margin-bottom: 1.25rem;
+    .prose-content h1, .prose-content h2, .prose-content h3 {
+        margin-top: 2rem;
+        margin-bottom: 1rem;
         border: none;
         line-height: 1.3;
         color: var(--accent-color);
         text-transform: uppercase;
-        text-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+        font-size: 1.2rem;
     }
     
-    .prose .content a { color: var(--accent-color); text-decoration: underline; text-underline-offset: 4px; }
+    .prose-content a { color: var(--accent-color); text-decoration: underline; text-underline-offset: 4px; }
     
-    .prose .content pre {
+    .prose-content pre {
         background-color: #000000 !important;
-        padding: 1.5rem;
-        border-radius: 0;
+        padding: 1rem;
+        border-radius: 4px;
         overflow-x: auto;
-        margin: 2.5rem 0;
+        margin: 1.5rem 0;
         border: 1px solid var(--border-color);
     }
 
-    .prose .content blockquote {
+    .prose-content blockquote {
         border-left: 4px solid var(--accent-color);
-        padding: 0.5rem 0 0.5rem 1.5rem;
-        margin: 2rem 0;
+        padding: 0.5rem 0 0.5rem 1rem;
+        margin: 1.5rem 0;
         color: var(--secondary-text);
         font-style: italic;
         background-color: rgba(0, 59, 0, 0.05);
-        border-radius: 0;
     }
 
-    .prose .content ul, .prose .content ol {
-        margin: 1.5rem 0;
+    .prose-content ul, .prose-content ol {
+        margin: 1rem 0;
         padding-left: 1.5rem;
-        list-style-type: "> ";
     }
 
-    .prose .content li {
-        margin-bottom: 0.75rem;
+    .prose-content li {
+        margin-bottom: 0.5rem;
     }
 
-    .prose .content strong { color: var(--accent-color); }
-
-    /* Fix for nested sandbox styling */
-    .solution-sandbox-wrapper {
-        margin-top: 5rem;
-        border-top: 2px solid var(--accent-color);
-        padding-top: 2rem;
-    }
+    .prose-content strong { color: var(--accent-color); }
 </style>
 
 <style>
-    .prose {
-        background-color: rgba(0, 59, 0, 0.02);
-        padding: 4rem;
-        border-radius: 0;
-        border: 1px solid var(--border-color);
-        max-width: 100%;
-    }
-    
-    @media (max-width: 640px) {
-        .prose { padding: 2rem; }
+    .leetcode-workspace {
+        display: grid;
+        grid-template-columns: 45% 55%;
+        gap: 1.5rem;
+        height: calc(100vh - 160px);
+        min-height: 700px;
     }
 
-    header { margin-bottom: 4rem; }
+    @media (max-width: 1024px) {
+        .leetcode-workspace {
+            grid-template-columns: 1fr;
+            height: auto;
+        }
+    }
+
+    .problem-description {
+        background: var(--card-bg);
+        padding: 1.5rem;
+        border-radius: 8px;
+        border: 1px solid var(--border-color);
+        overflow-y: auto;
+    }
+
+    .solution-area {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .sandbox-container {
+        height: 100%;
+    }
+
+    /* Override component styles for the split view */
+    :global(.sandbox-component) {
+        margin: 0 !important;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    :global(.editor-section) {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    :global(textarea) {
+        flex-grow: 1;
+        height: 100% !important;
+        min-height: 300px;
+    }
+
+    header { margin-bottom: 2rem; }
     
     .back-link {
         display: inline-block;
-        margin-bottom: 2rem;
+        margin-bottom: 1rem;
         color: var(--accent-color);
         text-decoration: none;
         font-weight: 700;
-        font-size: 0.9rem;
-        transition: all 0.2s;
+        font-size: 0.8rem;
     }
     
-    .back-link:hover { text-shadow: 0 0 8px var(--accent-color); transform: translateX(-5px); }
-    
     h1 {
-        font-size: 3rem;
+        font-size: 1.8rem;
         margin: 0;
-        line-height: 1.1;
+        line-height: 1.2;
         font-weight: 800;
-        border: none;
-        text-shadow: 0 0 20px rgba(0, 255, 65, 0.4);
-        text-transform: uppercase;
+        color: var(--accent-color);
     }
 
     .post-metadata {
-        margin-top: 1.5rem;
+        margin-top: 1rem;
         display: flex;
+        flex-wrap: wrap;
         align-items: center;
-        gap: 2rem;
+        gap: 1rem;
         border-top: 1px solid var(--border-color);
-        padding-top: 1.5rem;
+        padding-top: 1rem;
     }
 
     .date {
         color: var(--secondary-text);
         font-weight: 700;
-        font-size: 0.85rem;
+        font-size: 0.75rem;
     }
 
     .tags {
         display: flex;
-        gap: 1rem;
+        gap: 0.5rem;
     }
 
     .tag {
         color: var(--accent-color);
         font-weight: 700;
-        font-size: 0.8rem;
+        font-size: 0.7rem;
         text-transform: uppercase;
-        letter-spacing: 0.1em;
     }
 </style>
