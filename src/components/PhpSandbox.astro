@@ -24,6 +24,8 @@ const {
     description = "Write and run PHP code directly in your browser using WebAssembly."
 } = Astro.props;
 
+console.log(`Sandbox ID: ${id}, solutions length: ${solutions?.length}`);
+
 // Merge primary solution with alternative solutions
 const allSolutions = initialCode 
     ? [{ label: 'Primary', code: initialCode }, ...solutions]

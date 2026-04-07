@@ -16,6 +16,7 @@ const { Content } = await render(post);
 
 const extractedCode = post.data.solution || '';
 const altSolutions = post.data.solutions || [];
+console.log("SLUG:", post.id, "Solutions:", altSolutions);
 const testCases = post.data.testCases || '';
 
 const formatDate = (date: Date | undefined) => {

@@ -23,6 +23,52 @@ class Solution {
 }
 ?>`;
 
+const twoSumBruteForce = `<?php
+class Solution {
+    /**
+     * @param Integer[] $nums
+     * @param Integer $target
+     * @return Integer[]
+     */
+    function twoSum($nums, $target) {
+        $n = count($nums);
+        for ($i = 0; $i < $n; $i++) {
+            for ($j = $i + 1; $j < $n; $j++) {
+                if ($nums[$i] + $nums[$j] === $target) {
+                    return [$i, $j];
+                }
+            }
+        }
+        return [];
+    }
+}
+?>`;
+
+const twoSumTwoPointer = `<?php
+class Solution {
+    /**
+     * Note: This approach requires sorting.
+     */
+    function twoSum($nums, $target) {
+        sort($nums);
+        $left = 0;
+        $right = count($nums) - 1;
+        while ($left < $right) {
+            $sum = $nums[$left] + $nums[$right];
+            if ($sum === $target) return [$nums[$left], $nums[$right]];
+            if ($sum < $target) $left++;
+            else $right--;
+        }
+        return [];
+    }
+}
+?>`;
+
+const altSolutions = [
+    { label: "Brute Force", code: twoSumBruteForce },
+    { label: "Two-Pointer", code: twoSumTwoPointer }
+];
+
 const twoSumTests = `// Test Cases for Two Sum
 $sol = new Solution();
 
@@ -52,6 +98,7 @@ foreach ($testCases as $i => $test) {
         <div class="sandbox-wrapper">
             <PhpSandbox 
                 initialCode={twoSumSolution} 
+                solutions={altSolutions}
                 testCaseInitialCode={twoSumTests}
                 id="main-sandbox" 
                 title="PHP 8.x Environment (Two Sum Example)"
