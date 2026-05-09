@@ -1,0 +1,60 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { tickets } from '../data/fifa-tickets';
+---
+<Layout title="FIFA 2026 Tickets">
+  <div id="password-gate">
+    <h1>FIFA 2026 Tickets</h1>
+    <p>Please enter the access code to view ticket details.</p>
+    <input type="password" id="password" placeholder="Enter code" />
+    <button id="submit">Unlock</button>
+    <p id="error" style="color: red; display: none;">Incorrect code.</p>
+  </div>
+
+  <div id="content" style="display: none;">
+    <h1>FIFA 2026 Tickets</h1>
+    <div class="dashboard-grid">
+      {tickets.map(game => (
+        <div class="match-card">
+          <p class="picked-by">{game.pickedBy}</p>
+          <h3>{game.match}</h3>
+          <p class="meta">{game.date} | {game.time} | {game.city}</p>
+          <p class="phase">{game.phase}</p>
+          <p class="seating"><strong>Seating:</strong> {game.seating}</p>
+          <p class="cost"><strong>Cost Per Ticket:</strong> ${game.costPerTicket}</p>
+          <a href={game.mapLink} target="_blank" class="map-link">
+            View Seat Map
+          </a>
+        </div>
+      ))}
+    </div>
+  </div>
+</Layout>
+
+<script>
+  const password = "dtown"; // Simple code
+  const gate = document.getElementById('password-gate');
+  const content = document.getElementById('content');
+  const input = document.getElementById('password');
+  const button = document.getElementById('submit');
+  const error = document.getElementById('error');
+
+  button.addEventListener('click', () => {
+    if (input.value === password) {
+      gate.style.display = 'none';
+      content.style.display = 'block';
+    } else {
+      error.style.display = 'block';
+    }
+  });
+</script>
+
+<style>
+  .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+  .match-card { background: var(--card-bg); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border-color); }
+  .match-card h3 { margin-top: 0; font-size: 1.5rem; }
+  .meta { color: var(--secondary-text); font-size: 0.9rem; }
+  .phase { font-weight: 600; color: var(--accent-color); }
+  .picked-by { font-size: 1.1rem; font-weight: 700; color: var(--text-color); background: rgba(0, 204, 51, 0.1); padding: 0.5rem; border-radius: 6px; margin-bottom: 1rem; }
+  .map-link { display: inline-block; margin-top: 1rem; color: var(--accent-color); font-weight: 600; text-decoration: underline; }
+</style>
