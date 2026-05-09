@@ -22,7 +22,7 @@ export const tickets = [
     count: 4,
     costPerTicket: 505.00,
     totalCost: 2020,
-    mapLink: "https://www.bmofield.com/events/seating-chart",
+    mapLink: "https://argonauts.io-media.com/web/index.html#",
     pickedBy: "Niraj"
   },
   {
@@ -35,7 +35,7 @@ export const tickets = [
     count: 4,
     costPerTicket: 445.00,
     totalCost: 1780,
-    mapLink: "https://attstadium.com/maps/#/",
+    mapLink: "https://attstadium.com/maps/#/profile?location=LOC-4TKPJCWJ",
     pickedBy: "Manjil"
   },
   {
@@ -48,7 +48,7 @@ export const tickets = [
     count: 4,
     costPerTicket: 445.00,
     totalCost: 1780,
-    mapLink: "https://attstadium.com/maps/#/",
+    mapLink: "https://attstadium.com/maps/#/profile?location=LOC-81TNQ0XW",
     pickedBy: "Niraj"
   },
   {
@@ -61,7 +61,7 @@ export const tickets = [
     count: 4,
     costPerTicket: 445.00,
     totalCost: 1780,
-    mapLink: "https://attstadium.com/maps/#/",
+    mapLink: "https://attstadium.com/maps/#/profile?location=LOC-7Z05IQ3H",
     pickedBy: "Manjil"
   },
   {
@@ -74,7 +74,7 @@ export const tickets = [
     count: 4,
     costPerTicket: 480.00,
     totalCost: 1920,
-    mapLink: "https://attstadium.com/maps/#/",
+    mapLink: "https://attstadium.com/maps/#/profile?location=LOC-1NGI1KUQ",
     pickedBy: "Ganesh, Gaurav"
   },
   {
@@ -87,7 +87,7 @@ export const tickets = [
     count: 4,
     costPerTicket: 515.00,
     totalCost: 2060,
-    mapLink: "https://attstadium.com/maps/#/",
+    mapLink: "https://attstadium.com/maps/#/profile?location=LOC-LCQSB8U3",
     pickedBy: "Suman"
   },
   {
@@ -113,7 +113,7 @@ export const tickets = [
     count: 4,
     costPerTicket: 640.00,
     totalCost: 2560,
-    mapLink: "https://attstadium.com/maps/#/",
+    mapLink: "https://attstadium.com/maps/#/profile?location=LOC-329TWVM9",
     pickedBy: "Manjil"
   },
   {
@@ -126,7 +126,7 @@ export const tickets = [
     count: 4,
     costPerTicket: 2350.00,
     totalCost: 9400,
-    mapLink: "https://attstadium.com/maps/#/",
+    mapLink: "https://attstadium.com/maps/#/profile?location=LOC-HSYGG4HZ",
     pickedBy: "Niraj"
   }
 ];
