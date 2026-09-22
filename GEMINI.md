@@ -69,5 +69,6 @@ For significant architectural shifts, new feature implementations, or critical b
 
 ## 🛠️ Development
 - `npm run dev`: Start local development server.
+- `npm run check`: Run full Astro and TypeScript type diagnostics.
 - `npm run build`: Build for production.
 - `npm run preview`: Preview production build locally.

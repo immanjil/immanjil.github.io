@@ -164,4 +164,64 @@ const formatDate = (date: Date | undefined) => {
         text-transform: uppercase;
         letter-spacing: 0.1em;
     }
+
+    :global(.mermaid-container) {
+        display: flex;
+        justify-content: center;
+        background: #020202;
+        border: 1px solid var(--border-color);
+        padding: 2rem;
+        margin: 2.5rem 0;
+        overflow-x: auto;
+    }
+
+    :global(.mermaid-container svg) {
+        max-width: 100%;
+        height: auto;
+    }
 </style>
+
+<script>
+    const renderMermaid = async () => {
+        const mermaidBlocks = document.querySelectorAll<HTMLElement>('pre code.language-mermaid, pre.mermaid');
+        if (mermaidBlocks.length === 0) return;
+
+        try {
+            // @ts-ignore
+            const { default: mermaid } = await import('https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs');
+            mermaid.initialize({
+                startOnLoad: false,
+                theme: 'dark',
+                themeVariables: {
+                    primaryColor: '#002600',
+                    primaryTextColor: '#00ff41',
+                    primaryBorderColor: '#00ff41',
+                    lineColor: '#00cc33',
+                    secondaryColor: '#050505',
+                    tertiaryColor: '#0a0a0a',
+                    background: '#020202'
+                }
+            });
+
+            for (let i = 0; i < mermaidBlocks.length; i++) {
+                const block = mermaidBlocks[i];
+                const pre = block.closest('pre');
+                if (!pre || pre.dataset.rendered === 'true') continue;
+
+                const code = block.textContent || '';
+                const id = `mermaid-graph-${Date.now()}-${i}`;
+                const { svg } = await mermaid.render(id, code);
+
+                const container = document.createElement('div');
+                container.className = 'mermaid-container';
+                container.innerHTML = svg;
+                pre.dataset.rendered = 'true';
+                pre.replaceWith(container);
+            }
+        } catch (err) {
+            console.warn('Mermaid rendering skipped or failed:', err);
+        }
+    };
+
+    document.addEventListener('astro:page-load', renderMermaid);
+</script>

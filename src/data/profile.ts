@@ -36,10 +36,17 @@ export const profile = {
     ],
     projects: [
         {
+            title: "AI-Powered DevOps & Agentic Workflow",
+            description: "A living demonstration of Agentic AI Orchestration integrating custom Gemini CLI pipelines, Model Context Protocol (MCP), and automated dispatch directly in GitHub Actions.",
+            tech: ["GitHub Actions", "Gemini CLI", "MCP", "Agentic Workflows"],
+            link: "/projects#ai-devops",
+            date: "2026-04-01"
+        },
+        {
             title: "Internal Coding Agent Ecosystem",
             description: "Integrated an internal coding agent ecosystem by defining modular 'Skills' and behavioral frameworks (Agents.md) to standardize AI-assisted workflows.",
-            tech: ["Agentic AI", "Python", "LLMs"],
-            link: "/projects",
+            tech: ["Agentic AI", "OpenCode", "Kimi K2", "Python"],
+            link: "/projects#coding-agents",
             date: "2026-03-20"
         }
     ],
