@@ -3,8 +3,6 @@ title: "System Design: [System Name]"
 description: "[Brief summary of the architectural problem and solution]"
 pubDate: [YYYY-MM-DD]
 tags: ["system-design", "[technology]", "[keyword]"]
-image: "/assets/[image-name].png"
-category: "System Design"
 ---
 
 # Overview
@@ -26,7 +24,17 @@ category: "System Design"
 [Back-of-the-envelope calculations]
 
 ## 4. High-Level Architecture
-[Description of the main components]
+
+```mermaid
+flowchart TD
+    Client["Client App"] --> LB["Load Balancer"]
+    LB --> Gateway["API Gateway"]
+    Gateway --> Service["Core Service"]
+    Service --> Cache[("Distributed Cache")]
+    Service --> DB[("Database")]
+```
+
+[Description of the main components and data flow]
 
 ## 5. Detailed Component Design
 [Deep dive into storage, hashing, or specific services]

@@ -52,6 +52,15 @@ For significant architectural shifts, new feature implementations, or critical b
 - **Pattern Learning:** When introducing new capabilities (like WebAssembly engines or interactive components), analyze the codebase to identify recurring needs. Implement these as standardized patterns that can be easily adopted by other sections of the project.
 - **Client-Side Autonomy:** Prefer client-side execution (WASM, Browser APIs) for interactive features to maintain the site's high-performance static nature and user privacy.
 
+## 📝 Recent Updates (September 2026)
+- **Type-Safety Hardening & Diagnostics:** Cleared all TypeScript errors and warnings with `npm run check`. Migrated `z` schema definitions in `content.config.ts` to `astro/zod` and eliminated local component naming collisions in `php-sandbox.astro`.
+- **ClientRouter Lifecycle Hardening:** Consolidated theme toggle and active navigation state handling into `astro:page-load` in `Layout.astro`, fixing event listener detachment across client-side view transitions and ensuring `aria-current="page"` accessibility.
+- **Interactive Architecture Diagrams:** Upgraded System Design breakdowns to render responsive, client-side Mermaid sequence and flowchart diagrams, removing legacy missing static image assets.
+- **SEO & Layout Polish:** Introduced a custom terminal-prompt SVG favicon (`>_`), comprehensive OpenGraph and Twitter Card metadata, canonical URLs, and explicit avatar image dimensions to mitigate Cumulative Layout Shift (CLS).
+- **Component Standardization (DRY):** Activated and typed `ProjectCard.astro` on `/projects` to consume centralized project data from `profile.ts`.
+- **Security & Privacy Cleanup:** Removed temporary sensitive ticket data and cleartext password gates from the static build.
+- **Engine Enforcement:** Documented and configured the minimum Node runtime (`>=22.12.0`) in `package.json` required by Astro 6.
+
 ## 📝 Recent Updates (April 2026)
 - **Multi-Solution Support:** Enhanced the LeetCode sandbox to support multiple solution versions per problem. Users can now switch between different approaches (e.g., O(n) vs. Brute Force) using a tabbed interface within the code editor.
 - **LeetCode Test Case Integration:** Added a dedicated "TEST_CASES" tab to the PHP Sandbox. Users can now write and execute test scripts (e.g., instantiating a `Solution` class) directly alongside their code, mimicking the LeetCode DX. The sandbox automatically combines the solution and test scripts into a single execution context.

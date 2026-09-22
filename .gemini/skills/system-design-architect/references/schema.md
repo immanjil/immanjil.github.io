@@ -11,11 +11,9 @@ All markdown files for the `system-design` content collection must adhere to the
 - `description` (string): Summary for SEO and cards.
 - `pubDate` (Date): Format `YYYY-MM-DD`.
 - `tags` (string[]): At least one tag (`system-design`).
-- `image` (string): Path starting with `/assets/`.
-- `category` (string): Must be `System Design`.
 
 ## 3. Formatting
 - Use GitHub Flavored Markdown (GFM).
 - Use code blocks for API definitions (e.g., `POST /v1/shorten`).
-- Use mermaid syntax or clear descriptions for diagrams.
+- **Architecture Diagrams:** Embed Mermaid syntax blocks (`sequenceDiagram`, `flowchart TD`) directly in Section 4 (High-Level Architecture) rather than referencing static image files.
 - Sanitize slugs: Remove `.md` extensions in Astro routing (handled by the Astro migration).
