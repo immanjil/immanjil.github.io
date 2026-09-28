@@ -3,8 +3,6 @@ title: "System Design: URL Shortener (Bitly)"
 description: "A deep dive into building a high-scale URL shortening service like Bitly, focusing on unique ID generation and low-latency redirection."
 pubDate: 2026-03-29
 tags: ["system-design", "scalability", "redis", "nosql", "hashing"]
-image: "/assets/url-shortener-architecture.png"
-category: "System Design"
 ---
 
 # Overview
@@ -79,6 +77,50 @@ Based on our target scale of **10 million new URLs** and **1 billion clicks** pe
 - **Cache Required:** 200 million unique redirects * 500 bytes ≈ **100 GB** of RAM.
 
 ## 4. High-Level Architecture
+
+```mermaid
+flowchart TD
+    subgraph Clients
+        UserWrite["Client (Shorten URL)"]
+        UserRead["Client (Visit Short Link)"]
+    end
+
+    LB["Load Balancer (Nginx / ALB)"]
+    UserWrite -->|POST /api/v1/shorten| LB
+    UserRead -->|GET /{short_code}| LB
+
+    subgraph Application_Tier [Stateless App Tier]
+        AppWrite["URL Shortener Workers"]
+        AppRead["Redirection Handlers"]
+    end
+
+    LB --> AppWrite
+    LB --> AppRead
+
+    subgraph Key_Generation [Unique Key Engine]
+        KGS["Key Generation Service (KGS)"]
+        KeyDB[("Pre-generated Key Store")]
+        KGS <--> KeyDB
+        AppWrite -->|Fetch Next Key Batch| KGS
+    end
+
+    subgraph Data_Tier [Distributed Storage & Caching]
+        Redis[("Distributed Cache\n(Redis Cluster - LRU)")]
+        NoSQL[("NoSQL Database\n(DynamoDB / Cassandra)")]
+        AppWrite -->|Save Mapping| NoSQL
+        AppWrite -->|Pre-warm Cache| Redis
+        AppRead -->|1. Cache Check| Redis
+        AppRead -->|2. Fallback on Miss| NoSQL
+    end
+
+    subgraph Analytics_Tier [Async Telemetry]
+        Kafka["Event Stream (Apache Kafka)"]
+        Consumer["Click Analytics Consumer"]
+        AnalyticsDB[("Time-Series Store\n(ClickHouse / Elasticsearch)")]
+        AppRead -.->|Async Click Event| Kafka
+        Kafka --> Consumer --> AnalyticsDB
+    end
+```
 
 For a system at this scale (10M writes/1B reads per day), we use a distributed, decoupled architecture:
 

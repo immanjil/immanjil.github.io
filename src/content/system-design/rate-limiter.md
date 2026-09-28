@@ -3,8 +3,6 @@ title: "System Design: Distributed Rate Limiter"
 description: "How to design a scalable, high-availability rate limiter for a multi-tenant microservices architecture."
 pubDate: 2026-03-29
 tags: ["system-design", "redis", "scalability", "distributed-systems"]
-image: "/assets/rate-limiter-architecture.png"
-category: "System Design"
 ---
 
 # Overview
@@ -33,11 +31,38 @@ A rate limiter is a critical component for protecting services from being overwh
 - **Storage**: If using Redis, each entry (User ID + Counter) is ~20 bytes. 100M users = ~2GB of RAM.
 
 ## 4. High-Level Architecture
-1. **Client** sends request.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Client
+    participant LB as Load Balancer
+    participant GW as API Gateway
+    participant RL as Rate Limiter Middleware
+    participant Redis as Distributed Cache (Redis)
+    participant Backend as Backend Services
+
+    Client->>LB: 1. Incoming HTTP Request
+    LB->>GW: 2. Route Request
+    GW->>RL: 3. Intercept & Validate Rate Limit
+    RL->>Redis: 4. Check & Decrement Token (Lua Script)
+    alt Tokens Available (Within Quota)
+        Redis-->>RL: Status: ALLOWED (Tokens Remaining)
+        RL-->>GW: Pass through
+        GW->>Backend: Forward to Microservice
+        Backend-->>Client: 200 OK Response
+    else Rate Limit Exceeded
+        Redis-->>RL: Status: BLOCKED (Bucket Empty)
+        RL-->>GW: 429 Too Many Requests (Retry-After header)
+        GW-->>Client: 429 Rate Limit Exceeded
+    end
+```
+
+1. **Client** sends request through DNS/CDN.
 2. **Load Balancer** forwards to **API Gateway**.
 3. **API Gateway** calls the **Rate Limiter Middleware**.
-4. **Rate Limiter** checks the count in a **Distributed Cache (Redis)**.
-5. If allowed, forward to **Backend Service**; otherwise, return `429`.
+4. **Rate Limiter** checks the count in a **Distributed Cache (Redis)** using atomic Lua scripts.
+5. If allowed, forward to **Backend Service**; otherwise, return HTTP `429 Too Many Requests`.
 
 ## 5. Detailed Component Design
 ### Token Bucket Algorithm

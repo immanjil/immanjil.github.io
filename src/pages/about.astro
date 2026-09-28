@@ -12,7 +12,7 @@ import { profile } from '../data/profile';
             </div>
             {profile.links.avatar && (
                 <div class="profile-image-container">
-                    <img src={profile.links.avatar} alt={profile.name} class="profile-image" />
+                    <img src={profile.links.avatar} alt={profile.name} class="profile-image" width="180" height="180" loading="eager" />
                 </div>
             )}
         </div>

@@ -1,27 +1,45 @@
-# Astro Portfolio & Blog
+# Manjil Thapa Magar Portfolio & Engineering Hub
 
-Welcome to my new, simpler portfolio built with **Astro**.
+Modern, high-performance portfolio and engineering portal built with **Astro v6**.
+
+## Prerequisites
+
+- **Node.js:** `>= 22.12.0`
+- **npm:** `>= 9.6.5`
 
 ## Getting Started
 
-1.  **Install dependencies:**
-    ```bash
-    npm install
-    ```
-2.  **Run locally:**
-    ```bash
-    npm run dev
-    ```
-3.  **Build for production:**
-    ```bash
-    npm run build
-    ```
+1. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+2. **Run locally:**
+   ```bash
+   npm run dev
+   ```
+
+3. **Type check:**
+   ```bash
+   npm run check
+   ```
+
+4. **Build for production:**
+   ```bash
+   npm run build
+   ```
+
+5. **Preview production build:**
+   ```bash
+   npm run preview
+   ```
 
 ## Content Management
 
-- Add new blog posts as Markdown files to `src/content/blog/`.
-- The site will automatically update the blog index and create new pages based on the filenames.
+The site uses Astro Content Collections:
+- **LeetCode Solutions (`src/content/leetcode/`):** Algorithmic problem breakdowns with solutions and interactive in-browser PHP WebAssembly (`php-wasm`) sandboxes.
+- **System Design Deep-Dives (`src/content/system-design/`):** In-depth architectural designs with interactive Mermaid diagrams.
 
 ## Deployment
 
-This site is configured for GitHub Pages. Pushing to the `master` branch will trigger an automated build and deployment.
+Automated deployment is configured via GitHub Actions to GitHub Pages. Pushing to the `master` branch triggers the build and deployment pipeline.

@@ -1,6 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import SkillBadge from '../components/SkillBadge.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { profile } from '../data/profile';
 ---
 
 <Layout title="Projects Showcase">
@@ -9,7 +11,16 @@ import SkillBadge from '../components/SkillBadge.astro';
         <p class="subtitle">Showcasing high-impact engineering and AI initiatives.</p>
     </section>
 
-    <article class="project-featured live-integration">
+    <section class="projects-overview">
+        <h2>Project Index</h2>
+        <div class="projects-grid">
+            {profile.projects.map(project => (
+                <ProjectCard {...project} />
+            ))}
+        </div>
+    </section>
+
+    <article id="ai-devops" class="project-featured live-integration">
         <header>
             <div class="project-label">Live Integration</div>
             <h2>AI-Powered DevOps & Agentic Workflow</h2>
@@ -47,7 +58,7 @@ import SkillBadge from '../components/SkillBadge.astro';
         </div>
     </article>
 
-    <article class="project-featured secondary">
+    <article id="coding-agents" class="project-featured secondary">
         <header>
             <div class="project-label">Featured AI Project</div>
             <h2>Internal Coding Agent Ecosystem</h2>
@@ -214,4 +225,30 @@ import SkillBadge from '../components/SkillBadge.astro';
     }
 
     .roadmap-card p { font-size: 1.1rem; margin: 0; color: var(--secondary-text); font-style: italic; }
+
+    .projects-overview {
+        margin-top: 3rem;
+        margin-bottom: 4rem;
+    }
+
+    .projects-overview h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        color: var(--accent-color);
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 0.5rem;
+    }
+
+    .projects-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+        .projects-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
 </style>

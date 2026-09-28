@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import PhpSandbox from '../components/PhpSandbox.astro';
+import PhpSandboxComponent from '../components/PhpSandbox.astro';
 
 const twoSumSolution = `<?php
 class Solution {
@@ -50,7 +50,7 @@ foreach ($testCases as $i => $test) {
         </header>
 
         <div class="sandbox-wrapper">
-            <PhpSandbox 
+            <PhpSandboxComponent 
                 initialCode={twoSumSolution} 
                 testCaseInitialCode={twoSumTests}
                 id="main-sandbox" 

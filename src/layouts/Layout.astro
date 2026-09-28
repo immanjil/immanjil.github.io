@@ -4,10 +4,21 @@ import Footer from '../components/Footer.astro';
 import AICopilot from '../components/AICopilot.astro';
 interface Props {
     title: string;
+    description?: string;
+    image?: string;
     isFullWidth?: boolean;
 }
 
-const { title, isFullWidth = false } = Astro.props;
+const { 
+    title, 
+    description = "Software Development Team Leader portfolio of Manjil Thapa Magar: high-scale systems (.NET, PHP, React, AWS), algorithmic sandboxes, and agentic AI workflows.",
+    image = "/assets/Magar_Thapa_Manjil.jpg",
+    isFullWidth = false 
+} = Astro.props;
+
+const siteUrl = Astro.site ? Astro.site.toString().replace(/\/$/, '') : 'https://immanjil.github.io';
+const canonicalURL = new URL(Astro.url.pathname, siteUrl);
+const ogImageURL = new URL(image, siteUrl);
 ---
 <script is:inline>
     const theme = (() => {
@@ -44,6 +55,24 @@ const { title, isFullWidth = false } = Astro.props;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{title} | Manjil Thapa Magar</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={`${title} | Manjil Thapa Magar`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImageURL} />
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={canonicalURL} />
+    <meta name="twitter:title" content={`${title} | Manjil Thapa Magar`} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageURL} />
+
     <ClientRouter />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -275,34 +304,33 @@ const { title, isFullWidth = false } = Astro.props;
 
             const isDark = element.classList.contains("dark");
             localStorage.setItem("theme", isDark ? "dark" : "light");
-        }
+        };
 
-        document.getElementById("theme-toggle")?.addEventListener("click", handleToggleClick);
-
-        // Active link highlighting
-        const navLinks = document.querySelectorAll('.nav-links a');
-        const currentPath = window.location.pathname;
-        
-        navLinks.forEach(link => {
-            const href = link.getAttribute('href');
-            if (href && (href === currentPath || (href !== '/' && currentPath.startsWith(href)))) {
-                link.classList.add('active');
+        const setupNavigationAndTheme = () => {
+            const toggle = document.getElementById("theme-toggle");
+            if (toggle) {
+                toggle.removeEventListener("click", handleToggleClick);
+                toggle.addEventListener("click", handleToggleClick);
             }
-        });
 
-        // Re-run for view transitions
-        document.addEventListener('astro:after-swap', () => {
+            // Active link highlighting & accessibility
             const navLinks = document.querySelectorAll('.nav-links a');
             const currentPath = window.location.pathname;
             
             navLinks.forEach(link => {
                 const href = link.getAttribute('href');
-                if (href && (href === currentPath || (href !== '/' && currentPath.startsWith(href)))) {                    link.classList.add('active');
+                const isActive = href && (href === currentPath || (href !== '/' && currentPath.startsWith(href)));
+                if (isActive) {
+                    link.classList.add('active');
+                    link.setAttribute('aria-current', 'page');
                 } else {
                     link.classList.remove('active');
+                    link.removeAttribute('aria-current');
                 }
             });
-        });
+        };
+
+        document.addEventListener('astro:page-load', setupNavigationAndTheme);
     </script>
 </body>
 </html>
