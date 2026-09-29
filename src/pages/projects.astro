@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import SkillBadge from '../components/SkillBadge.astro';
 import ProjectCard from '../components/ProjectCard.astro';
+import AgenticWorkflowInspector from '../components/AgenticWorkflowInspector.astro';
 import { profile } from '../data/profile';
 ---
 
@@ -50,10 +51,11 @@ import { profile } from '../data/profile';
             </section>
 
             <section>
-                <h3>The Architecture</h3>
+                <h3>The Architecture & Live Pipeline</h3>
                 <p>
                     The system uses a <strong>Dispatcher-Specialist</strong> pattern. A central GitHub Action (The Dispatcher) listens for repository events and routes them to specialized AI sub-agents (Specialists) for review, triage, or implementation, all communicating via the <strong>Model Context Protocol (MCP)</strong>.
                 </p>
+                <AgenticWorkflowInspector />
             </section>
         </div>
     </article>

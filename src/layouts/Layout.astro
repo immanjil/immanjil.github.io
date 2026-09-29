@@ -215,12 +215,44 @@ const ogImageURL = new URL(image, siteUrl);
             font-size: 0.75rem;
             font-weight: 700;
             color: var(--accent-color);
-            background: rgba(0, 112, 243, 0.1);
-            padding: 0.4rem 0.75rem;
+            background: rgba(0, 128, 43, 0.08);
+            padding: 0.35rem 0.75rem;
             border-radius: 20px;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            border: 1px solid rgba(0, 112, 243, 0.2);
+            border: 1px solid rgba(0, 128, 43, 0.2);
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.2s ease;
+        }
+
+        :root.dark .ai-status {
+            background: rgba(0, 204, 51, 0.08);
+            border-color: rgba(0, 204, 51, 0.25);
+        }
+
+        .ai-status:hover {
+            border-color: var(--accent-color);
+            background: rgba(0, 204, 51, 0.15);
+            box-shadow: 0 0 12px rgba(0, 204, 51, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .kbd-shortcut {
+            background: rgba(0, 0, 0, 0.06);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 0.1rem 0.35rem;
+            font-size: 0.65rem;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--secondary-text);
+            line-height: 1;
+        }
+
+        :root.dark .kbd-shortcut {
+            background: #020202;
+            border-color: #003300;
+            color: var(--accent-color);
         }
 
         .pulse {
@@ -281,10 +313,11 @@ const ogImageURL = new URL(image, siteUrl);
             <a href="/php-sandbox">PHP Sandbox</a>
         </div>
         <div class="status-badges">
-            <span class="ai-status">
+            <button id="ai-quick-trigger" class="ai-status" aria-label="Open AI Copilot (⌘K / Ctrl+K)">
                 <span class="pulse"></span>
-                AI Powered Repo
-            </span>
+                <span>AI Copilot</span>
+                <kbd class="kbd-shortcut">⌘K</kbd>
+            </button>
             <button id="theme-toggle" aria-label="Toggle dark mode">
                 <span class="sun">🌞</span>
                 <span class="moon">🌙</span>
