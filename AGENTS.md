@@ -53,16 +53,21 @@ This repository serves as the professional digital presence, engineering leaders
 - Prohibited without prior approval: `git push`, creating or updating Pull Requests, merging branches, altering GitHub Issues or labels, and modifying remote tags.
 - All code changes must be verified locally before proposing remote operations.
 
-### 2. 📋 Mandatory Planning Mode
+### 2. 🌿 Feature Branch Protocol (Strict Branching Strategy)
+- **Never commit or push directly to `master`.**
+- All modifications—including bug fixes, hotfixes, features, and documentation updates—must originate on a dedicated branch (`feature/<name>`, `fix/<name>`, `docs/<name>`).
+- Direct commits or pushes to `master` are strictly prohibited; changes must be integrated into `master` exclusively via Pull Requests.
+
+### 3. 📋 Mandatory Planning Mode
 - For any new feature request or non-trivial architectural change, enter **Plan Mode** first.
 - Present at least **2–3 distinct design/architectural options** with trade-offs before modifying code.
 
-### 3. 🧩 DRY & Architectural Consistency
+### 4. 🧩 DRY & Architectural Consistency
 - **DRY (Don't Repeat Yourself):** Consolidate cross-cutting functionality (e.g., card layouts, code runners, badges) into reusable components rather than duplicating markup across pages.
 - **Centralized Data:** Store shared profile, project, and skill metadata in `src/data/profile.ts` so all consuming components (`AICopilot`, `agentManifest`, `projects.astro`, `index.astro`) stay synchronized.
 - **Client-Side Autonomy:** Interactive tools (PHP execution, site search, Mermaid diagram rendering) execute client-side to preserve the site's high-performance static nature and user privacy.
 
-### 4. 🌐 ViewTransitions & Lifecycle Awareness
+### 5. 🌐 ViewTransitions & Lifecycle Awareness
 - The site uses Astro's `<ClientRouter />` for client-side routing.
 - Never bind DOM event listeners exclusively on initial script execution (`DOMContentLoaded`).
 - Use `document.addEventListener('astro:page-load', ...)` or event delegation so interactive handlers re-bind across client navigation swaps.
