@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
+import SystemDesignCalculator from '../../components/SystemDesignCalculator.astro';
 
 const selectedTag = Astro.url.searchParams.get('tag');
 
@@ -29,6 +30,14 @@ const formatDate = (date: Date | undefined) => {
             </div>
         )}
     </div>
+
+    <!-- Standalone Interactive Capacity & Scale Workstation -->
+    <SystemDesignCalculator 
+        defaultPreset="bitly" 
+        isCollapsible={false} 
+        title="System Scale & Capacity Workstation"
+        subtitle="Interactive capacity estimation engine for high-scale distributed architectures"
+    />
     
     <div class="posts-list">
         {posts.map(post => (

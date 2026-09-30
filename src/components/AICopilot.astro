@@ -27,7 +27,14 @@ const searchIndex = [
         tags: post.data.tags || [],
         url: `/system-design/${post.id.replace(/\.md$/, '')}`,
         type: 'System Design'
-    }))
+    })),
+    {
+        title: 'System Scale & Capacity Workstation',
+        description: 'Interactive system design capacity estimation workstation. Calculate QPS, network bandwidth, storage growth, cache working set, and cluster hardware node sizing.',
+        tags: ['system-design', 'calculator', 'capacity-estimation', 'scalability', 'redis', 'hardware-sizing', 'qps'],
+        url: '/system-design',
+        type: 'Interactive Tool'
+    }
 ];
 ---
 
@@ -529,6 +536,12 @@ const searchIndex = [
                     window.open(manifest.knowledge.links.resume, '_blank');
                     addLine(`RESOURCE DISPATCHED TO NEW WINDOW.`);
                 }, 500);
+            }
+            else if (isMatch(['calc', 'scale', 'calculator', 'capacity'])) {
+                addLine(`SYSTEM SCALE & CAPACITY WORKSTATION:\nRedirecting to interactive capacity calculator...\n\nURL: /system-design\n\nCAPABILITIES: QPS sizing, bandwidth estimation, 5-year storage growth, 80/20 cache memory tier, and Redis/NVMe cluster heuristics.`);
+                setTimeout(() => {
+                    window.location.href = '/system-design';
+                }, 800);
             }
             else if (isMatch(['clear', 'cls', 'reset'])) {
                 if (output) output.innerHTML = '';
