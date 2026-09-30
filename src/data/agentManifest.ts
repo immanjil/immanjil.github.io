@@ -15,6 +15,7 @@ export const agentManifest = {
         { cmd: "cat experience", desc: "Show professional career trajectory." },
         { cmd: "ping skills", desc: "Check technical stack status." },
         { cmd: "get resume", desc: "Provide direct link to the latest resume." },
+        { cmd: "calc scale", desc: "Open the System Scale & Capacity Calculator workstation." },
         { cmd: "clear", desc: "Purge the current terminal session." },
         { cmd: "help", desc: "List all available terminal protocols." }
     ],

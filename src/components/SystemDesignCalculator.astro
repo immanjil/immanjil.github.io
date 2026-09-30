@@ -1,0 +1,1308 @@
+---
+// SystemDesignCalculator.astro
+// Interactive System Design Capacity & Scale Calculator
+// Computes QPS, Bandwidth, Storage, Cache RAM, and Cluster Sizing heuristics with architecture presets.
+
+interface Props {
+    defaultPreset?: 'bitly' | 'rate-limiter' | 'social-feed' | 'iot-telemetry' | 'custom';
+    isCollapsible?: boolean;
+    initiallyExpanded?: boolean;
+    title?: string;
+    subtitle?: string;
+}
+
+const {
+    defaultPreset = 'bitly',
+    isCollapsible = false,
+    initiallyExpanded = !isCollapsible,
+    title = 'System Scale & Capacity Calculator',
+    subtitle = 'Interactive capacity estimation engine for high-scale distributed architectures'
+} = Astro.props;
+
+// Unique ID for multiple instances on different pages
+const instanceId = `sd-calc-${Math.random().toString(36).substring(2, 9)}`;
+---
+
+<div 
+    class={`sys-calc-wrapper ${isCollapsible ? 'is-collapsible' : ''} ${initiallyExpanded ? 'is-expanded' : 'is-collapsed'}`}
+    id={instanceId}
+    data-default-preset={defaultPreset}
+    data-collapsible={isCollapsible ? 'true' : 'false'}
+    data-initialized="false"
+>
+    <!-- Header / Collapsible Bar -->
+    <div class="calc-header">
+        <div class="calc-title-group">
+            <span class="calc-badge">SYSTEM_ESTIMATOR // v1.2</span>
+            <h3 class="calc-title">{title}</h3>
+            <p class="calc-subtitle">{subtitle}</p>
+        </div>
+
+        {isCollapsible && (
+            <div class="calc-collapse-controls">
+                <div class="summary-pills">
+                    <span class="pill pill-qps">QPS: <strong class="summary-val-qps">11.6k</strong></span>
+                    <span class="pill pill-storage">Storage: <strong class="summary-val-storage">27.4 TB</strong></span>
+                    <span class="pill pill-ram">RAM: <strong class="summary-val-ram">100 GB</strong></span>
+                </div>
+                <button type="button" class="calc-toggle-btn" aria-expanded={initiallyExpanded ? 'true' : 'false'}>
+                    <span class="toggle-icon">{initiallyExpanded ? '[-]' : '[+]'}</span>
+                    <span class="toggle-text">{initiallyExpanded ? 'COLLAPSE WORKSTATION' : 'LAUNCH WORKSTATION'}</span>
+                </button>
+            </div>
+        )}
+    </div>
+
+    <!-- Main Workstation Body -->
+    <div class="calc-body">
+        <!-- Preset Quick Selectors -->
+        <div class="preset-selector-row">
+            <span class="preset-label">ARCH_PRESETS:</span>
+            <div class="preset-buttons" role="tablist">
+                <button type="button" class="preset-btn" data-preset="bitly" role="tab">
+                    <span class="preset-num">[1]</span> Bitly URL Shortener
+                </button>
+                <button type="button" class="preset-btn" data-preset="rate-limiter" role="tab">
+                    <span class="preset-num">[2]</span> Distributed Rate Limiter
+                </button>
+                <button type="button" class="preset-btn" data-preset="social-feed" role="tab">
+                    <span class="preset-num">[3]</span> Twitter / X Scale Feed
+                </button>
+                <button type="button" class="preset-btn" data-preset="iot-telemetry" role="tab">
+                    <span class="preset-num">[4]</span> IoT Telemetry Stream
+                </button>
+                <button type="button" class="preset-btn" data-preset="custom" role="tab">
+                    <span class="preset-num">[5]</span> Custom Architecture
+                </button>
+            </div>
+        </div>
+
+        <!-- Two-Column Calculator Grid -->
+        <div class="calc-grid">
+            <!-- Left Column: Inputs & Sliders -->
+            <div class="calc-column inputs-column">
+                <div class="column-header">
+                    <h4>PARAM_INPUTS</h4>
+                    <span class="header-tag">VARIABLES</span>
+                </div>
+
+                <div class="input-controls-list">
+                    <!-- DAU -->
+                    <div class="control-group">
+                        <div class="control-header">
+                            <label for={`${instanceId}-dau`}>Daily Active Users (DAU)</label>
+                            <span class="control-display" id={`${instanceId}-dau-display`}>100M</span>
+                        </div>
+                        <input 
+                            type="range" 
+                            id={`${instanceId}-dau`} 
+                            name="dau" 
+                            min="100000" 
+                            max="1000000000" 
+                            step="100000" 
+                            value="100000000" 
+                            class="retro-slider" 
+                        />
+                        <div class="slider-scale">
+                            <span>100K</span>
+                            <span>10M</span>
+                            <span>100M</span>
+                            <span>1B</span>
+                        </div>
+                    </div>
+
+                    <!-- Read Requests / User / Day -->
+                    <div class="control-group">
+                        <div class="control-header">
+                            <label for={`${instanceId}-reads`}>Reads / User / Day</label>
+                            <span class="control-display" id={`${instanceId}-reads-display`}>10.0</span>
+                        </div>
+                        <input 
+                            type="range" 
+                            id={`${instanceId}-reads`} 
+                            name="reads" 
+                            min="0" 
+                            max="500" 
+                            step="0.5" 
+                            value="10" 
+                            class="retro-slider" 
+                        />
+                        <div class="slider-scale">
+                            <span>0</span>
+                            <span>50</span>
+                            <span>200</span>
+                            <span>500</span>
+                        </div>
+                    </div>
+
+                    <!-- Write Requests / User / Day -->
+                    <div class="control-group">
+                        <div class="control-header">
+                            <label for={`${instanceId}-writes`}>Writes / User / Day</label>
+                            <span class="control-display" id={`${instanceId}-writes-display`}>0.10</span>
+                        </div>
+                        <input 
+                            type="range" 
+                            id={`${instanceId}-writes`} 
+                            name="writes" 
+                            min="0" 
+                            max="200" 
+                            step="0.05" 
+                            value="0.1" 
+                            class="retro-slider" 
+                        />
+                        <div class="slider-scale">
+                            <span>0</span>
+                            <span>1</span>
+                            <span>50</span>
+                            <span>200</span>
+                        </div>
+                    </div>
+
+                    <!-- Payload Size -->
+                    <div class="control-group">
+                        <div class="control-header">
+                            <label for={`${instanceId}-payload`}>Average Record / Payload Size</label>
+                            <span class="control-display" id={`${instanceId}-payload-display`}>500 B</span>
+                        </div>
+                        <input 
+                            type="range" 
+                            id={`${instanceId}-payload`} 
+                            name="payload" 
+                            min="20" 
+                            max="20000" 
+                            step="10" 
+                            value="500" 
+                            class="retro-slider" 
+                        />
+                        <div class="slider-scale">
+                            <span>20 B</span>
+                            <span>500 B</span>
+                            <span>4 KB</span>
+                            <span>20 KB</span>
+                        </div>
+                    </div>
+
+                    <!-- Multipliers & Options Row -->
+                    <div class="control-row">
+                        <!-- Retention -->
+                        <div class="control-group compact">
+                            <label for={`${instanceId}-retention`}>Retention (Yrs)</label>
+                            <select id={`${instanceId}-retention`} name="retention" class="retro-select">
+                                <option value="0.0027">1 Day (Ephemeral)</option>
+                                <option value="0.0833">1 Month</option>
+                                <option value="1">1 Year</option>
+                                <option value="3">3 Years</option>
+                                <option value="5" selected>5 Years</option>
+                                <option value="10">10 Years</option>
+                            </select>
+                        </div>
+
+                        <!-- Replication Factor -->
+                        <div class="control-group compact">
+                            <label for={`${instanceId}-rep`}>Replication</label>
+                            <select id={`${instanceId}-rep`} name="rep" class="retro-select">
+                                <option value="1">1x (Raw)</option>
+                                <option value="2">2x (Dual-AZ)</option>
+                                <option value="3" selected>3x (Standard HA)</option>
+                                <option value="5">5x (Geo-Distributed)</option>
+                            </select>
+                        </div>
+
+                        <!-- Peak Multiplier -->
+                        <div class="control-group compact">
+                            <label for={`${instanceId}-peak`}>Peak Spike</label>
+                            <select id={`${instanceId}-peak`} name="peak" class="retro-select">
+                                <option value="2">2x Avg</option>
+                                <option value="3">3x Avg</option>
+                                <option value="5" selected>5x Avg</option>
+                                <option value="10">10x Avg</option>
+                            </select>
+                        </div>
+
+                        <!-- Cache Working Set (80/20) -->
+                        <div class="control-group compact">
+                            <label for={`${instanceId}-cache`}>Cache Working Set</label>
+                            <select id={`${instanceId}-cache`} name="cache" class="retro-select">
+                                <option value="0.10">10% Hot Reads</option>
+                                <option value="0.20" selected>20% (80/20 Rule)</option>
+                                <option value="0.30">30% High-Churn</option>
+                                <option value="1.00">100% Full In-Memory</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Live Computed Telemetry & Hardware Sizing -->
+            <div class="calc-column outputs-column">
+                <div class="column-header">
+                    <h4>ESTIMATED_TELEMETRY</h4>
+                    <span class="header-tag pulse">REALTIME_CALC</span>
+                </div>
+
+                <div class="metrics-dashboard">
+                    <!-- Metric Box 1: QPS & Throughput -->
+                    <div class="metric-card">
+                        <div class="card-title-row">
+                            <span class="metric-label">THROUGHPUT & REQUEST LOAD</span>
+                            <span class="ratio-badge" id={`${instanceId}-ratio-badge`}>R:W = 100:1</span>
+                        </div>
+                        <div class="metric-values-row">
+                            <div class="sub-metric">
+                                <span class="sub-label">Avg Read QPS:</span>
+                                <span class="sub-val" id={`${instanceId}-read-qps`}>11,574 /s</span>
+                                <span class="sub-peak" id={`${instanceId}-read-peak`}>Peak: 57,870 /s</span>
+                            </div>
+                            <div class="sub-metric">
+                                <span class="sub-label">Avg Write QPS:</span>
+                                <span class="sub-val" id={`${instanceId}-write-qps`}>116 /s</span>
+                                <span class="sub-peak" id={`${instanceId}-write-peak`}>Peak: 579 /s</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Metric Box 2: Network Bandwidth -->
+                    <div class="metric-card">
+                        <div class="card-title-row">
+                            <span class="metric-label">NETWORK BANDWIDTH</span>
+                            <span class="unit-tag">SI_BITS & BYTES</span>
+                        </div>
+                        <div class="metric-values-row">
+                            <div class="sub-metric">
+                                <span class="sub-label">Read Egress:</span>
+                                <span class="sub-val val-cyan" id={`${instanceId}-read-bw`}>46.3 Mbps</span>
+                                <span class="sub-peak" id={`${instanceId}-read-bw-bytes`}>(5.8 MB/s)</span>
+                            </div>
+                            <div class="sub-metric">
+                                <span class="sub-label">Write Ingress:</span>
+                                <span class="sub-val val-cyan" id={`${instanceId}-write-bw`}>463 Kbps</span>
+                                <span class="sub-peak" id={`${instanceId}-write-bw-bytes`}>(57.9 KB/s)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Metric Box 3: Storage & Retention -->
+                    <div class="metric-card">
+                        <div class="card-title-row">
+                            <span class="metric-label">STORAGE FOOTPRINT</span>
+                            <span class="unit-tag" id={`${instanceId}-retention-label`}>5 YRS RETENTION</span>
+                        </div>
+                        <div class="metric-values-row">
+                            <div class="sub-metric">
+                                <span class="sub-label">Daily Ingest (Raw):</span>
+                                <span class="sub-val val-amber" id={`${instanceId}-daily-storage`}>5.00 GB / day</span>
+                            </div>
+                            <div class="sub-metric">
+                                <span class="sub-label">Total Retention (Raw):</span>
+                                <span class="sub-val val-amber" id={`${instanceId}-total-raw-storage`}>9.13 TB</span>
+                            </div>
+                            <div class="sub-metric">
+                                <span class="sub-label">Replicated Storage:</span>
+                                <span class="sub-val val-highlight" id={`${instanceId}-total-rep-storage`}>27.38 TB</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Metric Box 4: Cache Memory (80/20) -->
+                    <div class="metric-card">
+                        <div class="card-title-row">
+                            <span class="metric-label">IN-MEMORY CACHING TIER</span>
+                            <span class="unit-tag" id={`${instanceId}-cache-pct-tag`}>20% HOT CACHE</span>
+                        </div>
+                        <div class="metric-values-row">
+                            <div class="sub-metric">
+                                <span class="sub-label">Daily Hot Reads Volume:</span>
+                                <span class="sub-val" id={`${instanceId}-daily-reads-vol`}>500 GB / day</span>
+                            </div>
+                            <div class="sub-metric">
+                                <span class="sub-label">RAM Required:</span>
+                                <span class="sub-val val-glow" id={`${instanceId}-cache-ram`}>100.0 GB</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Metric Box 5: Cluster Infrastructure Sizing -->
+                    <div class="metric-card hardware-card">
+                        <div class="card-title-row">
+                            <span class="metric-label">INFRASTRUCTURE SIZING HEURISTICS</span>
+                            <span class="cluster-tag">HA_PRODUCTION</span>
+                        </div>
+                        <div class="hardware-grid">
+                            <div class="hw-node">
+                                <span class="hw-icon">⚡</span>
+                                <div class="hw-details">
+                                    <span class="hw-val" id={`${instanceId}-hw-apps`}>12 Nodes</span>
+                                    <span class="hw-desc">Stateless App Tier (10k peak QPS / 4-vCPU)</span>
+                                </div>
+                            </div>
+                            <div class="hw-node">
+                                <span class="hw-icon">🧠</span>
+                                <div class="hw-details">
+                                    <span class="hw-val" id={`${instanceId}-hw-redis`}>5 Nodes</span>
+                                    <span class="hw-desc">Redis Cache Tier (32GB RAM / 75% usable)</span>
+                                </div>
+                            </div>
+                            <div class="hw-node">
+                                <span class="hw-icon">💾</span>
+                                <div class="hw-details">
+                                    <span class="hw-val" id={`${instanceId}-hw-storage`}>10 Shards</span>
+                                    <span class="hw-desc">NVMe Storage Shards (4TB / 70% threshold)</span>
+                                </div>
+                            </div>
+                            <div class="hw-node">
+                                <span class="hw-icon">🌐</span>
+                                <div class="hw-details">
+                                    <span class="hw-val" id={`${instanceId}-hw-net`}>10 Gbps</span>
+                                    <span class="hw-desc">Redundant NIC / Backbone Bandwidth</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Bar -->
+                <div class="calc-action-bar">
+                    <button type="button" class="action-btn copy-spec-btn" id={`${instanceId}-copy-btn`}>
+                        <span class="btn-icon">📋</span>
+                        <span class="btn-text">COPY_ARCH_SPEC_MD</span>
+                    </button>
+                    <button type="button" class="action-btn reset-btn" id={`${instanceId}-reset-btn`}>
+                        <span class="btn-icon">↺</span>
+                        <span class="btn-text">RESET_TO_PRESET</span>
+                    </button>
+                    <span class="action-status" id={`${instanceId}-status-msg`}></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .sys-calc-wrapper {
+        background-color: #020202;
+        border: 1px solid var(--border-color);
+        margin: 2.5rem 0;
+        font-family: 'JetBrains Mono', 'Fira Code', monospace;
+        color: var(--text-color);
+        box-shadow: 0 0 25px rgba(0, 255, 65, 0.05);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .sys-calc-wrapper::before {
+        content: " ";
+        display: block;
+        position: absolute;
+        top: 0; left: 0; bottom: 0; right: 0;
+        background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+        z-index: 1;
+        background-size: 100% 2px, 3px 100%;
+        pointer-events: none;
+        opacity: 0.35;
+    }
+
+    /* Header */
+    .calc-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.25rem 1.75rem;
+        background: rgba(0, 38, 0, 0.3);
+        border-bottom: 1px solid var(--border-color);
+        gap: 1.5rem;
+        flex-wrap: wrap;
+        position: relative;
+        z-index: 2;
+    }
+
+    .calc-badge {
+        font-size: 0.75rem;
+        color: var(--accent-color);
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        display: block;
+        margin-bottom: 0.25rem;
+    }
+
+    .calc-title {
+        font-size: 1.4rem;
+        font-weight: 800;
+        margin: 0;
+        color: #ffffff;
+        text-shadow: 0 0 8px rgba(0, 255, 65, 0.4);
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+    }
+
+    .calc-subtitle {
+        font-size: 0.85rem;
+        color: var(--secondary-text);
+        margin: 0.25rem 0 0 0;
+    }
+
+    /* Collapsible Controls */
+    .calc-collapse-controls {
+        display: flex;
+        align-items: center;
+        gap: 1.25rem;
+        flex-wrap: wrap;
+    }
+
+    .summary-pills {
+        display: flex;
+        gap: 0.5rem;
+        font-size: 0.8rem;
+    }
+
+    .pill {
+        padding: 0.25rem 0.6rem;
+        border: 1px solid var(--border-color);
+        background: rgba(0, 0, 0, 0.6);
+        color: var(--secondary-text);
+    }
+
+    .pill strong {
+        color: var(--accent-color);
+    }
+
+    .calc-toggle-btn {
+        background: rgba(0, 255, 65, 0.1);
+        border: 1px solid var(--accent-color);
+        color: var(--accent-color);
+        padding: 0.4rem 0.85rem;
+        font-size: 0.8rem;
+        font-weight: 700;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-family: inherit;
+        transition: all 0.2s ease;
+    }
+
+    .calc-toggle-btn:hover {
+        background: var(--accent-color);
+        color: #000000;
+        box-shadow: 0 0 12px rgba(0, 255, 65, 0.4);
+    }
+
+    /* Collapsed state */
+    .is-collapsible.is-collapsed .calc-body {
+        display: none;
+    }
+
+    .is-collapsible.is-collapsed {
+        box-shadow: none;
+    }
+
+    /* Body */
+    .calc-body {
+        padding: 1.5rem 1.75rem;
+        position: relative;
+        z-index: 2;
+    }
+
+    /* Preset Selectors */
+    .preset-selector-row {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding-bottom: 1.25rem;
+        margin-bottom: 1.5rem;
+        border-bottom: 1px solid rgba(0, 255, 65, 0.15);
+        flex-wrap: wrap;
+    }
+
+    .preset-label {
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--secondary-text);
+        letter-spacing: 0.05em;
+    }
+
+    .preset-buttons {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .preset-btn {
+        background: rgba(0, 20, 0, 0.6);
+        border: 1px solid var(--border-color);
+        color: var(--secondary-text);
+        padding: 0.35rem 0.75rem;
+        font-size: 0.8rem;
+        font-family: inherit;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .preset-btn .preset-num {
+        color: var(--accent-color);
+        margin-right: 0.2rem;
+    }
+
+    .preset-btn:hover {
+        border-color: var(--accent-color);
+        color: #ffffff;
+        background: rgba(0, 255, 65, 0.05);
+    }
+
+    .preset-btn.active {
+        border-color: var(--accent-color);
+        color: #000000;
+        background: var(--accent-color);
+        font-weight: 800;
+        box-shadow: 0 0 12px rgba(0, 255, 65, 0.3);
+    }
+
+    .preset-btn.active .preset-num {
+        color: #000000;
+    }
+
+    /* Two-Column Grid */
+    .calc-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+    }
+
+    @media (max-width: 960px) {
+        .calc-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .calc-column {
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+    }
+
+    .column-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 0.5rem;
+    }
+
+    .column-header h4 {
+        margin: 0;
+        font-size: 0.95rem;
+        font-weight: 800;
+        color: var(--accent-color);
+        letter-spacing: 0.05em;
+    }
+
+    .header-tag {
+        font-size: 0.7rem;
+        color: var(--secondary-text);
+        padding: 0.15rem 0.4rem;
+        background: rgba(0, 255, 65, 0.05);
+        border: 1px solid rgba(0, 255, 65, 0.2);
+    }
+
+    .header-tag.pulse {
+        color: #00ff41;
+        border-color: #00ff41;
+        animation: tagPulse 2s infinite ease-in-out;
+    }
+
+    @keyframes tagPulse {
+        0%, 100% { opacity: 0.7; }
+        50% { opacity: 1; box-shadow: 0 0 8px rgba(0, 255, 65, 0.3); }
+    }
+
+    /* Input Controls */
+    .input-controls-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1.2rem;
+    }
+
+    .control-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+    }
+
+    .control-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.85rem;
+    }
+
+    .control-header label {
+        color: #e0e0e0;
+        font-weight: 600;
+    }
+
+    .control-display {
+        color: var(--accent-color);
+        font-weight: 800;
+        font-size: 0.9rem;
+        background: rgba(0, 0, 0, 0.6);
+        padding: 0.1rem 0.5rem;
+        border: 1px solid rgba(0, 255, 65, 0.3);
+    }
+
+    /* Sliders */
+    .retro-slider {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 100%;
+        height: 6px;
+        background: #0f1f0f;
+        border: 1px solid var(--border-color);
+        outline: none;
+        cursor: pointer;
+    }
+
+    .retro-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 16px;
+        height: 16px;
+        background: var(--accent-color);
+        border: 1px solid #000;
+        cursor: pointer;
+        box-shadow: 0 0 6px rgba(0, 255, 65, 0.8);
+    }
+
+    .retro-slider::-moz-range-thumb {
+        width: 16px;
+        height: 16px;
+        background: var(--accent-color);
+        border: 1px solid #000;
+        cursor: pointer;
+        box-shadow: 0 0 6px rgba(0, 255, 65, 0.8);
+    }
+
+    .slider-scale {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.68rem;
+        color: var(--secondary-text);
+        opacity: 0.7;
+    }
+
+    /* Dropdowns row */
+    .control-row {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+        margin-top: 0.5rem;
+    }
+
+    .control-group.compact label {
+        font-size: 0.75rem;
+        color: var(--secondary-text);
+        margin-bottom: 0.2rem;
+    }
+
+    .retro-select {
+        background: #000000;
+        border: 1px solid var(--border-color);
+        color: #ffffff;
+        font-family: inherit;
+        font-size: 0.8rem;
+        padding: 0.4rem 0.5rem;
+        cursor: pointer;
+        outline: none;
+        transition: border-color 0.2s;
+    }
+
+    .retro-select:focus {
+        border-color: var(--accent-color);
+    }
+
+    /* Output Dashboard */
+    .metrics-dashboard {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .metric-card {
+        background: rgba(0, 20, 0, 0.4);
+        border: 1px solid var(--border-color);
+        padding: 0.85rem 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        transition: border-color 0.2s;
+    }
+
+    .metric-card:hover {
+        border-color: rgba(0, 255, 65, 0.4);
+    }
+
+    .card-title-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.75rem;
+        border-bottom: 1px dashed rgba(0, 255, 65, 0.15);
+        padding-bottom: 0.3rem;
+    }
+
+    .metric-label {
+        font-weight: 700;
+        color: var(--secondary-text);
+        letter-spacing: 0.05em;
+    }
+
+    .ratio-badge, .unit-tag, .cluster-tag {
+        font-size: 0.68rem;
+        padding: 0.1rem 0.4rem;
+        background: rgba(0, 255, 65, 0.08);
+        color: var(--accent-color);
+        border: 1px solid rgba(0, 255, 65, 0.2);
+    }
+
+    .metric-values-row {
+        display: flex;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+    }
+
+    .sub-metric {
+        display: flex;
+        flex-direction: column;
+        gap: 0.1rem;
+    }
+
+    .sub-label {
+        font-size: 0.72rem;
+        color: var(--secondary-text);
+    }
+
+    .sub-val {
+        font-size: 1.1rem;
+        font-weight: 800;
+        color: #ffffff;
+    }
+
+    .sub-val.val-cyan { color: #38bdf8; text-shadow: 0 0 6px rgba(56, 189, 248, 0.4); }
+    .sub-val.val-amber { color: #f59e0b; text-shadow: 0 0 6px rgba(245, 158, 11, 0.4); }
+    .sub-val.val-highlight { color: #00ff41; text-shadow: 0 0 8px rgba(0, 255, 65, 0.5); }
+    .sub-val.val-glow { color: #4ade80; text-shadow: 0 0 10px rgba(74, 222, 128, 0.6); }
+
+    .sub-peak {
+        font-size: 0.72rem;
+        color: #f59e0b;
+        opacity: 0.9;
+    }
+
+    /* Hardware Sizing */
+    .hardware-card {
+        background: rgba(0, 30, 0, 0.5);
+        border-color: rgba(0, 255, 65, 0.3);
+    }
+
+    .hardware-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+    }
+
+    @media (max-width: 600px) {
+        .hardware-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .hw-node {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.6rem;
+        background: rgba(0, 0, 0, 0.4);
+        padding: 0.5rem;
+        border: 1px solid rgba(0, 255, 65, 0.15);
+    }
+
+    .hw-icon {
+        font-size: 1.1rem;
+    }
+
+    .hw-details {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .hw-val {
+        font-size: 0.95rem;
+        font-weight: 800;
+        color: #00ff41;
+        letter-spacing: 0.02em;
+    }
+
+    .hw-desc {
+        font-size: 0.68rem;
+        color: var(--secondary-text);
+        line-height: 1.2;
+    }
+
+    /* Action Bar */
+    .calc-action-bar {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding-top: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .action-btn {
+        background: rgba(0, 0, 0, 0.6);
+        border: 1px solid var(--border-color);
+        color: var(--text-color);
+        font-family: inherit;
+        font-size: 0.75rem;
+        font-weight: 700;
+        padding: 0.45rem 0.85rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        transition: all 0.2s ease;
+    }
+
+    .action-btn:hover {
+        border-color: var(--accent-color);
+        color: var(--accent-color);
+        box-shadow: 0 0 10px rgba(0, 255, 65, 0.2);
+    }
+
+    .action-btn:active {
+        transform: scale(0.98);
+    }
+
+    .copy-spec-btn {
+        border-color: rgba(0, 255, 65, 0.3);
+    }
+
+    .action-status {
+        font-size: 0.75rem;
+        color: var(--accent-color);
+        font-weight: 600;
+    }
+</style>
+
+<script>
+    // Client-side reactivity and calculations
+    function initSystemDesignCalculators() {
+        const wrappers = document.querySelectorAll<HTMLElement>('.sys-calc-wrapper');
+
+        wrappers.forEach(wrapper => {
+            if (wrapper.dataset.initialized === 'true') return;
+            wrapper.dataset.initialized = 'true';
+
+            const instanceId = wrapper.id;
+            const isCollapsible = wrapper.dataset.collapsible === 'true';
+
+            // Toggle collapsible workstation
+            const toggleBtn = wrapper.querySelector<HTMLButtonElement>('.calc-toggle-btn');
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', () => {
+                    const isExpanded = wrapper.classList.contains('is-expanded');
+                    if (isExpanded) {
+                        wrapper.classList.remove('is-expanded');
+                        wrapper.classList.add('is-collapsed');
+                        toggleBtn.setAttribute('aria-expanded', 'false');
+                        const icon = toggleBtn.querySelector('.toggle-icon');
+                        const text = toggleBtn.querySelector('.toggle-text');
+                        if (icon) icon.textContent = '[+]';
+                        if (text) text.textContent = 'LAUNCH WORKSTATION';
+                    } else {
+                        wrapper.classList.remove('is-collapsed');
+                        wrapper.classList.add('is-expanded');
+                        toggleBtn.setAttribute('aria-expanded', 'true');
+                        const icon = toggleBtn.querySelector('.toggle-icon');
+                        const text = toggleBtn.querySelector('.toggle-text');
+                        if (icon) icon.textContent = '[-]';
+                        if (text) text.textContent = 'COLLAPSE WORKSTATION';
+                    }
+                });
+            }
+
+            // Input elements
+            const dauInput = wrapper.querySelector<HTMLInputElement>(`#${instanceId}-dau`);
+            const readsInput = wrapper.querySelector<HTMLInputElement>(`#${instanceId}-reads`);
+            const writesInput = wrapper.querySelector<HTMLInputElement>(`#${instanceId}-writes`);
+            const payloadInput = wrapper.querySelector<HTMLInputElement>(`#${instanceId}-payload`);
+            const retentionSelect = wrapper.querySelector<HTMLSelectElement>(`#${instanceId}-retention`);
+            const repSelect = wrapper.querySelector<HTMLSelectElement>(`#${instanceId}-rep`);
+            const peakSelect = wrapper.querySelector<HTMLSelectElement>(`#${instanceId}-peak`);
+            const cacheSelect = wrapper.querySelector<HTMLSelectElement>(`#${instanceId}-cache`);
+
+            // Displays
+            const dauDisplay = wrapper.querySelector<HTMLElement>(`#${instanceId}-dau-display`);
+            const readsDisplay = wrapper.querySelector<HTMLElement>(`#${instanceId}-reads-display`);
+            const writesDisplay = wrapper.querySelector<HTMLElement>(`#${instanceId}-writes-display`);
+            const payloadDisplay = wrapper.querySelector<HTMLElement>(`#${instanceId}-payload-display`);
+
+            // Outputs
+            const ratioBadge = wrapper.querySelector<HTMLElement>(`#${instanceId}-ratio-badge`);
+            const readQpsEl = wrapper.querySelector<HTMLElement>(`#${instanceId}-read-qps`);
+            const readPeakEl = wrapper.querySelector<HTMLElement>(`#${instanceId}-read-peak`);
+            const writeQpsEl = wrapper.querySelector<HTMLElement>(`#${instanceId}-write-qps`);
+            const writePeakEl = wrapper.querySelector<HTMLElement>(`#${instanceId}-write-peak`);
+            const readBwEl = wrapper.querySelector<HTMLElement>(`#${instanceId}-read-bw`);
+            const readBwBytesEl = wrapper.querySelector<HTMLElement>(`#${instanceId}-read-bw-bytes`);
+            const writeBwEl = wrapper.querySelector<HTMLElement>(`#${instanceId}-write-bw`);
+            const writeBwBytesEl = wrapper.querySelector<HTMLElement>(`#${instanceId}-write-bw-bytes`);
+            const retentionLabel = wrapper.querySelector<HTMLElement>(`#${instanceId}-retention-label`);
+            const dailyStorageEl = wrapper.querySelector<HTMLElement>(`#${instanceId}-daily-storage`);
+            const totalRawStorageEl = wrapper.querySelector<HTMLElement>(`#${instanceId}-total-raw-storage`);
+            const totalRepStorageEl = wrapper.querySelector<HTMLElement>(`#${instanceId}-total-rep-storage`);
+            const cachePctTag = wrapper.querySelector<HTMLElement>(`#${instanceId}-cache-pct-tag`);
+            const dailyReadsVolEl = wrapper.querySelector<HTMLElement>(`#${instanceId}-daily-reads-vol`);
+            const cacheRamEl = wrapper.querySelector<HTMLElement>(`#${instanceId}-cache-ram`);
+
+            // Hardware Sizing
+            const hwAppsEl = wrapper.querySelector<HTMLElement>(`#${instanceId}-hw-apps`);
+            const hwRedisEl = wrapper.querySelector<HTMLElement>(`#${instanceId}-hw-redis`);
+            const hwStorageEl = wrapper.querySelector<HTMLElement>(`#${instanceId}-hw-storage`);
+            const hwNetEl = wrapper.querySelector<HTMLElement>(`#${instanceId}-hw-net`);
+
+            // Summary Pills (in header when collapsed)
+            const summaryQps = wrapper.querySelector<HTMLElement>('.summary-val-qps');
+            const summaryStorage = wrapper.querySelector<HTMLElement>('.summary-val-storage');
+            const summaryRam = wrapper.querySelector<HTMLElement>('.summary-val-ram');
+
+            // Action Buttons
+            const copyBtn = wrapper.querySelector<HTMLButtonElement>(`#${instanceId}-copy-btn`);
+            const resetBtn = wrapper.querySelector<HTMLButtonElement>(`#${instanceId}-reset-btn`);
+            const statusMsg = wrapper.querySelector<HTMLElement>(`#${instanceId}-status-msg`);
+
+            // Preset definitions
+            interface PresetConfig {
+                dau: number;
+                reads: number;
+                writes: number;
+                payload: number;
+                retention: string;
+                rep: string;
+                peak: string;
+                cache: string;
+            }
+
+            const presets: Record<string, PresetConfig> = {
+                bitly: {
+                    dau: 100000000,
+                    reads: 10,
+                    writes: 0.1,
+                    payload: 500,
+                    retention: '5',
+                    rep: '3',
+                    peak: '5',
+                    cache: '0.20'
+                },
+                'rate-limiter': {
+                    dau: 100000000,
+                    reads: 0,
+                    writes: 8.64, // 10k QPS check
+                    payload: 20,
+                    retention: '0.0027', // 1 day
+                    rep: '3',
+                    peak: '5',
+                    cache: '1.00' // full in-memory
+                },
+                'social-feed': {
+                    dau: 250000000,
+                    reads: 100,
+                    writes: 2,
+                    payload: 1000,
+                    retention: '5',
+                    rep: '3',
+                    peak: '3',
+                    cache: '0.20'
+                },
+                'iot-telemetry': {
+                    dau: 10000000,
+                    reads: 1,
+                    writes: 288, // 1 record every 5 min per device
+                    payload: 256,
+                    retention: '3',
+                    rep: '2',
+                    peak: '2',
+                    cache: '0.10'
+                },
+                custom: {
+                    dau: 50000000,
+                    reads: 20,
+                    writes: 1,
+                    payload: 1024,
+                    retention: '3',
+                    rep: '3',
+                    peak: '3',
+                    cache: '0.20'
+                }
+            };
+
+            let currentPresetKey = wrapper.dataset.defaultPreset || 'bitly';
+
+            // Formatting helpers
+            const formatNumber = (num: number): string => {
+                if (num >= 1e9) return (num / 1e9).toFixed(1) + 'B';
+                if (num >= 1e6) return (num / 1e6).toFixed(1) + 'M';
+                if (num >= 1e3) return (num / 1e3).toFixed(1) + 'k';
+                return num.toLocaleString('en-US');
+            };
+
+            const formatBytesSI = (bytes: number): string => {
+                if (bytes < 1000) return `${Math.round(bytes)} B`;
+                if (bytes < 1e6) return `${(bytes / 1e3).toFixed(1)} KB`;
+                if (bytes < 1e9) return `${(bytes / 1e6).toFixed(1)} MB`;
+                if (bytes < 1e12) return `${(bytes / 1e9).toFixed(2)} GB`;
+                if (bytes < 1e15) return `${(bytes / 1e12).toFixed(2)} TB`;
+                return `${(bytes / 1e15).toFixed(2)} PB`;
+            };
+
+            const formatBitsSI = (bytesPerSec: number): string => {
+                const bits = bytesPerSec * 8;
+                if (bits < 1e3) return `${Math.round(bits)} bps`;
+                if (bits < 1e6) return `${(bits / 1e3).toFixed(1)} Kbps`;
+                if (bits < 1e9) return `${(bits / 1e6).toFixed(1)} Mbps`;
+                return `${(bits / 1e9).toFixed(2)} Gbps`;
+            };
+
+            // Main recalculation function
+            const recalculate = () => {
+                const dau = parseFloat(dauInput?.value || '100000000');
+                const readsPerUser = parseFloat(readsInput?.value || '10');
+                const writesPerUser = parseFloat(writesInput?.value || '0.1');
+                const payloadBytes = parseFloat(payloadInput?.value || '500');
+                const retentionYears = parseFloat(retentionSelect?.value || '5');
+                const repFactor = parseFloat(repSelect?.value || '3');
+                const peakMultiplier = parseFloat(peakSelect?.value || '5');
+                const cacheRatio = parseFloat(cacheSelect?.value || '0.20');
+
+                // Displays update
+                if (dauDisplay) dauDisplay.textContent = formatNumber(dau);
+                if (readsDisplay) readsDisplay.textContent = readsPerUser.toFixed(1);
+                if (writesDisplay) writesDisplay.textContent = writesPerUser >= 1 ? writesPerUser.toFixed(0) : writesPerUser.toFixed(2);
+                if (payloadDisplay) {
+                    payloadDisplay.textContent = payloadBytes >= 1000 ? `${(payloadBytes / 1000).toFixed(1)} KB` : `${payloadBytes} B`;
+                }
+
+                // Volume and QPS
+                const totalDailyWrites = dau * writesPerUser;
+                const totalDailyReads = dau * readsPerUser;
+                const avgWriteQps = totalDailyWrites / 86400;
+                const peakWriteQps = avgWriteQps * peakMultiplier;
+                const avgReadQps = totalDailyReads / 86400;
+                const peakReadQps = avgReadQps * peakMultiplier;
+
+                // Ratio
+                if (ratioBadge) {
+                    if (avgWriteQps === 0 && avgReadQps === 0) {
+                        ratioBadge.textContent = 'R:W = 1:1';
+                    } else if (avgWriteQps === 0) {
+                        ratioBadge.textContent = 'READ_ONLY';
+                    } else if (avgReadQps === 0) {
+                        ratioBadge.textContent = 'WRITE_ONLY';
+                    } else {
+                        const ratio = Math.round(avgReadQps / avgWriteQps);
+                        ratioBadge.textContent = `R:W = ${ratio}:1`;
+                    }
+                }
+
+                // Throughput elements
+                if (readQpsEl) readQpsEl.textContent = `${Math.round(avgReadQps).toLocaleString()} /s`;
+                if (readPeakEl) readPeakEl.textContent = `Peak: ${Math.round(peakReadQps).toLocaleString()} /s`;
+                if (writeQpsEl) writeQpsEl.textContent = `${Math.round(avgWriteQps).toLocaleString()} /s`;
+                if (writePeakEl) writePeakEl.textContent = `Peak: ${Math.round(peakWriteQps).toLocaleString()} /s`;
+
+                // Bandwidth
+                const writeBwBytesPerSec = avgWriteQps * payloadBytes;
+                const readBwBytesPerSec = avgReadQps * payloadBytes;
+
+                if (readBwEl) readBwEl.textContent = formatBitsSI(readBwBytesPerSec);
+                if (readBwBytesEl) readBwBytesEl.textContent = `(${formatBytesSI(readBwBytesPerSec)}/s)`;
+                if (writeBwEl) writeBwEl.textContent = formatBitsSI(writeBwBytesPerSec);
+                if (writeBwBytesEl) writeBwBytesEl.textContent = `(${formatBytesSI(writeBwBytesPerSec)}/s)`;
+
+                // Storage
+                const dailyStorageBytes = totalDailyWrites * payloadBytes;
+                const totalRawStorageBytes = dailyStorageBytes * 365 * retentionYears;
+                const totalRepStorageBytes = totalRawStorageBytes * repFactor;
+
+                if (retentionLabel) {
+                    const selText = retentionSelect?.options[retentionSelect.selectedIndex]?.text || '';
+                    retentionLabel.textContent = `${selText.toUpperCase()} RETENTION`;
+                }
+                if (dailyStorageEl) dailyStorageEl.textContent = `${formatBytesSI(dailyStorageBytes)} / day`;
+                if (totalRawStorageEl) totalRawStorageEl.textContent = formatBytesSI(totalRawStorageBytes);
+                if (totalRepStorageEl) totalRepStorageEl.textContent = `${formatBytesSI(totalRepStorageBytes)} (${repFactor}x)`;
+
+                // Cache
+                const dailyReadVolBytes = totalDailyReads * payloadBytes;
+                const cacheRamBytes = dailyReadVolBytes * cacheRatio;
+
+                if (cachePctTag) {
+                    const selCacheText = cacheSelect?.options[cacheSelect.selectedIndex]?.text || '';
+                    cachePctTag.textContent = selCacheText.toUpperCase();
+                }
+                if (dailyReadsVolEl) dailyReadsVolEl.textContent = `${formatBytesSI(dailyReadVolBytes)} / day`;
+                if (cacheRamEl) cacheRamEl.textContent = formatBytesSI(cacheRamBytes);
+
+                // Hardware Sizing Heuristics
+                // 1. Stateless App Tier: 10,000 peak QPS per 4-vCPU worker, with 50% CPU headroom -> 5,000 safe QPS
+                const totalPeakQps = peakReadQps + peakWriteQps;
+                const appNodes = Math.max(2, Math.ceil(totalPeakQps / 5000));
+                if (hwAppsEl) hwAppsEl.textContent = `${appNodes} Nodes`;
+
+                // 2. Redis Cache Tier: 32GB RAM per node, 75% maxmemory threshold -> 24GB usable
+                const usableRamPerNode = 24 * 1e9;
+                const redisNodes = Math.max(1, Math.ceil(cacheRamBytes / usableRamPerNode));
+                if (hwRedisEl) hwRedisEl.textContent = `${redisNodes} Nodes`;
+
+                // 3. NVMe Storage Shards: 4TB NVMe SSD per shard, 70% threshold -> 2.8TB usable
+                const usableDiskPerShard = 2.8 * 1e12;
+                const storageShards = Math.max(1, Math.ceil(totalRepStorageBytes / usableDiskPerShard));
+                if (hwStorageEl) hwStorageEl.textContent = `${storageShards} Shards`;
+
+                // 4. Network NIC requirement
+                const totalBwGbps = ((readBwBytesPerSec + writeBwBytesPerSec) * 8) / 1e9;
+                let nicRecommendation = '10 Gbps';
+                if (totalBwGbps > 40) nicRecommendation = '100 Gbps';
+                else if (totalBwGbps > 10) nicRecommendation = '25 Gbps Dual';
+                else if (totalBwGbps > 1) nicRecommendation = '10 Gbps Redundant';
+                else nicRecommendation = '1 Gbps Std';
+                if (hwNetEl) hwNetEl.textContent = nicRecommendation;
+
+                // Update summary pills
+                if (summaryQps) summaryQps.textContent = `${formatNumber(avgReadQps + avgWriteQps)}/s`;
+                if (summaryStorage) summaryStorage.textContent = formatBytesSI(totalRepStorageBytes);
+                if (summaryRam) summaryRam.textContent = formatBytesSI(cacheRamBytes);
+            };
+
+            // Preset applying logic
+            const applyPreset = (key: string) => {
+                const conf = presets[key];
+                if (!conf) return;
+                currentPresetKey = key;
+
+                if (dauInput) dauInput.value = String(conf.dau);
+                if (readsInput) readsInput.value = String(conf.reads);
+                if (writesInput) writesInput.value = String(conf.writes);
+                if (payloadInput) payloadInput.value = String(conf.payload);
+                if (retentionSelect) retentionSelect.value = conf.retention;
+                if (repSelect) repSelect.value = conf.rep;
+                if (peakSelect) peakSelect.value = conf.peak;
+                if (cacheSelect) cacheSelect.value = conf.cache;
+
+                // Highlight active button
+                wrapper.querySelectorAll<HTMLButtonElement>('.preset-btn').forEach(btn => {
+                    if (btn.dataset.preset === key) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+
+                recalculate();
+            };
+
+            // Wire preset buttons
+            wrapper.querySelectorAll<HTMLButtonElement>('.preset-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const presetKey = btn.dataset.preset || 'custom';
+                    applyPreset(presetKey);
+                });
+            });
+
+            // Wire input events
+            [dauInput, readsInput, writesInput, payloadInput].forEach(inp => {
+                inp?.addEventListener('input', () => {
+                    // Switch to custom preset visually if manually changed
+                    wrapper.querySelectorAll<HTMLButtonElement>('.preset-btn').forEach(btn => {
+                        btn.classList.toggle('active', btn.dataset.preset === 'custom');
+                    });
+                    recalculate();
+                });
+            });
+
+            [retentionSelect, repSelect, peakSelect, cacheSelect].forEach(sel => {
+                sel?.addEventListener('change', () => {
+                    recalculate();
+                });
+            });
+
+            // Wire Reset button
+            if (resetBtn) {
+                resetBtn.addEventListener('click', () => {
+                    applyPreset(wrapper.dataset.defaultPreset || 'bitly');
+                    if (statusMsg) {
+                        statusMsg.textContent = 'RESET_TO_PRESET_COMPLETE';
+                        setTimeout(() => { if (statusMsg) statusMsg.textContent = ''; }, 2000);
+                    }
+                });
+            }
+
+            // Wire Copy Spec Markdown button
+            if (copyBtn) {
+                copyBtn.addEventListener('click', async () => {
+                    try {
+                        const dau = dauInput?.value || '100000000';
+                        const reads = readsInput?.value || '10';
+                        const writes = writesInput?.value || '0.1';
+                        const payload = payloadInput?.value || '500';
+                        const readQps = readQpsEl?.textContent || '';
+                        const readPeak = readPeakEl?.textContent || '';
+                        const writeQps = writeQpsEl?.textContent || '';
+                        const writePeak = writePeakEl?.textContent || '';
+                        const readBw = readBwEl?.textContent || '';
+                        const writeBw = writeBwEl?.textContent || '';
+                        const dailyStorage = dailyStorageEl?.textContent || '';
+                        const totalStorage = totalRepStorageEl?.textContent || '';
+                        const cacheRam = cacheRamEl?.textContent || '';
+                        const apps = hwAppsEl?.textContent || '';
+                        const redis = hwRedisEl?.textContent || '';
+                        const shards = hwStorageEl?.textContent || '';
+                        const nic = hwNetEl?.textContent || '';
+
+                        const specMd = `## Capacity & Hardware Sizing Spec
+- **Target Scale:** ${formatNumber(parseFloat(dau))} DAU | ${reads} Reads/user/day | ${writes} Writes/user/day | ${payload}B payload
+- **Throughput:**
+  - Read QPS: ${readQps} (${readPeak})
+  - Write QPS: ${writeQps} (${writePeak})
+- **Network Bandwidth:**
+  - Read Egress: ${readBw}
+  - Write Ingress: ${writeBw}
+- **Storage Tier:**
+  - Daily Ingestion: ${dailyStorage}
+  - Total Retention (Replicated): ${totalStorage}
+- **In-Memory Cache (80/20 Rule):**
+  - RAM Required: ${cacheRam}
+- **Recommended Infrastructure Cluster:**
+  - Stateless App Instances: ${apps}
+  - Redis In-Memory Nodes: ${redis}
+  - NVMe Storage Shards: ${shards}
+  - Network Backbone: ${nic}
+*(Generated via System Scale & Capacity Workstation)*`;
+
+                        await navigator.clipboard.writeText(specMd);
+                        if (statusMsg) {
+                            statusMsg.textContent = 'COPIED_TO_CLIPBOARD!';
+                            setTimeout(() => { if (statusMsg) statusMsg.textContent = ''; }, 2500);
+                        }
+                    } catch (err) {
+                        console.error('Failed to copy spec:', err);
+                        if (statusMsg) statusMsg.textContent = 'COPY_FAILED';
+                    }
+                });
+            }
+
+            // Initial execution
+            applyPreset(currentPresetKey);
+        });
+    }
+
+    document.addEventListener('astro:page-load', initSystemDesignCalculators);
+</script>

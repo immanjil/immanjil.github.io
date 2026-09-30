@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
+import SystemDesignCalculator from '../../components/SystemDesignCalculator.astro';
 
 export async function getStaticPaths() {
     const posts = await getCollection('system-design');
@@ -21,6 +22,13 @@ const formatDate = (date: Date | undefined) => {
         day: 'numeric',
     });
 };
+
+const slug = post.id.replace(/\.md$/, '');
+const calcPreset = slug === 'rate-limiter' 
+    ? 'rate-limiter' 
+    : slug.includes('feed') 
+        ? 'social-feed' 
+        : 'bitly';
 ---
 <Layout title={post.data.title || post.id.replace(/\.md$/, '').replace(/-/g, ' ')}>
     <article class="prose">
@@ -36,6 +44,16 @@ const formatDate = (date: Date | undefined) => {
                 )}
             </div>
         </header>
+
+        <!-- Interactive Capacity & Scale Workstation -->
+        <SystemDesignCalculator 
+            defaultPreset={calcPreset}
+            isCollapsible={true}
+            initiallyExpanded={false}
+            title={`${post.data.title || 'System Design'}: Scale Calculator`}
+            subtitle="Pre-loaded with this problem's parameters. Expand to tweak variables or generate sizing specs."
+        />
+
         <div class="content">
             <Content />
         </div>
