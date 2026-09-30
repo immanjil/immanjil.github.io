@@ -10,6 +10,8 @@ on:
   pull_request:
     types:
       - 'opened'
+      - 'reopened'
+      - 'synchronize'
   issues:
     types:
       - 'opened'
@@ -17,6 +19,9 @@ on:
   issue_comment:
     types:
       - 'created'
+
+env:
+  GEMINI_CLI_TRUST_WORKSPACE: 'true'
 
 defaults:
   run:
@@ -93,7 +98,7 @@ jobs:
             const request = process.env.REQUEST;
             core.setOutput('request', request);
 
-            if (eventType === 'pull_request.opened') {
+            if (['pull_request.opened', 'pull_request.reopened', 'pull_request.synchronize'].includes(eventType)) {
               core.setOutput('command', 'review');
             } else if (['issues.opened', 'issues.reopened'].includes(eventType)) {
               core.setOutput('command', 'triage');

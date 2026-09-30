@@ -39,13 +39,14 @@ const searchIndex = [
 >
     <!-- Tooltip -->
     <div id="ai-tooltip" class="tooltip-hidden">
-        <span class="tooltip-prefix">[SYSTEM]:</span> Terminal access established. Type 'help'.
+        <span class="tooltip-prefix">[SYSTEM]:</span> Terminal established. Press <span class="kbd-hint">⌘K</span> to open.
         <div class="tooltip-arrow"></div>
     </div>
 
     <!-- Trigger Button -->
-    <button id="ai-trigger" aria-label="Open AI Copilot">
+    <button id="ai-trigger" aria-label="Open AI Copilot (⌘K / Ctrl+K)">
         <span class="trigger-icon">>_</span>
+        <span class="trigger-kbd-badge">⌘K</span>
         <span class="trigger-pulse"></span>
     </button>
 
@@ -122,6 +123,33 @@ const searchIndex = [
     @keyframes pulse-ring {
         0% { transform: scale(0.8); opacity: 0.8; }
         100% { transform: scale(1.5); opacity: 0; }
+    }
+
+    .trigger-kbd-badge {
+        position: absolute;
+        bottom: -7px;
+        font-size: 0.6rem;
+        background: #020202;
+        border: 1px solid var(--accent-color);
+        border-radius: 4px;
+        padding: 0 4px;
+        font-family: 'JetBrains Mono', monospace;
+        color: var(--accent-color);
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        line-height: 1.3;
+        box-shadow: 0 0 8px rgba(0, 204, 51, 0.4);
+    }
+
+    .kbd-hint {
+        font-family: 'JetBrains Mono', monospace;
+        color: #ffffff;
+        background: rgba(0, 255, 65, 0.2);
+        padding: 0.1rem 0.35rem;
+        border-radius: 3px;
+        border: 1px solid var(--accent-color);
+        font-weight: bold;
+        font-size: 0.75rem;
     }
 
     /* Tooltip Styles */
@@ -372,6 +400,36 @@ const searchIndex = [
 
         closeBtn?.addEventListener('click', toggleTerminal);
         closeBtn?.addEventListener('touchstart', toggleTerminal, { passive: false });
+
+        // Global Keyboard Shortcut (Cmd+K / Ctrl+K and Escape)
+        const handleGlobalKeyDown = (e: KeyboardEvent) => {
+            if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+                e.preventDefault();
+                toggleTerminal();
+            } else if (e.key === 'Escape' && terminal && !terminal.classList.contains('terminal-hidden')) {
+                e.preventDefault();
+                toggleTerminal();
+            }
+        };
+
+        window.removeEventListener('keydown', handleGlobalKeyDown);
+        window.addEventListener('keydown', handleGlobalKeyDown);
+
+        // Header quick trigger hook
+        const quickTrigger = document.getElementById('ai-quick-trigger');
+        if (quickTrigger) {
+            quickTrigger.removeEventListener('click', toggleTerminal);
+            quickTrigger.addEventListener('click', toggleTerminal);
+        }
+
+        // Platform detection: update kbd labels to Ctrl+K on Windows/Linux
+        const isMac = typeof navigator !== 'undefined' && /Mac|iPod|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
+        if (!isMac) {
+            const kbdBadges = document.querySelectorAll('.kbd-shortcut, .trigger-kbd-badge, .kbd-hint');
+            kbdBadges.forEach(badge => {
+                badge.textContent = 'Ctrl+K';
+            });
+        }
 
         const typeWriter = (text: string, element: HTMLElement, i = 0, speed = 5) => {
             if (i < text.length) {
