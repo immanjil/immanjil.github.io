@@ -71,7 +71,7 @@ export const profile = {
         tools: ["Agentic AI Orchestration", "CI/CD", "GitHub Actions", "MCP", "TDD", "New Relic", "Splunk", "Jira"]
     },
     education: {
-        degree: "Bachelor of Science in Mechanical Engineering",
+        degree: "Bachelor of Science in Engineering",
         college: "Texas A&M University, College Station, Texas",
         period: "Dec 2015"
     },
