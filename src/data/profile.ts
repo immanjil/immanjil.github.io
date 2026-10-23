@@ -21,7 +21,7 @@ export const profile = {
         },
         {
             company: "Paycom",
-            role: "Software Developer",
+            role: "Software Engineer",
             period: "June 2020 - September 2022",
             location: "Grapevine, Texas",
             description: "Developed custom PHP applications for 100+ clients and refactored application code for Docker container transition. Adhered to TDD practices using PHPUnit to achieve high test coverage."
