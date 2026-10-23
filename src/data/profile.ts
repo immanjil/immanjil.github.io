@@ -21,21 +21,21 @@ export const profile = {
         },
         {
             company: "Paycom",
-            role: "Software Developer",
+            role: "Software Engineer",
             period: "June 2020 - September 2022",
             location: "Grapevine, Texas",
             description: "Developed custom PHP applications for 100+ clients and refactored application code for Docker container transition. Adhered to TDD practices using PHPUnit to achieve high test coverage."
         },
         {
             company: "Power Wizard",
-            role: "Full Stack Engineer",
+            role: "Software Engineer",
             period: "July 2019 - May 2020",
             location: "Houston, Texas",
             description: "Architected and developed an Angular 8 application for a subscription product within three months. Implemented RESTful backend using Zend Framework 3 and established autoscaling AWS infrastructure."
         },
         {
             company: "Cognizant with Direct Energy",
-            role: "Full Stack Engineer",
+            role: "Software Engineer",
             period: "June 2016 - June 2019",
             location: "Houston, Texas",
             description: "Developed web applications using PHP frameworks (Symfony, CodeIgniter) for over 1 million records on RDS-hosted MySQL. Orchestrated migrations of legacy applications to AWS cloud and monitored systems using CloudWatch, New Relic, and Splunk."
@@ -79,7 +79,7 @@ export const profile = {
         linkedin: "https://www.linkedin.com/in/manjilthapamagar/",
         github: "https://github.com/immanjil",
         email: "mailto:manjil.thapa.magar101@gmail.com",
-        resume: "/assets/Manjil_Thapa_Magar_Resume2026.pdf",
+        resume: "/assets/Manjil_Thapa_Magar_Resume.pdf",
         avatar: "/assets/Magar_Thapa_Manjil.jpg"
     }
 };

@@ -1,6 +1,6 @@
 # Coding Agent Guidelines: Manjil Thapa Magar Portfolio (Astro v6)
 
-This repository serves as the professional digital presence, engineering leadership portfolio, algorithmic sandbox, and agentic AI showcase for **Manjil Thapa Magar** (Software Development Team Leader at Paycom).
+This repository serves as the professional digital presence, engineering leadership portfolio, algorithmic sandbox, and agentic AI showcase for **Manjil Thapa Magar** (Technical Lead & Software Architect at Paycom).
 
 ---
 

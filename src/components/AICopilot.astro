@@ -531,11 +531,21 @@ const searchIndex = [
                 addLine(`CAREER SUMMARY & ASSETS:\nType 'get resume' for direct link.\n\n${manifest.knowledge.experience.map((e: any) => `[${e.period}] ${e.role} @ ${e.company}`).join('\n')}`);
             }
             else if (isMatch(['get resume', 'download'])) {
-                addLine(`INITIATING RESOURCE DOWNLOAD...`);
-                setTimeout(() => {
+                addLine(`INITIATING RESOURCE DOWNLOAD...\nFile: Manjil_Thapa_Magar_Resume.pdf`);
+                try {
+                    const dl = document.createElement('a');
+                    dl.href = manifest.knowledge.links.resume;
+                    dl.download = 'Manjil_Thapa_Magar_Resume.pdf';
+                    dl.target = '_blank';
+                    dl.rel = 'noopener noreferrer';
+                    document.body.appendChild(dl);
+                    dl.click();
+                    document.body.removeChild(dl);
+                    addLine(`RESOURCE DISPATCHED: Download started.`);
+                } catch (e) {
                     window.open(manifest.knowledge.links.resume, '_blank');
                     addLine(`RESOURCE DISPATCHED TO NEW WINDOW.`);
-                }, 500);
+                }
             }
             else if (isMatch(['calc', 'scale', 'calculator', 'capacity'])) {
                 addLine(`SYSTEM SCALE & CAPACITY WORKSTATION:\nRedirecting to interactive capacity calculator...\n\nURL: /system-design\n\nCAPABILITIES: QPS sizing, bandwidth estimation, 5-year storage growth, 80/20 cache memory tier, and Redis/NVMe cluster heuristics.`);
