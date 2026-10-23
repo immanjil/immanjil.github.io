@@ -29,6 +29,8 @@ This repository serves as the professional digital presence, engineering leaders
 - `src/components/`: Reusable UI and interactive components:
   - `AICopilot.astro`: Floating terminal-style AI assistant and instant site-wide search index.
   - `PhpSandbox.astro`: In-browser WebAssembly PHP code runner, solution tabs, and live test hub.
+  - `SystemDesignCalculator.astro`: Interactive system scale and capacity estimation workstation (QPS, storage, cache, cluster nodes).
+  - `AgenticWorkflowInspector.astro`: Interactive live architecture inspector for the Dispatcher-Specialist pipeline.
   - `ProjectCard.astro`: Reusable project display card.
   - `ExperienceCard.astro`: Career timeline and leadership role card.
   - `SkillBadge.astro`: Standardized technology tag.
@@ -73,6 +75,13 @@ This repository serves as the professional digital presence, engineering leaders
 - Use `document.addEventListener('astro:page-load', ...)` or event delegation so interactive handlers re-bind across client navigation swaps.
 - Use `document.addEventListener('astro:after-swap', ...)` for immediate document-level state restorations (e.g., applying `.dark` theme class to `document.documentElement` before rendering).
 - Prevent duplicate event listener attachments by utilizing idempotent setup functions or initialization markers (`data-initialized="true"`).
+
+### 6. 🤖 AI Agent CI/CD & Model Policy Protocol
+- **Model Standard (`gemini-3.8-flash`):** Standardize all automated GitHub Actions workflows on **`gemini-3.8-flash`**. It delivers advanced reasoning for code reviews and issue triage while maintaining sustainable throughput limits that avoid free-tier rate limits or HTTP 429 quota exhaustion.
+- **Secrets vs. Variables Isolation:**
+  - **Secrets:** API keys and credentials (`GEMINI_API_KEY`) must strictly reside in **GitHub Repository Secrets** (`secrets.GEMINI_API_KEY`). Never commit raw keys or echo them in build logs.
+  - **Variables:** Configuration options (`GEMINI_MODEL`) belong in **GitHub Repository Variables** (`vars.GEMINI_MODEL`). All workflow files must provide a fallback default: `"${{ vars.GEMINI_MODEL || 'gemini-3.8-flash' }}"`.
+- **Runner Execution Timeouts:** Multi-turn PR reviews using the Docker GitHub MCP server (`gemini-review.yml`) must maintain an execution timeout of at least **15 minutes** (`timeout-minutes: 15`) to ensure complete evaluation of multi-file diffs without premature runner termination.
 
 ---
 
@@ -119,7 +128,15 @@ This repository serves as the professional digital presence, engineering leaders
   - `leetcode-solver` (`.gemini/skills/leetcode-solver/`): Automated tooling for problem extraction, PHP WASM solution generation, and test suite verification.
 - **Autonomous Pipelines (`.github/workflows/`):**
   - `deploy.yml`: Production static build and GitHub Pages deployment on push to `master`.
-  - `gemini-dispatch.yml`: Dispatcher listening for repository events and routing to specialist agents for triage, code review, or autonomous plan execution.
+  - `gemini-dispatch.yml`: Central event dispatcher listening for repository events (`issues`, `pull_request`, `issue_comment`) and routing to specialized pipelines.
+  - `gemini-review.yml`: Automated pull request code reviewer powered by `@google/gemini-cli` and Docker GitHub MCP server (`ghcr.io/github/github-mcp-server`) with multi-turn diff analysis.
+  - `gemini-triage.yml`: Automated labeling and triage of newly filed issues.
+  - `gemini-scheduled-triage.yml`: Periodic cron workflow reviewing stale or unlabeled issues.
+  - `gemini-invoke.yml`: Interactive slash-command execution responding to mentions in PR/issue comments (`/gemini ...`).
+  - `gemini-plan-execute.yml`: Autonomous planning, coding, and PR opening agent.
+- **Repository Secrets & Variables Configuration:**
+  - `secrets.GEMINI_API_KEY`: Google AI Studio API key used by Gemini CLI.
+  - `vars.GEMINI_MODEL`: Default model configuration (`gemini-3.8-flash`). Fallback is handled automatically in workflow files.
 
 ---
 
