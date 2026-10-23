@@ -1,7 +1,8 @@
 ---
 title: "Number Complement"
 date: 2026-03-29
-tags: ["LeetCode"]
+tags: ["Bit Manipulation", "Math"]
+description: "Flip all bits in the binary representation of a positive integer and return its decimal complement."
 solution: |
   <?php
   /**

@@ -1,7 +1,8 @@
 ---
 title: "Flood Fill"
 date: 2026-03-29
-tags: ["LeetCode"]
+tags: ["Array", "BFS", "Matrix"]
+description: "Perform 4-directional color flood fill on an image matrix using iterative breadth-first queue traversal."
 solution: |
   <?php
   /**
@@ -104,8 +105,4 @@ testCases: |
 >         return $image;        
 >       }
 >     }
-
----
-
-### Solution - Using Breadth First Search implemented on Python3
 

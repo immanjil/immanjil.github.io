@@ -1,7 +1,8 @@
 ---
 title: "First Bad Version"
 date: 2026-03-29
-tags: ["LeetCode"]
+tags: ["Binary Search", "Algorithms"]
+description: "Minimize API calls to locate the first corrupted software build using modified binary search."
 solution: |
   <?php
   /**

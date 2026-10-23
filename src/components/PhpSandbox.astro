@@ -525,7 +525,8 @@ const allSolutions = initialCode
 
     function initSandbox(id) {
         const container = document.getElementById(`sandbox-${id}`);
-        if (!container) return;
+        if (!container || container.dataset.initialized === 'true') return;
+        container.dataset.initialized = 'true';
 
         const runBtn = document.getElementById(`run-btn-${id}`);
         const clearBtn = document.getElementById(`clear-btn-${id}`);
@@ -737,17 +738,14 @@ const allSolutions = initialCode
         start();
     }
 
-    const sandboxes = document.querySelectorAll('.sandbox-component');
-    sandboxes.forEach(sb => {
-        const id = sb.getAttribute('data-sandbox-id');
-        initSandbox(id);
-    });
-
-    document.addEventListener('astro:after-swap', () => {
+    function initAllSandboxes() {
         const sandboxes = document.querySelectorAll('.sandbox-component');
         sandboxes.forEach(sb => {
             const id = sb.getAttribute('data-sandbox-id');
-            initSandbox(id);
+            if (id) initSandbox(id);
         });
-    });
+    }
+
+    initAllSandboxes();
+    document.addEventListener('astro:page-load', initAllSandboxes);
 </script>

@@ -1,7 +1,8 @@
 ---
 title: "First Unique Character in a String"
 date: 2026-03-29
-tags: ["LeetCode"]
+tags: ["Queue", "Hash Table", "String"]
+description: "Find the index of the first non-repeating character in a string using two-pass frequency scanning."
 solution: |
   <?php
   /**

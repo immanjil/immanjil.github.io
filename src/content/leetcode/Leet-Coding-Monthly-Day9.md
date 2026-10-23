@@ -1,7 +1,8 @@
 ---
 title: "Valid Perfect Square"
 date: 2026-03-29
-tags: ["LeetCode"]
+tags: ["Binary Search", "Math"]
+description: "Determine whether a positive integer is a perfect square without using built-in library functions via binary search."
 solution: |
   <?php
   class Solution {

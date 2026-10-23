@@ -21,6 +21,38 @@ import { profile } from '../data/profile';
         </div>
     </section>
 
+    <article id="file-storage" class="project-featured featured-primary">
+        <header>
+            <div class="project-label">Architectural Initiative</div>
+            <h2>Enterprise File Storage Service</h2>
+            <div class="project-tech">
+                <SkillBadge name=".NET 10" />
+                <SkillBadge name="PostgreSQL" />
+                <SkillBadge name="React" />
+                <SkillBadge name="Docker" />
+                <SkillBadge name="Modular Architecture" />
+            </div>
+        </header>
+
+        <div class="project-details">
+            <section>
+                <h3>Context & Architectural Vision</h3>
+                <p>
+                    Architected an enterprise file storage platform engineered to handle high-throughput document ingestion, metadata indexing, and secure access across multi-tenant applications. The service is built on <strong>.NET 10</strong> with a <strong>PostgreSQL</strong> relational core and a responsive <strong>React</strong> administrative interface.
+                </p>
+            </section>
+
+            <section class="features-list">
+                <h3>Core Capabilities & Modular Boundaries</h3>
+                <ul>
+                    <li><strong>Autonomous Agent-Friendly Design:</strong> Structured modular context boundaries, clean contracts, and strict OpenAPI specifications to enable autonomous coding agents to develop and maintain isolated components reliably.</li>
+                    <li><strong>Scalable Data & Ingestion Pipeline:</strong> Optimized database indexing and chunked file transfer pipelines to process large enterprise datasets with minimal memory pressure.</li>
+                    <li><strong>Containerized Deployment:</strong> Fully containerized with Docker for local developer parity, automated testing, and multi-stage CI/CD deployments.</li>
+                </ul>
+            </section>
+        </div>
+    </article>
+
     <article id="ai-devops" class="project-featured live-integration">
         <header>
             <div class="project-label">Live Integration</div>
@@ -176,6 +208,9 @@ import { profile } from '../data/profile';
         margin: 0 0 1.5rem 0; 
         font-weight: 800; 
         border: none;
+    }
+
+    :global(.dark) .project-featured h2 {
         text-shadow: 0 0 15px rgba(0, 255, 65, 0.4);
     }
 

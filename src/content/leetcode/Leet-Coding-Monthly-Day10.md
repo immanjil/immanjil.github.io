@@ -1,7 +1,8 @@
 ---
 title: "Find the Town Judge"
 date: 2026-03-29
-tags: ["LeetCode"]
+tags: ["Graph", "Array", "Hash Table"]
+description: "Identify the town judge who trusts nobody while being trusted by everybody using directed graph in-degree/out-degree scores."
 solution: |
   <?php
   class Solution {
@@ -41,8 +42,6 @@ testCases: |
       $res = $sol->findJudge($case['n'], $case['trust']);
       echo "Case " . ($index + 1) . ": Judge is person $res\n";
   }
----
-
 ---
 
 ### In a town, there are n people labeled from 1 to n. There is a rumor that one of these people is secretly the town judge.

@@ -8,7 +8,7 @@ import { profile } from '../data/profile';
         <div class="hero-content">
             <div class="hero-text">
                 <h1>About & Leadership</h1>
-                <p class="subtitle">Software Development Team Leader | Strategic Leader | AI Innovator</p>
+                <p class="subtitle">Technical Lead & Software Architect | Engineering Leader | AI Innovator</p>
             </div>
             {profile.links.avatar && (
                 <div class="profile-image-container">
@@ -56,9 +56,9 @@ import { profile } from '../data/profile';
     </section>
 
     <section class="team-building fade-in">
-        <h2>[TEAM_METRICS]</h2>
+        <h2>[ORGANIZATIONAL_IMPACT & TEAM_METRICS]</h2>
         <p>
-            I currently manage a team of 6+ software engineers at Paycom, where I focus on technical coaching, career development, and building a culture of mutual respect and shared ownership. I believe a team's strength lies in its diversity of thought and its ability to communicate openly.
+            At Paycom, I have directed agile teams of 6+ software developers, mentoring engineers, driving architectural reviews, and establishing clean delivery practices. In my Technical Lead role, I expanded that impact across the CRD organization—driving agentic coding enablement, prompt harnesses, and multi-agent quality gates across 60+ engineers to elevate development velocity and architectural consistency.
         </p>
     </section>
 
@@ -142,5 +142,6 @@ import { profile } from '../data/profile';
 
     ul { margin-top: 1.5rem; padding-left: 1.5rem; list-style-type: "> "; }
     li { font-size: 1.1rem; line-height: 1.8; color: var(--text-color); margin-bottom: 0.75rem; opacity: 0.9; }
-    li strong { color: var(--accent-color); text-shadow: 0 0 5px rgba(0, 255, 65, 0.3); }
+    li strong { color: var(--accent-color); }
+    :global(.dark) li strong { text-shadow: 0 0 5px rgba(0, 255, 65, 0.3); }
 </style>
