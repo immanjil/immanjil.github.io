@@ -1,7 +1,8 @@
 ---
 title: "Check If It Is a Straight Line"
 date: 2026-03-29
-tags: ["LeetCode"]
+tags: ["Geometry", "Math", "Array"]
+description: "Verify collinearity across coordinate points using cross-multiplied slope delta comparison."
 solution: |
   <?php
   class Solution {

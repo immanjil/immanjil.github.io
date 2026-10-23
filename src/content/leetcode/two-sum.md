@@ -2,7 +2,8 @@
 title: "Two Sum"
 date: 2026-03-29
 priority: 1
-tags: ["LeetCode"]
+tags: ["Array", "Hash Table", "Algorithms"]
+description: "Find two numbers in an array that sum up to a target value using a one-pass hash map for O(n) time complexity."
 solution: |
   <?php
   class Solution {

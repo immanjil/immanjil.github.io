@@ -2,6 +2,7 @@
 title: "System Design: URL Shortener (Bitly)"
 description: "A deep dive into building a high-scale URL shortening service like Bitly, focusing on unique ID generation and low-latency redirection."
 pubDate: 2026-03-29
+date: 2026-03-29
 tags: ["system-design", "scalability", "redis", "nosql", "hashing"]
 ---
 

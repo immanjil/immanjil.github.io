@@ -2,45 +2,57 @@
 import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 
-const selectedTag = Astro.url.searchParams.get('tag');
-
 const allPosts = await getCollection('leetcode');
-const posts = allPosts
-    .filter(post => !selectedTag || post.data.tags?.includes(selectedTag))
-    .sort((a, b) => {
-        const priorityA = a.data.priority ?? 0;
-        const priorityB = b.data.priority ?? 0;
+const posts = allPosts.sort((a, b) => {
+    const priorityA = a.data.priority ?? 0;
+    const priorityB = b.data.priority ?? 0;
 
-        if (priorityA !== priorityB) {
-            return priorityB - priorityA;
-        }
+    if (priorityA !== priorityB) {
+        return priorityB - priorityA;
+    }
 
-        const dateA = a.data.date?.getTime() ?? 0;
-        const dateB = b.data.date?.getTime() ?? 0;
-        return dateB - dateA;
-    });
+    const dateA = a.data.date?.getTime() ?? 0;
+    const dateB = b.data.date?.getTime() ?? 0;
+    return dateB - dateA;
+});
+
+// Collect all unique tags across all posts
+const allTags = Array.from(
+    new Set(allPosts.flatMap(post => post.data.tags || []))
+).sort();
 ---
 <Layout title="LeetCode Problems">
     <div class="blog-header">
         <h1>LeetCode Problems</h1>
-        <p>A monthly series exploring algorithmic challenges and solutions.</p>
-        {selectedTag && (
-            <div class="filter-info">
-                EXEC_QUERY --tag <span class="active-tag">#{selectedTag}</span>
-                <a href="/leetcode" class="clear-filter">[RESET]</a>
+        <p>A monthly series exploring algorithmic challenges, PHP WebAssembly implementations, and multi-approach solutions.</p>
+        
+        <!-- Tag Filter Navigation Bar -->
+        <div class="tags-filter-bar">
+            <span class="filter-label">QUICK_TAGS:</span>
+            <div class="filter-tag-pills">
+                {allTags.map(tag => (
+                    <a href={`/leetcode?tag=${tag}`} class="tag-pill" data-tag={tag}>
+                        #{tag}
+                    </a>
+                ))}
             </div>
-        )}
+        </div>
+
+        <div id="filter-info" class="filter-info" style="display: none;">
+            EXEC_QUERY --tag <span id="active-tag" class="active-tag"></span>
+            <a href="/leetcode" id="clear-filter" class="clear-filter">[RESET]</a>
+        </div>
     </div>
     
-    <div class="posts-list">
+    <div class="posts-list" id="lc-posts-list">
         {posts.map(post => (
-            <article class="post-item">
+            <article class="post-item" data-tags={JSON.stringify(post.data.tags || [])}>
                 <div class="post-meta">
                     <span class="post-date">ID: {post.id.replace(/\.md$/, '')}</span>
                     {post.data.tags && (
                         <div class="post-tags">
                             {post.data.tags.map(tag => (
-                                <a href={`/leetcode?tag=${tag}`} class={`tag ${selectedTag === tag ? 'active' : ''}`}>
+                                <a href={`/leetcode?tag=${tag}`} class="tag" data-tag={tag}>
                                     #{tag}
                                 </a>
                             ))}
@@ -49,6 +61,7 @@ const posts = allPosts
                 </div>
                 <a href={`/leetcode/${post.id.replace(/\.md$/, '')}`} class="post-link">
                     <h2>{post.data.title || post.id.replace(/\.md$/, '').replace(/-/g, ' ')}</h2>
+                    {post.data.description && <p class="description">{post.data.description}</p>}
                     <p class="read-more">CAT solution.txt →</p>
                 </a>
             </article>
@@ -57,9 +70,49 @@ const posts = allPosts
 </Layout>
 
 <style>
-    .blog-header { margin-bottom: 4rem; margin-top: 2rem; }
+    .blog-header { margin-bottom: 3.5rem; margin-top: 2rem; }
     .blog-header p { color: var(--secondary-text); font-size: 1.25rem; margin-bottom: 1.5rem; }
     
+    .tags-filter-bar {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+    }
+
+    .filter-label {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--secondary-text);
+        letter-spacing: 0.05em;
+    }
+
+    .filter-tag-pills {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .tag-pill {
+        font-size: 0.75rem;
+        color: var(--secondary-text);
+        background: rgba(0, 59, 0, 0.06);
+        border: 1px solid var(--border-color);
+        padding: 0.2rem 0.6rem;
+        text-decoration: none;
+        font-family: inherit;
+        font-weight: 600;
+        text-transform: uppercase;
+        transition: all 0.2s;
+    }
+
+    .tag-pill:hover, .tag-pill.active {
+        color: var(--accent-color);
+        border-color: var(--accent-color);
+        background: rgba(0, 255, 65, 0.1);
+    }
+
     .filter-info {
         font-size: 0.9rem;
         color: var(--secondary-text);
@@ -70,6 +123,7 @@ const posts = allPosts
         padding: 0.75rem 1.25rem;
         border: 1px solid var(--border-color);
         width: fit-content;
+        margin-top: 1rem;
     }
 
     .active-tag { color: var(--accent-color); font-weight: 700; }
@@ -97,7 +151,9 @@ const posts = allPosts
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 1.5rem;
+        margin-bottom: 1.25rem;
+        flex-wrap: wrap;
+        gap: 0.5rem;
     }
 
     .post-date {
@@ -108,7 +164,8 @@ const posts = allPosts
 
     .post-tags {
         display: flex;
-        gap: 0.75rem;
+        gap: 0.5rem;
+        flex-wrap: wrap;
     }
 
     .tag {
@@ -128,6 +185,50 @@ const posts = allPosts
         border-color: var(--accent-color);
     }
 
-    .post-item h2 { margin: 0; font-size: 1.5rem; text-transform: uppercase; border: none; text-shadow: 0 0 8px rgba(0, 255, 65, 0.3); }
-    .read-more { margin-top: 1.5rem; color: var(--accent-color); font-weight: 700; font-size: 0.9rem; }
+    .post-item h2 { margin: 0; font-size: 1.5rem; text-transform: uppercase; border: none; }
+    :global(.dark) .post-item h2 { text-shadow: 0 0 8px rgba(0, 255, 65, 0.3); }
+    .description { margin: 0.75rem 0 0 0; color: var(--secondary-text); font-size: 0.95rem; line-height: 1.5; }
+    .read-more { margin-top: 1.25rem; color: var(--accent-color); font-weight: 700; font-size: 0.9rem; }
 </style>
+
+<script>
+    function setupLeetCodeTagFiltering() {
+        const filterInfo = document.getElementById('filter-info');
+        const activeTagEl = document.getElementById('active-tag');
+        const postItems = document.querySelectorAll<HTMLElement>('.post-item');
+        const allTags = document.querySelectorAll<HTMLElement>('.tag, .tag-pill');
+
+        const params = new URLSearchParams(window.location.search);
+        const selectedTag = params.get('tag');
+
+        if (selectedTag && filterInfo && activeTagEl) {
+            filterInfo.style.display = 'flex';
+            activeTagEl.textContent = `#${selectedTag}`;
+
+            allTags.forEach(t => {
+                if (t.dataset.tag === selectedTag) {
+                    t.classList.add('active');
+                } else {
+                    t.classList.remove('active');
+                }
+            });
+
+            postItems.forEach(item => {
+                const tags: string[] = JSON.parse(item.dataset.tags || '[]');
+                if (tags.includes(selectedTag)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        } else {
+            if (filterInfo) filterInfo.style.display = 'none';
+            allTags.forEach(t => t.classList.remove('active'));
+            postItems.forEach(item => {
+                item.style.display = 'block';
+            });
+        }
+    }
+
+    document.addEventListener('astro:page-load', setupLeetCodeTagFiltering);
+</script>

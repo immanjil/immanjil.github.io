@@ -3,12 +3,12 @@ import { getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import SystemDesignCalculator from '../../components/SystemDesignCalculator.astro';
 
-const selectedTag = Astro.url.searchParams.get('tag');
-
 const allPosts = await getCollection('system-design');
-const posts = allPosts
-    .filter(post => !selectedTag || post.data.tags?.includes(selectedTag))
-    .sort((a, b) => (b.data.date?.getTime() ?? 0) - (a.data.date?.getTime() ?? 0));
+const posts = allPosts.sort((a, b) => {
+    const timeA = (a.data.pubDate || a.data.date)?.getTime() ?? 0;
+    const timeB = (b.data.pubDate || b.data.date)?.getTime() ?? 0;
+    return timeB - timeA;
+});
 
 const formatDate = (date: Date | undefined) => {
     if (!date) return '';
@@ -23,12 +23,10 @@ const formatDate = (date: Date | undefined) => {
     <div class="blog-header">
         <h1>System Design Problems</h1>
         <p>In-depth architectural analysis and high-scale system design breakdowns.</p>
-        {selectedTag && (
-            <div class="filter-info">
-                FILTER_ON: <span class="active-tag">#{selectedTag}</span>
-                <a href="/system-design" class="clear-filter">[CLEAR_FILTER]</a>
-            </div>
-        )}
+        <div id="filter-info" class="filter-info" style="display: none;">
+            FILTER_ON: <span id="active-tag" class="active-tag"></span>
+            <a href="/system-design" id="clear-filter" class="clear-filter">[CLEAR_FILTER]</a>
+        </div>
     </div>
 
     <!-- Standalone Interactive Capacity & Scale Workstation -->
@@ -39,15 +37,15 @@ const formatDate = (date: Date | undefined) => {
         subtitle="Interactive capacity estimation engine for high-scale distributed architectures"
     />
     
-    <div class="posts-list">
+    <div class="posts-list" id="sd-posts-list">
         {posts.map(post => (
-            <article class="post-item">
+            <article class="post-item" data-tags={JSON.stringify(post.data.tags || [])}>
                 <div class="post-meta">
-                    <span class="post-date">DATE: {formatDate(post.data.date)}</span>
+                    <span class="post-date">DATE: {formatDate(post.data.pubDate || post.data.date)}</span>
                     {post.data.tags && (
                         <div class="post-tags">
                             {post.data.tags.map(tag => (
-                                <a href={`/system-design?tag=${tag}`} class={`tag ${selectedTag === tag ? 'active' : ''}`}>
+                                <a href={`/system-design?tag=${tag}`} class="tag" data-tag={tag}>
                                     #{tag}
                                 </a>
                             ))}
@@ -119,6 +117,7 @@ const formatDate = (date: Date | undefined) => {
     .post-tags {
         display: flex;
         gap: 0.75rem;
+        flex-wrap: wrap;
     }
 
     .tag {
@@ -139,7 +138,50 @@ const formatDate = (date: Date | undefined) => {
         background: rgba(0, 255, 65, 0.05);
     }
 
-    .post-item h2 { margin: 0; font-size: 1.75rem; font-weight: 800; border: none; text-shadow: 0 0 10px rgba(0, 255, 65, 0.3); }
+    .post-item h2 { margin: 0; font-size: 1.75rem; font-weight: 800; border: none; }
+    :global(.dark) .post-item h2 { text-shadow: 0 0 10px rgba(0, 255, 65, 0.3); }
     .description { margin-top: 1rem; color: var(--text-color); opacity: 0.8; line-height: 1.6; }
     .read-more { margin-top: 1.5rem; color: var(--accent-color); font-weight: 700; text-transform: uppercase; font-size: 0.9rem; }
 </style>
+
+<script>
+    function setupSystemDesignTagFiltering() {
+        const filterInfo = document.getElementById('filter-info');
+        const activeTagEl = document.getElementById('active-tag');
+        const postItems = document.querySelectorAll<HTMLElement>('.post-item');
+        const allTags = document.querySelectorAll<HTMLElement>('.tag');
+
+        const params = new URLSearchParams(window.location.search);
+        const selectedTag = params.get('tag');
+
+        if (selectedTag && filterInfo && activeTagEl) {
+            filterInfo.style.display = 'flex';
+            activeTagEl.textContent = `#${selectedTag}`;
+
+            allTags.forEach(t => {
+                if (t.dataset.tag === selectedTag) {
+                    t.classList.add('active');
+                } else {
+                    t.classList.remove('active');
+                }
+            });
+
+            postItems.forEach(item => {
+                const tags: string[] = JSON.parse(item.dataset.tags || '[]');
+                if (tags.includes(selectedTag)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        } else {
+            if (filterInfo) filterInfo.style.display = 'none';
+            allTags.forEach(t => t.classList.remove('active'));
+            postItems.forEach(item => {
+                item.style.display = 'block';
+            });
+        }
+    }
+
+    document.addEventListener('astro:page-load', setupSystemDesignTagFiltering);
+</script>

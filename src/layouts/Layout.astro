@@ -76,7 +76,7 @@ const ogImageURL = new URL(image, siteUrl);
     <ClientRouter />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <style is:global>
         :root {
             /* The Construct (Default) */
@@ -159,10 +159,23 @@ const ogImageURL = new URL(image, siteUrl);
             justify-content: space-between;
             align-items: center;
             margin-bottom: 4rem;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 640px) {
+            nav { margin-bottom: 2.5rem; }
+            body { padding: 1.25rem; }
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem 1.5rem;
         }
 
         .nav-links a {
-            margin-right: 1.5rem;
             text-decoration: none;
             color: var(--secondary-text);
             font-weight: 500;

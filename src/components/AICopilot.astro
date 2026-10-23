@@ -430,7 +430,7 @@ const searchIndex = [
         }
 
         // Platform detection: update kbd labels to Ctrl+K on Windows/Linux
-        const isMac = typeof navigator !== 'undefined' && /Mac|iPod|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
+        const isMac = typeof navigator !== 'undefined' && /Mac|iPod|iPhone|iPad/.test((navigator as any).userAgentData?.platform || navigator.userAgent);
         if (!isMac) {
             const kbdBadges = document.querySelectorAll('.kbd-shortcut, .trigger-kbd-badge, .kbd-hint');
             kbdBadges.forEach(badge => {

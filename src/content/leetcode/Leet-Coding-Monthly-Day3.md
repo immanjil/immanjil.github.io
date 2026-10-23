@@ -1,7 +1,8 @@
 ---
 title: "Ransom Note"
 date: 2026-03-29
-tags: ["LeetCode"]
+tags: ["Hash Table", "String", "Counting"]
+description: "Verify if a ransom note can be constructed from letters in a magazine using character frequency maps."
 solution: |
   <?php
   /**

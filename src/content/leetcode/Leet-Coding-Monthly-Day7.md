@@ -1,7 +1,8 @@
 ---
 title: "Cousins in Binary Tree"
 date: 2026-03-29
-tags: ["LeetCode"]
+tags: ["Tree", "DFS", "Breadth-First Search"]
+description: "Determine if two nodes in a binary tree have the same depth but different parents using recursive tree traversal."
 solution: |
   <?php
   class TreeNode {

@@ -1,7 +1,8 @@
 ---
 title: "Jewels and Stones"
 date: 2026-03-29
-tags: ["LeetCode"]
+tags: ["Hash Table", "String", "Algorithms"]
+description: "Count how many stones are also jewels using character lookup sets and frequency analysis."
 solution: |
   <?php
   /**

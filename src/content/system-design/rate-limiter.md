@@ -2,6 +2,7 @@
 title: "System Design: Distributed Rate Limiter"
 description: "How to design a scalable, high-availability rate limiter for a multi-tenant microservices architecture."
 pubDate: 2026-03-29
+date: 2026-03-29
 tags: ["system-design", "redis", "scalability", "distributed-systems"]
 ---
 
