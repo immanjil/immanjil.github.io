@@ -28,14 +28,14 @@ export const profile = {
         },
         {
             company: "Power Wizard",
-            role: "Full Stack Engineer",
+            role: "Software Engineer",
             period: "July 2019 - May 2020",
             location: "Houston, Texas",
             description: "Architected and developed an Angular 8 application for a subscription product within three months. Implemented RESTful backend using Zend Framework 3 and established autoscaling AWS infrastructure."
         },
         {
             company: "Cognizant with Direct Energy",
-            role: "Full Stack Engineer",
+            role: "Software Engineer",
             period: "June 2016 - June 2019",
             location: "Houston, Texas",
             description: "Developed web applications using PHP frameworks (Symfony, CodeIgniter) for over 1 million records on RDS-hosted MySQL. Orchestrated migrations of legacy applications to AWS cloud and monitored systems using CloudWatch, New Relic, and Splunk."
